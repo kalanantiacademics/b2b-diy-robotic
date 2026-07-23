@@ -1,0 +1,2213 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>RUANGGURU CODING</title>
+<link rel="icon" href="https://cdn-web-2.ruangguru.com/landing-pages/assets/e7d93748-818d-462d-be57-7db1e479cd62.png" type="image/png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#073b70;--navy2:#0d4f86;--deep:#062b50;--cyan:#43d5e6;--orange:#ff8b2b;--yellow:#ffc33d;--ink:#153650;--muted:#5e7487;--green:#38b56f;--red:#ef5350;--white:#fff;--cream:#fff9ef;--shadow:0 18px 46px rgba(2,25,50,.28)}
+*{box-sizing:border-box}html,body{height:100%}body{margin:0;overflow:hidden;font-family:'Fredoka',sans-serif;color:var(--ink);background:radial-gradient(circle at 80% 18%,rgba(67,213,230,.16) 0 12%,transparent 13%),radial-gradient(circle at 10% 82%,rgba(255,195,61,.14) 0 15%,transparent 16%),linear-gradient(135deg,var(--deep),var(--navy) 52%,var(--navy2))}body:before,body:after{content:"";position:fixed;width:48vw;height:8px;background:rgba(255,255,255,.035);transform:rotate(-24deg);border-radius:20px;box-shadow:0 52px rgba(255,255,255,.03),0 104px rgba(255,255,255,.025),0 156px rgba(255,255,255,.02)}body:before{left:2vw;top:20vh}body:after{right:-10vw;bottom:20vh}
+.brand{position:fixed;left:22px;top:18px;z-index:1000;display:flex;align-items:center;gap:14px;padding:9px 15px;background:rgba(255,255,255,.97);border-radius:20px;box-shadow:0 10px 28px rgba(2,24,48,.3)}.brand img{object-fit:contain;width:auto}.brand .k{height:45px;max-width:170px}.brand .r{height:38px;max-width:145px}.brand i{width:2px;height:34px;background:#dce7f0;border-radius:10px}
+.presentation{position:fixed;left:50%;top:50%;transform:translate(-50%,-48%);width:min(88vw,1440px);aspect-ratio:16/9;max-height:82vh;border:5px solid rgba(255,255,255,.9);border-radius:28px;overflow:hidden;box-shadow:var(--shadow);background:var(--cream)}
+.slide{position:absolute;inset:0;padding:70px 74px 62px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;opacity:0;visibility:hidden;transform:translateX(65px) scale(.985);transition:.42s ease;background:radial-gradient(circle at 88% 12%,rgba(67,213,230,.12),transparent 25%),linear-gradient(#fffefa,#fff8ed);overflow:hidden}.slide.active{opacity:1;visibility:visible;transform:none;z-index:5}.slide.dark{color:#fff;background:radial-gradient(circle at 78% 44%,rgba(85,170,255,.24) 0 17%,rgba(85,170,255,.08) 18% 29%,transparent 30%),linear-gradient(135deg,#0b4a81,#083766 58%,#062b50)}.slide.orange{color:#fff;background:radial-gradient(circle at 82% 24%,rgba(255,255,255,.18),transparent 22%),linear-gradient(135deg,#ffa23d,#ff7e26)}.slide:after{content:"";position:absolute;left:-8%;right:-8%;bottom:-32px;height:64px;background:var(--orange);transform:rotate(-1.5deg);opacity:.94}.dark:after{background:linear-gradient(90deg,var(--yellow),var(--orange))}.orange:after{background:var(--navy)}.content{position:relative;z-index:2;width:100%}.chip{position:absolute;left:34px;top:25px;z-index:4;display:flex;align-items:center;gap:8px;padding:8px 14px;border-radius:999px;background:var(--navy);color:#fff;font-weight:700;font-size:.94rem;box-shadow:0 6px 16px rgba(7,59,112,.2)}.dark .chip{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22)}.chip b{width:9px;height:9px;background:var(--yellow);border-radius:50%;box-shadow:0 0 0 4px rgba(255,195,61,.16)}
+h1,h2,h3,p{margin:0}.display{font-size:clamp(3.2rem,5.8vw,6rem);line-height:.96;font-weight:700;text-shadow:0 5px rgba(12,46,86,.18)}.display .accent{color:var(--yellow)}.slide-title{font-size:clamp(2rem,3.8vw,3.65rem);line-height:1.06;text-align:center;color:var(--navy);font-weight:700}.dark .slide-title,.orange .slide-title{color:#fff}.kicker{text-align:center;color:var(--orange);font-size:.95rem;font-weight:700;letter-spacing:2px;text-transform:uppercase}.lead{font-size:clamp(1.12rem,1.65vw,1.52rem);line-height:1.52;color:var(--muted);text-align:center;max-width:960px;font-weight:500;margin:0 auto}.dark .lead,.orange .lead{color:rgba(255,255,255,.9)}.highlight{color:var(--orange);font-weight:700}.cyan{color:#00a6bf;font-weight:700}.yellow{color:var(--yellow);font-weight:700}.center{text-align:center}.left{text-align:left}.stack{display:grid;gap:15px}.w{width:100%}.max{max-width:1050px}.two{display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:center;width:100%}.three{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;width:100%}.four{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;width:100%}.agenda{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;width:100%}
+.card{background:#fff;border:2px solid #e5eef5;border-radius:24px;padding:23px;box-shadow:0 12px 28px rgba(5,49,87,.11)}.dark .card{color:var(--ink)}.card h3,.card-title{font-size:1.25rem;font-weight:700;color:var(--navy);margin-bottom:7px}.card p{font-size:1rem;line-height:1.44;color:var(--muted)}.icon-card{min-height:150px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;gap:8px;transition:.2s}.icon-card:hover{transform:translateY(-6px);border-color:var(--cyan)}.big-icon{font-size:3rem}.instruction{display:inline-flex;align-items:center;gap:8px;padding:9px 15px;border-radius:999px;background:#edf9fb;border:2px solid #bdebf1;color:#116c79;font-weight:600;font-size:.95rem}.dark .instruction{background:rgba(255,255,255,.13);border-color:rgba(255,255,255,.27);color:#fff}.note{font-size:.88rem;color:var(--muted);line-height:1.44}.dark .note{color:rgba(255,255,255,.76)}
+.btn,.option{font-family:'Fredoka',sans-serif;font-weight:700;cursor:pointer;transition:.2s}.btn{border:0;padding:13px 24px;border-radius:16px;background:linear-gradient(135deg,var(--orange),var(--yellow));color:#173a59;box-shadow:0 9px 18px rgba(255,139,43,.26);font-size:1.03rem}.btn:hover{transform:translateY(-3px) scale(1.02)}.btn2{border:0;padding:12px 20px;border-radius:15px;background:var(--navy);color:#fff;font-family:'Fredoka';font-weight:700;cursor:pointer}.option{width:100%;padding:13px 16px;border-radius:14px;border:2px solid #dbe8f2;background:#f7fbff;color:var(--ink);text-align:left;font-size:1.02rem}.option:hover{border-color:var(--cyan);transform:translateX(4px)}.option.correct{background:#e7f9ef;border-color:var(--green);color:#197247}.option.wrong{background:#fff0ef;border-color:var(--red);color:#a93232}.option:disabled{cursor:default}
+.nav{position:fixed;top:50%;transform:translateY(-50%);width:54px;height:54px;border-radius:50%;border:3px solid rgba(255,255,255,.88);background:var(--yellow);color:var(--navy);display:flex;align-items:center;justify-content:center;font-size:1.45rem;font-weight:700;cursor:pointer;z-index:1100;box-shadow:0 12px 28px rgba(2,20,40,.28);transition:.2s}.nav:hover:not(:disabled){transform:translateY(-50%) scale(1.1);background:var(--orange);color:#fff}.nav:disabled{opacity:.28;cursor:not-allowed}#prev{left:18px}#next{right:18px}.footer{position:absolute;left:0;right:0;bottom:10px;z-index:10;display:flex;justify-content:center;pointer-events:none}.counter{font-size:.78rem;font-weight:700;letter-spacing:.8px;color:#6a8094;background:rgba(255,255,255,.9);border:1px solid rgba(7,59,112,.12);padding:6px 12px;border-radius:999px}.progress{position:absolute;left:22%;right:22%;bottom:5px;height:4px;background:rgba(7,59,112,.12);border-radius:999px;overflow:hidden}.bar{height:100%;width:0;background:linear-gradient(90deg,var(--cyan),var(--orange));transition:.3s}
+.cover{display:grid;grid-template-columns:1.05fr .95fr;gap:28px;align-items:center;width:100%}.cover-sub{margin-top:22px;font-size:1.24rem;line-height:1.5;color:rgba(255,255,255,.86);max-width:620px}.pill{display:inline-flex;margin-top:24px;padding:10px 18px;border-radius:16px;background:var(--yellow);color:var(--navy);font-weight:700}.robot{width:600px;height:600px;position:relative;margin:auto;animation:float 3.2s ease-in-out infinite;object-fit:contain;display:block}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}@keyframes spin{to{transform:rotate(360deg)}}@keyframes pulse{0%,100%{filter:drop-shadow(0 0 6px rgba(255,195,61,.3))}50%{filter:drop-shadow(0 0 32px rgba(255,195,61,.95))}}@keyframes blink{0%,46%{filter:brightness(.55) saturate(.6);transform:scale(.98)}48%,94%{filter:brightness(1.2) saturate(1.2) drop-shadow(0 0 24px rgba(255,65,65,.85));transform:scale(1.02)}96%,100%{filter:brightness(.55) saturate(.6);transform:scale(.98)}}@keyframes dash{to{stroke-dashoffset:-28}}@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}@keyframes damage{0%,100%{filter:brightness(1);transform:scale(1)}25%{filter:brightness(2.4);transform:scale(1.09)}50%{filter:brightness(.5) grayscale(.7);transform:scale(.96)}75%{filter:brightness(2.2);transform:scale(1.1)}}
+.home,.tvscene,.fanscene,.river-scene{width:100%;height:340px;border-radius:28px;position:relative;overflow:hidden;border:5px solid #fff;box-shadow:0 16px 34px rgba(4,40,73,.18)}.home{background:linear-gradient(#dff4ff 0 62%,#d9b27b 62%)}.home.on{background:linear-gradient(#fff2bd 0 62%,#d9b27b 62%)}.window{position:absolute;left:7%;top:14%;width:170px;height:130px;border:12px solid #fff;border-radius:12px;background:linear-gradient(#73c4f2 0 68%,#86c56a 69%)}.window:before,.window:after{content:"";position:absolute;background:#fff}.window:before{width:8px;top:0;bottom:0;left:50%}.window:after{height:8px;left:0;right:0;top:50%}.sofa{position:absolute;left:12%;bottom:10%;width:280px;height:104px;background:#f2a14c;border-radius:30px 30px 16px 16px}.sofa:before,.sofa:after{content:"";position:absolute;top:-35px;width:128px;height:90px;background:#ffb461;border-radius:30px}.sofa:before{left:8px}.sofa:after{right:8px}.lamp{position:absolute;right:18%;top:9%;width:110px;height:110px;border-radius:50%;background:#dce3e7;transition:.25s}.lamp:before{content:"";position:absolute;left:50%;top:-72px;width:8px;height:78px;background:#40596b}.home.on .lamp{background:#fff3ae;box-shadow:0 0 70px 35px rgba(255,218,94,.72)}.wallsw{position:absolute;right:7%;bottom:22%;width:74px;height:108px;border-radius:16px;background:#fff;border:5px solid #d8e3ea;display:flex;align-items:center;justify-content:center;cursor:pointer}.rocker{width:34px;height:62px;border-radius:10px;background:#dce6eb;position:relative}.rocker:before{content:"";position:absolute;left:5px;right:5px;top:5px;height:24px;border-radius:7px;background:#fff;transition:.2s}.home.on .rocker:before{transform:translateY(28px);background:var(--yellow)}.scene-msg{position:absolute;right:5%;top:54%;font-size:1.25rem;font-weight:700;color:var(--navy);background:#fff;padding:10px 16px;border-radius:14px;opacity:0;transform:translateY(10px);transition:.2s}.scene-msg.show{opacity:1;transform:none}
+.tvscene{background:linear-gradient(#e4f0f8 0 67%,#b98c61 68%)}.tv{position:absolute;left:13%;top:14%;width:470px;height:240px;border-radius:24px;background:#17222d;border:16px solid #25394a;box-shadow:0 20px 0 -2px #6d4d39}.screen{position:absolute;inset:10px;border-radius:9px;background:linear-gradient(135deg,#253441,#10151b);display:flex;align-items:center;justify-content:center;color:#fff;font-size:2rem;transition:.25s}.screen.on{background:linear-gradient(135deg,#50c8ff,#7367f0 55%,#ff8b2b)}.broadcast{opacity:0;transform:scale(.8);transition:.25s;text-align:center}.screen.on .broadcast{opacity:1;transform:scale(1)}.remote{position:absolute;right:15%;top:22%;width:105px;height:225px;border-radius:30px;background:#26394a;border:5px solid #fff;cursor:pointer;display:flex;flex-direction:column;align-items:center;padding-top:24px;gap:18px;transform:rotate(-8deg);transition:.2s}.remote:hover{transform:rotate(-4deg) scale(1.04)}.power{width:45px;height:45px;border-radius:50%;background:#e84c4c;border:4px solid #f8a0a0}.dots{display:grid;grid-template-columns:repeat(3,14px);gap:9px}.dots i{width:14px;height:14px;border-radius:50%;background:#cbd7df}
+.fanscene{background:linear-gradient(#e3f8ff 0 70%,#e9c89c 71%)}.fan{position:absolute;left:50%;top:48%;transform:translate(-50%,-50%);width:250px;height:250px;border-radius:50%;border:18px solid #7fa5be;background:#edf8fc}.blades{position:absolute;inset:24px;border-radius:50%}.fan.running .blades{animation:spin .38s linear infinite}.blade{position:absolute;left:50%;top:50%;width:70px;height:125px;background:#6bd0dd;border-radius:70% 25% 70% 25%;transform-origin:0 0}.blade:nth-child(1){transform:rotate(0) translate(-5px,-5px)}.blade:nth-child(2){transform:rotate(120deg) translate(-5px,-5px)}.blade:nth-child(3){transform:rotate(240deg) translate(-5px,-5px)}.hub{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:62px;height:62px;border-radius:50%;background:var(--orange);border:8px solid #fff2d8;z-index:2}.stand{position:absolute;left:50%;top:72%;transform:translateX(-50%);width:44px;height:90px;background:#769bb2;border-radius:12px;box-shadow:0 75px 0 35px #688ca3}.fantoggle{position:absolute;right:10%;bottom:18%;width:120px;height:58px;border-radius:999px;background:#d7e3e9;border:5px solid #fff;cursor:pointer}.fantoggle:before{content:"OFF";position:absolute;left:5px;top:5px;width:44px;height:38px;border-radius:999px;background:#8298a7;color:#fff;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700;transition:.2s}.fantoggle.on{background:#c9f3da}.fantoggle.on:before{content:"ON";transform:translateX(59px);background:var(--green)}
+.device-row{display:flex;gap:26px;justify-content:center;width:100%}.device{flex:1;max-width:290px;background:#fff;border-radius:24px;padding:26px;text-align:center;border:2px solid #e5edf4}.device .v{font-size:5rem}.device strong{font-size:1.2rem;color:var(--navy)}.orb{width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,#fff8bd 0 20%,#ffd053 21% 43%,#ff9a2f 44% 59%,rgba(255,154,47,.18) 60%);display:flex;align-items:center;justify-content:center;font-size:8rem;animation:pulse 2s infinite}.chapter-hero{display:grid;grid-template-columns:1.15fr .85fr;gap:32px;align-items:center;width:100%}.blink-led{width:min(310px,80%);display:block;margin:auto;animation:blink 2.3s infinite;transform-origin:center bottom}
+.inspect,.battery-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:28px;width:100%;align-items:center}.imgbox{background:linear-gradient(135deg,#edf8ff,#fff8ec);border:3px solid #d8ebf5;border-radius:28px;padding:25px;display:flex;align-items:center;justify-content:center;min-height:350px}.imgbox img{max-height:320px;max-width:100%;object-fit:contain;filter:drop-shadow(0 18px 18px rgba(0,0,0,.16))}.labels{display:grid;gap:15px}.label{border-radius:20px;padding:18px 20px;background:#fff;border-left:8px solid var(--orange);box-shadow:0 10px 22px rgba(5,49,87,.1)}.label.c{border-left-color:var(--cyan)}.label strong{display:block;font-size:1.2rem;color:var(--navy);margin-bottom:4px}.label span{font-size:1rem;color:var(--muted);line-height:1.44}.polarity{display:flex;align-items:center;gap:15px;padding:18px 20px;background:#fff;border-radius:20px;border:2px solid #e7eff6}.sym{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.8rem;font-weight:700;flex:none}.plus{background:#ef5350}.minus{background:#222}.polarity strong{font-size:1.2rem;color:var(--navy);display:block}.polarity span{color:var(--muted)}
+.wireboard{position:relative;width:100%;min-height:390px;border-radius:28px;background:linear-gradient(135deg,#edf8ff,#fffaf1);border:3px solid #d7e9f3;overflow:hidden}.wireboard svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2}.wire{fill:none;stroke-width:8;stroke-linecap:round}.wire.pos{stroke:#ef5350}.wire.neg{stroke:#222}.wire.ctrl{stroke:#ff9b2f}.preview{fill:none;stroke:#46bfd0;stroke-width:6;stroke-linecap:round;stroke-dasharray:12 10;animation:dash .6s linear infinite}.term{position:absolute;width:30px;height:30px;border-radius:50%;border:5px solid #fff;box-shadow:0 5px 12px rgba(0,0,0,.18);cursor:pointer;z-index:5;transition:.16s}.term:hover{transform:scale(1.18)}.term.sel{box-shadow:0 0 0 7px rgba(67,213,230,.26)}.term.done{opacity:.45;cursor:default}.term.pos{background:#ef5350}.term.neg{background:#222}.term.ctrl{background:#ff9b2f}.bbattery{position:absolute;left:7%;top:28%;width:130px;height:170px;border-radius:20px;background:linear-gradient(90deg,#f5b447 0 72%,#222 73%);border:7px solid #fff;z-index:3}.bbattery:before{content:"CR2032";position:absolute;left:20px;top:56px;font-weight:700}.bbattery:after{content:"3V";position:absolute;left:42px;top:86px;font-weight:700}.bled{position:absolute;right:9%;top:17%;width:150px;height:220px;z-index:3}.bulb{position:absolute;left:50%;top:0;transform:translateX(-50%);width:105px;height:125px;border-radius:55px 55px 38px 38px;background:#a9d8e0;border:8px solid #fff;transition:.25s}.bled.on .bulb{background:#ff5757;box-shadow:0 0 42px 18px rgba(255,77,77,.55)}.leg{position:absolute;top:118px;width:10px;background:#b6bfc6;border-radius:4px}.leg.p{left:53px;height:95px}.leg.n{right:53px;height:72px}.bmsg{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);padding:10px 18px;border-radius:14px;background:#fff;color:var(--navy);font-weight:700;z-index:7;min-width:240px;text-align:center}
+.concept{position:relative;overflow:hidden;min-height:235px}.concept .num{position:absolute;right:-12px;bottom:-36px;font-size:9rem;font-weight:700;color:rgba(7,59,112,.06)}.concept .ci{font-size:3rem;margin-bottom:8px}.pipe,.push{width:100%;height:350px;background:#fff;border-radius:28px;border:3px solid #d9e9f3;padding:14px}.pipe svg,.push svg{width:100%;height:100%}.water{animation:dash .8s linear infinite}
+.wallpanel{min-height:350px;border-radius:28px;background:linear-gradient(#dfeef7,#f8fbfd);position:relative;border:5px solid #fff}.wallbulb{position:absolute;left:50%;top:58px;transform:translateX(-50%);width:112px;height:112px;border-radius:55% 55% 45% 45%;background:#dce5e9;transition:.25s}.wallpanel.on .wallbulb{background:#fff0a1;box-shadow:0 0 64px 30px rgba(255,213,80,.65)}.switchui{position:absolute;left:50%;bottom:45px;transform:translateX(-50%);width:96px;height:136px;border-radius:18px;background:#fff;border:6px solid #d8e4ea;cursor:pointer;display:flex;align-items:center;justify-content:center}.switchui .rocker{width:46px;height:80px}.wallpanel.on .rocker:before{transform:translateY(36px);background:var(--yellow)}.loops{display:grid;grid-template-columns:1fr 1fr;gap:24px;width:100%}.loop{background:#fff;border-radius:24px;padding:18px;border:3px solid #e2edf4}.loop h3{text-align:center;color:var(--navy);font-size:1.25rem;margin-bottom:8px}.loop svg{width:100%;height:230px}.smodule{position:absolute;left:44%;top:28%;width:155px;height:120px;border-radius:22px;background:#fff;border:4px solid #dceaf2;z-index:3;display:flex;align-items:center;justify-content:center}.minisw{width:85px;height:45px;border-radius:999px;background:#d7e2e8;cursor:pointer;position:relative;border:4px solid #fff}.minisw:before{content:"OFF";position:absolute;left:3px;top:3px;width:34px;height:31px;border-radius:999px;background:#879ca9;color:#fff;display:flex;align-items:center;justify-content:center;font-size:.66rem;font-weight:700;transition:.2s}.minisw.on{background:#c6f0d7}.minisw.on:before{content:"ON";transform:translateX(41px);background:var(--green)}
+.voltage{display:grid;grid-template-columns:1fr 1fr;gap:24px;width:100%}.station{min-height:350px;background:#fff;border-radius:26px;border:3px solid #dcebf4;padding:18px;text-align:center}.battery-token{width:116px;height:164px;border-radius:20px;background:linear-gradient(90deg,#f4b844 0 72%,#222 73%);border:6px solid #fff;display:flex;align-items:center;justify-content:center;font-size:1.55rem;font-weight:700;cursor:grab;margin:6px auto 12px}.battery-token.nine{background:linear-gradient(90deg,#20262b 0 66%,#e68c23 67%);color:#fff}.drop{border:3px dashed #a9c8da;border-radius:18px;min-height:84px;display:flex;align-items:center;justify-content:center;color:#6f8798;font-weight:600;background:#f6fbfe}.drop.over{border-color:var(--cyan);background:#e9fbfd}.labled{margin:14px auto 8px;width:74px;height:92px;border-radius:40px 40px 28px 28px;background:#dbe3e7;border:7px solid #f7fbfd;transition:.25s}.labled.safe{background:#ff5f5f;box-shadow:0 0 34px 16px rgba(255,74,74,.5)}.labled.damage{background:#fff4c3;animation:damage .65s 2;box-shadow:0 0 70px 28px rgba(255,224,91,.85)}.dlabel{font-size:.95rem;font-weight:700;color:var(--red);min-height:24px}
+.river-scene{background:linear-gradient(#dff4ff 0 50%,#8ac45c 51%)}.river{position:absolute;left:-5%;right:-5%;top:48%;height:130px;background:linear-gradient(#58c7ef,#2b95cf);transform:rotate(-4deg)}.river:before,.river:after{content:"";position:absolute;left:-10%;right:-10%;height:16px;border-radius:50%;border-top:6px solid rgba(255,255,255,.7);animation:dash 1s linear infinite}.river:before{top:24px}.river:after{top:74px}.rock-led{position:absolute;right:20%;top:50%;width:110px;height:110px;border-radius:46%;background:#8b7c72;border:7px solid #675a52;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;z-index:2}.rock-led.crack{animation:shake .25s 5;background:#6b5b52}.rock-led.crack:after{content:"⚡";position:absolute;font-size:3.2rem;color:var(--yellow)}.river-label{position:absolute;left:8%;top:21%;padding:9px 15px;border-radius:14px;background:#fff;color:var(--navy);font-weight:700}.river-control{position:absolute;left:8%;bottom:12%;z-index:3}.shield{width:260px;height:290px;margin:auto;background:linear-gradient(135deg,var(--cyan),var(--navy));clip-path:polygon(50% 0,92% 16%,84% 72%,50% 100%,16% 72%,8% 16%);display:flex;align-items:center;justify-content:center;color:#fff;font-size:5rem;filter:drop-shadow(0 18px 20px rgba(0,0,0,.18))}
+.pool{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;padding:16px;border-radius:20px;background:#f1f7fb;border:2px solid #dbe9f2;width:100%}.token{padding:12px 18px;border-radius:16px;background:#fff;border:2px solid #d9e6ee;font-weight:700;cursor:grab}.slots{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;width:100%}.slot{min-height:112px;border:3px dashed #a9c7d9;border-radius:20px;background:#f9fcfe;display:flex;align-items:center;justify-content:center;text-align:center;color:#6c8496;font-weight:700;padding:10px}.slot.filled{border-style:solid;border-color:var(--green);background:#ecfaf2;color:#20734a}.slot.over{border-color:var(--cyan);background:#e9fbfd}.choice-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;width:100%}.choice{background:#fff;border-radius:22px;border:3px solid #e1edf4;padding:16px}.choice svg{width:100%;height:140px}.choice-btns{display:grid;grid-template-columns:1fr 1fr;gap:10px}.choice-btns button{padding:10px;border-radius:12px;border:2px solid #dce8ef;background:#f8fbfd;font-family:'Fredoka';font-weight:700;cursor:pointer}.choice-fb{min-height:24px;text-align:center;font-weight:700;margin-top:8px}
+.repair-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;width:100%}.repair{background:#fff;border-radius:22px;border:3px solid #e1edf4;padding:16px;text-align:center}.rvis{height:130px;position:relative;border-radius:16px;background:#f1f7fb;margin-bottom:12px;overflow:hidden}.fault{position:absolute;cursor:pointer;border:3px dashed var(--red);border-radius:12px;background:transparent}.repair.fixed .fault{border-color:var(--green);background:rgba(56,181,111,.15)}.status{font-weight:700;color:var(--red)}.repair.fixed .status{color:var(--green)}.flip-grid,.predict,.feedback{display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:center;width:100%}.flipbox{min-height:330px;background:#fff;border-radius:28px;border:3px solid #dcebf4;display:flex;align-items:center;justify-content:center}.flipled{position:relative;width:150px;height:240px;transition:.45s}.flipled.rev{transform:rotateY(180deg)}.flipled .bulb{width:110px;height:130px}.flipled.on .bulb{background:#ff5959;box-shadow:0 0 44px 20px rgba(255,69,69,.55)}.flipled .leg.one{left:48px;height:105px}.flipled .leg.two{right:48px;height:72px}.scenario{background:#fff;border-radius:26px;border:3px solid #dcebf4;padding:20px;min-height:340px}.scenario-title{font-size:1.2rem;font-weight:700;color:var(--navy);text-align:center;margin-bottom:12px}.scenario-vis{height:190px;border-radius:18px;background:#eff7fb;display:flex;align-items:center;justify-content:center;font-size:4.2rem}.predict-fb{min-height:72px;padding:14px;border-radius:16px;background:#f4f9fc;color:var(--muted);line-height:1.4}.quiz{width:min(860px,100%);background:#fff;border-radius:28px;padding:30px;border:3px solid #dcebf4;color:var(--ink);margin:0 auto}.quiz-prog{font-size:.9rem;font-weight:700;color:var(--orange);margin-bottom:10px}.quiz-q{font-size:1.55rem;font-weight:700;color:var(--navy);line-height:1.3;margin-bottom:18px}.quiz-options{display:grid;gap:12px}.quiz-fb{min-height:64px;margin-top:14px;padding:14px 16px;border-radius:16px;background:#f4f9fc;color:var(--muted);line-height:1.45}.review{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;width:100%}.review .card{min-height:150px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center}.feedback-choices{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.feedback-choice{padding:22px 10px;border-radius:20px;background:#fff;border:3px solid #e0ebf2;text-align:center;cursor:pointer;transition:.2s}.feedback-choice:hover,.feedback-choice.selected{transform:translateY(-5px);border-color:var(--cyan);background:#effcfd}.face{font-size:3rem}
+.toast{position:fixed;left:50%;bottom:34px;transform:translate(-50%,28px);z-index:3000;padding:14px 20px;border-radius:16px;background:#102f4c;color:#fff;font-weight:700;opacity:0;pointer-events:none;transition:.25s;max-width:min(620px,88vw);text-align:center}.toast.show{opacity:1;transform:translate(-50%,0)}.confetti{position:fixed;width:10px;height:16px;border-radius:3px;z-index:3500;pointer-events:none;animation:fall 1.5s ease-out forwards}@keyframes fall{to{transform:translate(var(--x),var(--y)) rotate(680deg);opacity:0}}
+@media(max-width:1100px){.presentation{width:94vw}.slide{padding:66px 50px 56px}.agenda,.review,.four{grid-template-columns:repeat(2,1fr)}}@media(max-width:760px){body{overflow:auto}.brand{left:8px;top:8px;padding:7px 10px;gap:8px}.brand .k{height:30px}.brand .r{height:26px}.brand i{height:25px}.presentation{position:absolute;top:64px;transform:translateX(-50%);width:100vw;height:calc(100vh - 64px);max-height:none;aspect-ratio:auto;border-radius:0;border:0}.slide{padding:68px 20px 62px;overflow-y:auto;justify-content:flex-start}.nav{width:42px;height:42px;top:auto;bottom:12px}#prev{left:12px}#next{right:12px}.chip{left:16px;top:18px}.two,.three,.cover,.chapter-hero,.inspect,.battery-grid,.voltage,.flip-grid,.predict,.feedback,.loops{grid-template-columns:1fr}.agenda,.review,.four,.choice-grid,.repair-grid{grid-template-columns:1fr}.slots{grid-template-columns:1fr 1fr}.display{text-align:center;font-size:3rem}.home,.tvscene,.fanscene{height:420px}.tv{left:5%;width:68%;height:210px}.remote{right:5%;width:90px;height:205px}.slide:after{display:none}}
+</style>
+</head>
+<body>
+<div class="brand"><img class="k" src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/5b36ddb1-5ff5-490e-af31-9a171820e051.png" alt="Kalananti"><i></i><img class="r" src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/7e71d258-897f-42b7-9c8b-2ff76376ffc6.png" alt="Ruangguru Coding"></div>
+<button class="nav" id="prev">◀</button><button class="nav" id="next">▶</button>
+<main class="presentation" id="presentation">
+<section class="slide dark active"><div class="cover content"><div><div class="kicker left" style="color:var(--cyan)">WELCOME TO DIY ROBOTIC CLASS</div><h1 class="display">Intro to<br><span class="accent">Electronics</span></h1><p class="cover-sub">Mengenal energi listrik, LED, switch, voltage, dan circuit melalui simulasi interaktif sebelum mulai menggunakan kit.</p><div class="pill">SESSION 1 · ELECTRONICS FOUNDATION</div></div><img class="robot" src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/eded3e71-16cf-401e-b1c1-3ff5f887dc38.png" alt="Robot"></div></section>
+
+<section class="slide"><span class="chip"><b></b> Today's Agenda</span><div class="content stack"><div><div class="kicker">WHAT WE WILL LEARN TODAY</div><h2 class="slide-title">Rencana Belajar Hari Ini</h2></div><div class="agenda"><div class="card icon-card"><div class="big-icon">💡</div><h3>Make It Light</h3><p>Mengenal LED, battery, dan polarity.</p></div><div class="card icon-card"><div class="big-icon">🎚️</div><h3>Switch It On</h3><p>Memahami switch dan jalur circuit.</p></div><div class="card icon-card"><div class="big-icon">⚡</div><h3>Voltage Matters</h3><p>Melihat dampak 3V dan 9V.</p></div><div class="card icon-card"><div class="big-icon">🧩</div><h3>Circuit Missions</h3><p>Menyelesaikan simulasi dan troubleshooting.</p></div></div></div></section>
+
+<section class="slide"><span class="chip"><b></b> Everyday Electronics</span><div class="content stack"><div><h2 class="slide-title">Coba Nyalakan Lampunya</h2><p class="lead">Klik switch di dinding. Perhatikan apa yang terjadi, lalu coba matikan dan nyalakan kembali.</p></div><div class="home" id="home"><div class="window"></div><div class="sofa"></div><div class="lamp"></div><button class="wallsw" id="homeSwitch"><span class="rocker"></span></button><div class="scene-msg" id="homeMsg">Lampu menyala. Coba matikan lagi.</div></div><div class="instruction">👆 Klik switch beberapa kali dan amati perubahan energinya.</div></div></section>
+
+<section class="slide"><span class="chip"><b></b> Everyday Electronics</span><div class="content stack"><div><h2 class="slide-title">Sekarang Coba Nyalakan TV</h2><p class="lead">Klik tombol power pada remote. Remote mengirimkan perintah, lalu TV menggunakan energi listrik untuk menampilkan gambar dan suara.</p></div><div class="tvscene"><div class="tv"><div class="screen" id="tvScreen"><div class="broadcast">DIY ROBOTIC<br><small>Electronics in Action</small></div></div></div><button class="remote" id="tvRemote"><span class="power"></span><span class="dots"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span></button></div><div class="instruction">📺 Klik tombol merah pada remote untuk menyalakan atau mematikan TV.</div></div></section>
+
+<section class="slide"><span class="chip"><b></b> Everyday Electronics</span><div class="content stack"><div><h2 class="slide-title">Bagaimana dengan Kipas?</h2><p class="lead">Klik tombol ON/OFF. Saat aktif, motor mengubah energi listrik menjadi gerak putar.</p></div><div class="fanscene"><div class="fan" id="fan"><div class="blades"><span class="blade"></span><span class="blade"></span><span class="blade"></span></div><span class="hub"></span></div><div class="stand"></div><button class="fantoggle" id="fanToggle"></button></div><div class="instruction">🌀 Klik tombol kipas dan lihat perubahan output-nya.</div></div></section>
+
+<section class="slide dark"><span class="chip"><b></b> Think About It</span><div class="content stack center"><h2 class="slide-title">Pernah Terpikir Kenapa Semua Itu Bisa Menyala?</h2><p class="lead">Lampu menghasilkan cahaya, TV menampilkan gambar, dan kipas berputar. Bentuk output-nya berbeda, tetapi semuanya membutuhkan satu hal yang sama.</p><div class="device-row"><div class="device"><div class="v">💡</div><strong>Light</strong></div><div class="device"><div class="v">📺</div><strong>Picture & Sound</strong></div><div class="device"><div class="v">🌀</div><strong>Movement</strong></div></div><button class="btn" onclick="toast('Jawabannya akan kita temukan pada slide berikutnya.')">Apa yang sama?</button></div></section>
+
+<section class="slide orange"><span class="chip"><b></b> Electricity</span><div class="content two max"><div class="stack"><div class="kicker left" style="color:#fff4cf">THE ENERGY BEHIND TECHNOLOGY</div><h2 class="slide-title left">Semua Itu Bekerja Berkat <span class="yellow">Listrik</span></h2><p class="lead left">Listrik adalah bentuk energi yang menghidupkan berbagai teknologi di rumah. Energi yang sama bisa diubah menjadi cahaya, suara, gambar, panas, atau gerak.</p></div><div class="orb">⚡</div></div></section>
+
+<section class="slide dark"><span class="chip"><b></b> Your Journey</span><div class="content two max"><img class="robot" src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/eded3e71-16cf-401e-b1c1-3ff5f887dc38.png" alt="Robot"><div class="stack"><h2 class="slide-title left">Dari Circuit Sederhana ke Robot Buatanmu</h2><p class="lead left">Setelah memahami dasar electronics, kamu akan lebih siap menggabungkan cahaya, suara, dan gerak menjadi berbagai proyek robotik. Kita mulai dari konsep kecil yang nantinya bisa berkembang menjadi sebuah sistem.</p><div class="instruction">🔧 Learn the basics. Test the circuit. Build the robot.</div></div></div></section>
+
+<section class="slide"><span class="chip"><b></b> Start Simple</span><div class="content chapter-hero max"><div class="stack"><div class="kicker left">BUT FIRST...</div><h2 class="slide-title left">Mari Mulai dari Hal yang Paling Sederhana</h2><p class="lead left">Sebelum membuat robot bergerak atau berbunyi, kita perlu memahami bagaimana sebuah lampu kecil bisa menyala.</p></div><div class="card icon-card" style="min-height:330px;background:linear-gradient(145deg,#fff,#edf9fb)"><div style="font-size:8rem;animation:pulse 2s infinite">💡</div><h3>First Mission</h3><p>Turn electrical energy into light.</p></div></div></section>
+
+<section class="slide dark"><span class="chip"><b></b> #1 Make It Light!</span><div class="content chapter-hero max"><div class="stack"><div class="kicker left" style="color:var(--cyan)">CHAPTER 1</div><h2 class="slide-title left">Make It Light!</h2><p class="lead left">Ketika switch lampu ditekan, cahaya muncul hampir seketika. Sekarang kita akan melihat bagaimana energi listrik membuat sebuah LED menyala.</p></div><img class="blink-led" src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/6c06092c-42ed-438e-b017-ad5cfe801d36.png" alt="LED berkedip"></div></section>
+
+<section class="slide"><span class="chip"><b></b> #1 Make It Light!</span><div class="content stack"><div><div class="kicker">LET'S INSPECT THE LED</div><h2 class="slide-title">Kenali Dua Kaki LED</h2><p class="lead">LED (Light Emitting Diode) merupakan perangkat semikonduktor yang mengubah energi listrik menjadi cahaya.</p></div><div class="inspect"><div class="imgbox"><img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/17dab66a-5f76-4bab-a36b-74e583afccf8.png" alt="LED 5 mm"></div><div class="labels"><div class="label"><strong>Anode · Positive (+)</strong><span>Biasanya memiliki kaki yang lebih ramping. Kaki ini perlu menuju sisi positif sumber energi.</span></div><div class="label c"><strong>Cathode · Negative (-)</strong><span>Biasanya memiliki kaki lebih lebar. Di dalam LED, sisi katoda terlihat seperti bagian logam yang lebih besar atau seperti “bendera”.</span></div><div class="instruction">🔎 Perhatikan perbedaan bentuk kaki dalam bohlam LED.</div></div></div></div></section>
+
+<section class="slide"><span class="chip"><b></b> #1 Make It Light!</span><div class="content stack"><div><div class="kicker">WE NEED POWER</div><h2 class="slide-title">Sumber Energi Kita: CR2032</h2><p class="lead">Baterai koin ini memiliki tegangan 3V dan berfungsi sebagai sumber energi untuk rangkaian kita.</p></div><div class="battery-grid"><div class="imgbox"><img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/8a8c19bd-d8f0-4a25-a0ae-cf9ca35adcef.jpg" alt="Baterai koin CR2032"></div><div class="stack"><div class="polarity"><span class="sym plus">+</span><div><strong>Positive Side</strong><span>Permukaan rata, lebar, dan biasanya memiliki tulisan CR2032 serta tanda +.</span></div></div><div class="polarity"><span class="sym minus">−</span><div><strong>Negative Side</strong><span>Permukaannya sedikit lebih kecil dan berada di sisi sebaliknya.</span></div></div><p class="note">Sisi positif dan negatif ini perlu diperhatikan ketika kita menghubungkan battery ke LED.</p></div></div></div></section>
+
+<section class="slide"><span class="chip"><b></b> #1 Make It Light!</span><div class="content stack"><div><h2 class="slide-title">Connect the LED to the Battery</h2><p class="lead">Klik satu terminal, lalu klik terminal pasangannya. Positive bertemu positive, negative bertemu negative.</p></div><div class="wireboard" id="ledBoard"><svg></svg><div class="bbattery"></div><div class="term pos" data-net="lp" data-wire="pos" style="left:19%;top:24%"><span style="position:absolute;right:38px;top:4px;font-size:1rem;font-weight:bold;color:#ef5350;white-space:nowrap;pointer-events:none">Positive (+)</span></div><div class="term neg" data-net="ln" data-wire="neg" style="left:19%;bottom:22%"><span style="position:absolute;right:38px;top:4px;font-size:1rem;font-weight:bold;color:#222;white-space:nowrap;pointer-events:none">Negative (-)</span></div><div class="bled" id="wireLed"><div class="bulb"></div><span class="leg p"></span><span class="leg n"></span></div><div class="term pos" data-net="lp" data-wire="pos" style="right:14%;bottom:20%"><span style="position:absolute;left:38px;top:4px;font-size:1rem;font-weight:bold;color:#ef5350;white-space:nowrap;pointer-events:none">(+) Anode</span></div><div class="term neg" data-net="ln" data-wire="neg" style="right:7%;bottom:29%"><span style="position:absolute;left:38px;top:4px;font-size:1rem;font-weight:bold;color:#222;white-space:nowrap;pointer-events:none">(-) Cathode</span></div><div class="bmsg" id="ledBoardMsg">Mulai dari salah satu terminal battery.</div></div><div class="instruction">🖱️ Klik terminal pertama, lalu klik pasangan dengan polaritas yang sesuai.</div></div></section>
+
+<section class="slide"><span class="chip"><b></b> #1 Make It Light!</span><div class="content two max"><div class="stack"><h2 class="slide-title left">Mengapa Polarity Harus Sesuai?</h2><p class="lead left">LED adalah komponen yang memiliki arah kerja. Arus konvensional perlu masuk melalui <span class="highlight">anode (+)</span> dan keluar melalui <span class="cyan">cathode (−)</span>.</p><p class="lead left" style="font-size:1.1rem">Jika LED dipasang terbalik, jalurnya terlihat lengkap, tetapi LED tidak mengalirkan arus pada arah tersebut sehingga lampu tidak menyala.</p></div><div class="card center"><svg viewBox="0 0 460 310" style="width:100%"><defs><marker id="ar" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#ef5350"/></marker></defs><rect x="34" y="98" width="90" height="120" rx="18" fill="#f4b844"/><text x="79" y="85" text-anchor="middle" font-size="16" font-weight="700" fill="#c73737">(+) Positive</text><text x="79" y="242" text-anchor="middle" font-size="16" font-weight="700" fill="#222">(-) Negative</text><path d="M124 125 H280" stroke="#ef5350" stroke-width="8" marker-end="url(#ar)"/><path d="M280 195 H124" stroke="#222" stroke-width="8"/><ellipse cx="330" cy="125" rx="48" ry="58" fill="#ff5c5c" stroke="#fff" stroke-width="8"/><line x1="305" y1="176" x2="305" y2="245" stroke="#aeb7be" stroke-width="10"/><line x1="354" y1="176" x2="354" y2="225" stroke="#aeb7be" stroke-width="10"/><text x="305" y="265" text-anchor="middle" font-size="15" font-weight="700" fill="#ef5350">(+) Anode</text><text x="365" y="245" text-anchor="middle" font-size="15" font-weight="700" fill="#222">(-) Cathode</text><text x="330" y="295" text-anchor="middle" font-size="18" font-weight="700" fill="#073b70">Correct Direction</text></svg></div></div></section>
+
+<section class="slide"><span class="chip"><b></b> #1 Make It Light!</span><div class="content stack"><div><div class="kicker">HOW DOES ELECTRICITY LIGHT AN LED?</div><h2 class="slide-title">Empat Konsep Dasar dalam Circuit</h2></div><div class="four"><div class="card concept"><div class="ci">⚛️</div><h3>Electrons</h3><p>Partikel sangat kecil yang bergerak di dalam rangkaian listrik (circuit).</p><span class="num">1</span></div><div class="card concept"><div class="ci">➡️</div><h3>Current</h3><p>Banyaknya aliran muatan listrik yang melewati circuit.</p><span class="num">2</span></div><div class="card concept"><div class="ci">🔋</div><h3>Voltage</h3><p>Dorongan listrik yang membantu menggerakkan muatan di dalam circuit.</p><span class="num">3</span></div><div class="card concept"><div class="ci">💡</div><h3>Output</h3><p>Komponen yang mengubah energi listrik menjadi cahaya atau gerak.</p><span class="num">4</span></div></div><p class="note center">Untuk sesi ini, kita fokus memahami gambaran besarnya terlebih dahulu.</p></div></section>
+
+<section class="slide"><span class="chip"><b></b> #1 Make It Light!</span><div class="content stack"><div><div class="kicker">A CIRCUIT IS LIKE A PIPE SYSTEM</div><h2 class="slide-title">Bayangkan Listrik Seperti Air dalam Pipa</h2></div><div class="pipe"><svg viewBox="0 0 1000 340"><path d="M170 90 H790 Q850 90 850 150 V220 Q850 270 790 270 H170 Q110 270 110 210 V150 Q110 90 170 90Z" fill="none" stroke="#b7d4e4" stroke-width="44" stroke-linecap="round"/><path d="M170 90 H790 Q850 90 850 150 V220 Q850 270 790 270 H170 Q110 270 110 210 V150 Q110 90 170 90Z" fill="none" stroke="#43b7e7" stroke-width="24" stroke-linecap="round" stroke-dasharray="24 18" class="water"/><rect x="55" y="127" width="110" height="105" rx="22" fill="#ffb13c" stroke="#fff" stroke-width="8"/><text x="110" y="178" text-anchor="middle" font-size="23" font-weight="700">PUMP</text><text x="110" y="205" text-anchor="middle" font-size="17">Battery</text><circle cx="501" cy="91" r="36" fill="#ff8b2b" stroke="#fff" stroke-width="6"/><path d="M480 70 L522 112 M480 112 L522 70 M501 55 V127 M465 91 H537" stroke="#fff" stroke-width="4"/><text x="501" y="45" text-anchor="middle" font-size="18" font-weight="700" fill="#073b70">Water Wheel</text><text x="501" y="152" text-anchor="middle" font-size="17" font-weight="700" fill="#ff8b2b">Output (LED)</text><text x="500" y="318" text-anchor="middle" font-size="18" font-weight="700" fill="#073b70">Jumlah air yang mengalir = Current</text><text x="815" y="55" text-anchor="middle" font-size="17" font-weight="700" fill="#073b70">Dorongan pump = Voltage</text></svg></div><div class="three"><div class="card center"><h3>Battery = Pump</h3><p>Memberi dorongan agar aliran bergerak.</p></div><div class="card center"><h3>Current = Water Flow</h3><p>Menunjukkan seberapa banyak aliran bergerak.</p></div><div class="card center"><h3>Output = Water Wheel</h3><p>Mengubah aliran menjadi energi (cahaya/gerak).</p></div></div></div></section>
+
+<section class="slide dark"><span class="chip"><b></b> #2 Switch It On</span><div class="content two max"><div class="wallpanel" id="wallPanel"><div class="wallbulb"></div><button class="switchui" id="wallSwitch"><span class="rocker"></span></button></div><div class="stack"><div class="kicker left" style="color:var(--cyan)">CHAPTER 2</div><h2 class="slide-title left">Switch It On</h2><p class="lead left">Switch ada di banyak tempat di rumah. Fungsinya sederhana: menyambungkan atau memutus jalur listrik.</p><div class="instruction">👆 Klik switch. Saat jalur tersambung, lampu menyala.</div></div></div></section>
+
+<section class="slide"><span class="chip"><b></b> #2 Switch It On</span><div class="content stack"><div><h2 class="slide-title">Closed Loop dan Open Loop</h2><p class="lead">Lampu menyala hanya ketika circuit membentuk jalur lengkap dari battery, melewati LED, lalu kembali ke battery.</p></div><div class="loops"><div class="loop"><h3>Closed Circuit · Light ON</h3><svg viewBox="0 0 430 230"><path d="M80 65 H330 V175 H80 Z" fill="none" stroke="#1e7ab5" stroke-width="9"/><rect x="42" y="93" width="70" height="72" rx="12" fill="#f4b844"/><ellipse cx="218" cy="65" rx="42" ry="48" fill="#ffef88" stroke="#fff" stroke-width="7"/><circle cx="330" cy="120" r="28" fill="#38b56f"/><text x="330" y="126" text-anchor="middle" fill="#fff" font-weight="700">ON</text></svg></div><div class="loop"><h3>Open Circuit · Light OFF</h3><svg viewBox="0 0 430 230"><path d="M80 65 H330 V98" fill="none" stroke="#1e7ab5" stroke-width="9"/><path d="M330 156 V175 H80 Z" fill="none" stroke="#1e7ab5" stroke-width="9"/><rect x="42" y="93" width="70" height="72" rx="12" fill="#f4b844"/><ellipse cx="218" cy="65" rx="42" ry="48" fill="#dfe7eb" stroke="#fff" stroke-width="7"/><line x1="316" y1="118" x2="356" y2="95" stroke="#ef5350" stroke-width="10"/><text x="330" y="207" text-anchor="middle" fill="#ef5350" font-weight="700">PATH DISCONNECTED</text></svg></div></div></div></section>
+
+<section class="slide"><span class="chip"><b></b> #2 Switch It On</span><div class="content stack"><div><h2 class="slide-title">Build a Switch Circuit</h2><p class="lead">Hubungkan Battery (+) ke switch, switch ke LED (+), lalu LED (−) kembali ke Battery (−).</p></div><div class="wireboard" id="switchBoard"><svg></svg><div class="bbattery"></div><div class="term pos" data-net="sa" data-wire="pos" style="left:17%;top:36%"><span style="position:absolute;right:38px;top:4px;font-size:1rem;font-weight:bold;color:#ef5350;white-space:nowrap;pointer-events:none">Positive (+)</span></div><div class="term neg" data-net="sc" data-wire="neg" style="left:17%;bottom:20%"><span style="position:absolute;right:38px;top:4px;font-size:1rem;font-weight:bold;color:#222;white-space:nowrap;pointer-events:none">Negative (-)</span></div><div class="smodule"><div class="minisw" id="builtSwitch"></div></div><div class="term ctrl" data-net="sa" data-wire="ctrl" style="left:41%;top:43%"></div><div class="term ctrl" data-net="sb" data-wire="ctrl" style="left:58%;top:43%"></div><div class="bled" id="switchLed"><div class="bulb"></div><span class="leg p"></span><span class="leg n"></span></div><div class="term pos" data-net="sb" data-wire="pos" style="right:13%;bottom:20%"><span style="position:absolute;left:38px;top:4px;font-size:1rem;font-weight:bold;color:#ef5350;white-space:nowrap;pointer-events:none">(+) Anode</span></div><div class="term neg" data-net="sc" data-wire="neg" style="right:6%;bottom:29%"><span style="position:absolute;left:38px;top:4px;font-size:1rem;font-weight:bold;color:#222;white-space:nowrap;pointer-events:none">(-) Cathode</span></div><div class="bmsg" id="switchMsg">Selesaikan tiga sambungan.</div></div><div class="instruction">🖱️ Setelah semua wire tersambung, klik switch untuk mengontrol LED.</div></div></section>
+
+<section class="slide"><span class="chip"><b></b> #2 Switch It On</span><div class="content two max"><div class="stack"><h2 class="slide-title left">Urutan Sambungan Switch</h2><div class="card"><h3>1. Battery (+) → Switch</h3><p>Energi dari battery masuk ke switch.</p></div><div class="card"><h3>2. Switch → LED (+)</h3><p>Ketika switch ON, jalur menuju LED menjadi lengkap.</p></div><div class="card"><h3>3. LED (−) → Battery (−)</h3><p>Arus kembali ke sumber energi untuk menutup loop.</p></div></div><div class="card center"><svg viewBox="0 0 460 360" style="width:100%"><path d="M82 92 H210" stroke="#ef5350" stroke-width="10"/><path d="M250 92 H365 V260 H82 V92" fill="none" stroke="#222" stroke-width="10"/><rect x="35" y="142" width="94" height="120" rx="20" fill="#f4b844"/><text x="82" y="132" text-anchor="middle" font-size="14" font-weight="700" fill="#ef5350">(+) Positive</text><text x="82" y="280" text-anchor="middle" font-size="14" font-weight="700" fill="#222">(-) Negative</text><rect x="198" y="62" width="66" height="62" rx="18" fill="#fff" stroke="#ff8b2b" stroke-width="7"/><line x1="215" y1="96" x2="247" y2="80" stroke="#ff8b2b" stroke-width="9"/><ellipse cx="365" cy="92" rx="46" ry="54" fill="#ff6464" stroke="#fff" stroke-width="8"/><text x="315" y="85" text-anchor="middle" font-size="14" font-weight="700" fill="#ef5350">(+) Anode</text><text x="385" y="145" text-anchor="middle" font-size="14" font-weight="700" fill="#222">(-) Cathode</text><text x="230" y="150" text-anchor="middle" font-size="18" font-weight="700" fill="#ff8b2b">SWITCH</text><text x="365" y="188" text-anchor="middle" font-size="18" font-weight="700" fill="#073b70">LED</text><text x="82" y="305" text-anchor="middle" font-size="18" font-weight="700" fill="#073b70">BATTERY</text></svg><p class="note">Seperti air di dalam pipa, aliran tidak dapat mencapai LED jika jalurnya terputus.</p></div></div></section>
+
+<section class="slide dark" id="voltageActivitySlide">
+    <span class="chip">
+        <b></b> #3 Voltage Matters
+    </span>
+
+    <style>
+        #voltageActivitySlide .voltage-circuit-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 22px;
+            width: 100%;
+        }
+
+        #voltageActivitySlide .voltage-station {
+            position: relative;
+            min-height: 390px;
+            padding: 20px;
+            overflow: hidden;
+            color: var(--ink);
+            text-align: center;
+            background: #ffffff;
+            border: 3px solid rgba(67, 213, 230, 0.35);
+            border-radius: 24px;
+            box-shadow: 0 14px 30px rgba(0, 0, 0, 0.18);
+        }
+
+        #voltageActivitySlide .station-title {
+            margin: 0 0 6px;
+            color: var(--navy);
+            font-size: 1.25rem;
+        }
+
+        #voltageActivitySlide .station-note {
+            margin: 0 0 12px;
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+
+        #voltageActivitySlide .circuit-workspace {
+            position: relative;
+            min-height: 255px;
+            margin-top: 10px;
+            overflow: hidden;
+            background:
+                radial-gradient(
+                    circle at center,
+                    rgba(67, 213, 230, 0.08),
+                    transparent 60%
+                ),
+                #f5fbff;
+            border: 2px solid #dcebf4;
+            border-radius: 20px;
+        }
+
+        #voltageActivitySlide .battery-visual {
+            position: absolute;
+            top: 62px;
+            left: 24px;
+            width: 105px;
+            height: 135px;
+            border: 5px solid #ffffff;
+            border-radius: 18px;
+            box-shadow: 0 10px 18px rgba(0, 0, 0, 0.16);
+        }
+
+        #voltageActivitySlide .battery-3v {
+            background: linear-gradient(
+                90deg,
+                #f5bb49 0 72%,
+                #222222 73%
+            );
+        }
+
+        #voltageActivitySlide .battery-9v {
+            background: linear-gradient(
+                90deg,
+                #242a30 0 66%,
+                #e58b24 67%
+            );
+        }
+
+        #voltageActivitySlide .battery-label {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        #voltageActivitySlide .battery-3v .battery-label {
+            color: #183b58;
+        }
+
+        #voltageActivitySlide .led-visual {
+            position: absolute;
+            top: 42px;
+            right: 30px;
+            width: 115px;
+            height: 190px;
+        }
+
+        #voltageActivitySlide .led-bulb {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 78px;
+            height: 94px;
+            background: #dce5e9;
+            border: 7px solid #ffffff;
+            border-radius: 42px 42px 28px 28px;
+            transform: translateX(-50%);
+            transition: 0.3s ease;
+            box-shadow: inset 0 -10px 0 rgba(0, 0, 0, 0.08);
+        }
+
+        #voltageActivitySlide .led-leg {
+            position: absolute;
+            top: 87px;
+            width: 8px;
+            background: #aeb9c1;
+            border-radius: 5px;
+        }
+
+        #voltageActivitySlide .led-leg.anode {
+            left: 38px;
+            height: 92px;
+        }
+
+        #voltageActivitySlide .led-leg.cathode {
+            right: 38px;
+            height: 68px;
+        }
+
+        #voltageActivitySlide .led-visual.safe .led-bulb {
+            background: #ff5959;
+            box-shadow:
+                0 0 34px 15px rgba(255, 89, 89, 0.55),
+                inset 0 -10px 0 rgba(150, 0, 0, 0.08);
+        }
+
+        #voltageActivitySlide .led-visual.damaged .led-bulb {
+            background: #fff1a3;
+            animation: voltageDamage 0.55s ease 3;
+            box-shadow: 0 0 58px 25px rgba(255, 225, 92, 0.85);
+        }
+
+        #voltageActivitySlide .led-visual.burnt .led-bulb {
+            background: #776b66;
+            box-shadow: none;
+        }
+
+        @keyframes voltageDamage {
+            0%, 100% {
+                transform: translateX(-50%) scale(1);
+                filter: brightness(1);
+            }
+
+            40% {
+                transform: translateX(-50%) scale(1.12);
+                filter: brightness(2.5);
+            }
+
+            70% {
+                transform: translateX(-50%) scale(0.96);
+                filter: brightness(0.65);
+            }
+        }
+
+        #voltageActivitySlide .terminal-label {
+            position: absolute;
+            z-index: 8;
+            padding: 5px 9px;
+            color: var(--ink);
+            font-size: 0.75rem;
+            font-weight: 700;
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 5px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        #voltageActivitySlide .positive-label {
+            top: 16px;
+            left: 16px;
+            color: #ef5350;
+        }
+
+        #voltageActivitySlide .negative-label {
+            bottom: 15px;
+            left: 16px;
+            color: #222;
+        }
+
+        #voltageActivitySlide .anode-label {
+            top: 15px;
+            right: 92px;
+            color: #ef5350;
+        }
+
+        #voltageActivitySlide .cathode-label {
+            right: 13px;
+            bottom: 15px;
+            color: #222;
+        }
+
+        #voltageActivitySlide .wire-source,
+        #voltageActivitySlide .wire-target {
+            position: absolute;
+            z-index: 10;
+            width: 28px;
+            height: 28px;
+            border: 5px solid #ffffff;
+            border-radius: 50%;
+            cursor: grab;
+            box-shadow: 0 5px 12px rgba(0, 0, 0, 0.18);
+            transition: 0.2s ease;
+        }
+
+        #voltageActivitySlide .wire-source:hover,
+        #voltageActivitySlide .wire-target.drag-over {
+            transform: scale(1.16);
+            box-shadow:
+                0 0 0 7px rgba(67, 213, 230, 0.22),
+                0 5px 12px rgba(0, 0, 0, 0.18);
+        }
+
+        #voltageActivitySlide .wire-source.connected,
+        #voltageActivitySlide .wire-target.connected {
+            opacity: 0.45;
+            cursor: default;
+        }
+
+        #voltageActivitySlide .positive-terminal {
+            background: #ef5350;
+        }
+
+        #voltageActivitySlide .negative-terminal {
+            background: #222;
+        }
+
+        #voltageActivitySlide .battery-positive {
+            top: 72px;
+            left: 115px;
+        }
+
+        #voltageActivitySlide .battery-negative {
+            top: 171px;
+            left: 115px;
+        }
+
+        #voltageActivitySlide .led-anode {
+            top: 150px;
+            right: 89px;
+        }
+
+        #voltageActivitySlide .led-cathode {
+            top: 128px;
+            right: 22px;
+        }
+
+        #voltageActivitySlide .voltage-wire-svg {
+            position: absolute;
+            inset: 0;
+            z-index: 5;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        #voltageActivitySlide .connected-wire {
+            fill: none;
+            stroke-width: 8;
+            stroke-linecap: round;
+        }
+
+        #voltageActivitySlide .connected-wire.positive {
+            stroke: #ef5350;
+        }
+
+        #voltageActivitySlide .connected-wire.negative {
+            stroke: #222;
+        }
+
+        #voltageActivitySlide .station-result {
+            min-height: 42px;
+            margin-top: 12px;
+            font-size: 0.95rem;
+            font-weight: 700;
+        }
+
+        #voltageActivitySlide .station-result.safe {
+            color: #258456;
+        }
+
+        #voltageActivitySlide .station-result.danger {
+            color: #cf3b3b;
+        }
+
+        #voltageActivitySlide .activity-instruction {
+            margin: 10px auto 0;
+            padding: 9px 16px;
+            color: #ffffff;
+            font-size: 0.9rem;
+            font-weight: 600;
+            background: rgba(255, 255, 255, 0.13);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: 999px;
+        }
+
+        @media (max-width: 900px) {
+            #voltageActivitySlide .voltage-circuit-grid {
+                grid-template-columns: 1fr;
+            }
+
+            #voltageActivitySlide .voltage-station {
+                min-height: 380px;
+            }
+        }
+    </style>
+
+    <div class="content stack">
+        <div>
+            <div class="kicker" style="color: var(--cyan)">
+                CHAPTER 3
+            </div>
+
+            <h2 class="slide-title">
+                Voltage Matters
+            </h2>
+
+            <p class="lead">
+                Hubungkan <strong>Battery (+)</strong> ke
+                <strong>LED Anode (+)</strong>, lalu hubungkan
+                <strong>Battery (−)</strong> ke
+                <strong>LED Cathode (−)</strong>.
+                Bandingkan respons LED pada 3V dan 9V.
+            </p>
+        </div>
+
+        <div class="voltage-circuit-grid">
+
+            <!-- STATION 3V -->
+            <div class="voltage-station" data-voltage-station="3">
+                <h3 class="station-title">
+                    Station A · CR2032 (3V)
+                </h3>
+
+                <p class="station-note">
+                    Buat dua sambungan sesuai polarity.
+                </p>
+
+                <div class="circuit-workspace">
+                    <svg class="voltage-wire-svg"></svg>
+
+                    <span class="terminal-label positive-label">
+                        Battery +
+                    </span>
+
+                    <span class="terminal-label negative-label">
+                        Battery −
+                    </span>
+
+                    <span class="terminal-label anode-label">
+                        Anode +
+                    </span>
+
+                    <span class="terminal-label cathode-label">
+                        Cathode −
+                    </span>
+
+                    <div class="battery-visual battery-3v">
+                        <span class="battery-label">3V</span>
+                    </div>
+
+                    <div
+                        class="wire-source positive-terminal battery-positive"
+                        draggable="true"
+                        data-connection="positive"
+                        aria-label="Drag dari battery positive"
+                    ></div>
+
+                    <div
+                        class="wire-source negative-terminal battery-negative"
+                        draggable="true"
+                        data-connection="negative"
+                        aria-label="Drag dari battery negative"
+                    ></div>
+
+                    <div class="led-visual">
+                        <div class="led-bulb"></div>
+                        <span class="led-leg anode"></span>
+                        <span class="led-leg cathode"></span>
+                    </div>
+
+                    <div
+                        class="wire-target positive-terminal led-anode"
+                        data-connection="positive"
+                        aria-label="Drop ke LED anode"
+                    ></div>
+
+                    <div
+                        class="wire-target negative-terminal led-cathode"
+                        data-connection="negative"
+                        aria-label="Drop ke LED cathode"
+                    ></div>
+                </div>
+
+                <div class="station-result">
+                    Sambungkan positive dan negative.
+                </div>
+            </div>
+
+            <!-- STATION 9V -->
+            <div class="voltage-station" data-voltage-station="9">
+                <h3 class="station-title">
+                    Station B · 9V Battery
+                </h3>
+
+                <p class="station-note">
+                    Gunakan polarity yang sama, lalu amati hasilnya.
+                </p>
+
+                <div class="circuit-workspace">
+                    <svg class="voltage-wire-svg"></svg>
+
+                    <span class="terminal-label positive-label">
+                        Battery +
+                    </span>
+
+                    <span class="terminal-label negative-label">
+                        Battery −
+                    </span>
+
+                    <span class="terminal-label anode-label">
+                        Anode +
+                    </span>
+
+                    <span class="terminal-label cathode-label">
+                        Cathode −
+                    </span>
+
+                    <div class="battery-visual battery-9v">
+                        <span class="battery-label">9V</span>
+                    </div>
+
+                    <div
+                        class="wire-source positive-terminal battery-positive"
+                        draggable="true"
+                        data-connection="positive"
+                        aria-label="Drag dari battery positive"
+                    ></div>
+
+                    <div
+                        class="wire-source negative-terminal battery-negative"
+                        draggable="true"
+                        data-connection="negative"
+                        aria-label="Drag dari battery negative"
+                    ></div>
+
+                    <div class="led-visual">
+                        <div class="led-bulb"></div>
+                        <span class="led-leg anode"></span>
+                        <span class="led-leg cathode"></span>
+                    </div>
+
+                    <div
+                        class="wire-target positive-terminal led-anode"
+                        data-connection="positive"
+                        aria-label="Drop ke LED anode"
+                    ></div>
+
+                    <div
+                        class="wire-target negative-terminal led-cathode"
+                        data-connection="negative"
+                        aria-label="Drop ke LED cathode"
+                    ></div>
+                </div>
+
+                <div class="station-result">
+                    Sambungkan positive dan negative.
+                </div>
+            </div>
+        </div>
+
+        <div class="activity-instruction">
+            Drag terminal dari battery menuju terminal LED dengan polarity yang sama.
+        </div>
+
+        <button
+            class="btn"
+            id="showVoltageExplanation"
+            style="display: none; margin: 4px auto 0"
+        >
+            Apa yang Berbeda? Reveal Answer
+        </button>
+
+        <div
+            id="vAnswer"
+            style="
+                display: none;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                z-index: 100;
+                width: min(720px, 82%);
+                padding: 30px;
+                color: var(--ink);
+                text-align: center;
+                background: #ffffff;
+                border: 4px solid var(--cyan);
+                border-radius: 20px;
+                box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+                transform: translate(-50%, -50%);
+            "
+        >
+            <h3>
+                Perbedaannya ada pada nilai voltage.
+            </h3>
+
+            <p
+                style="
+                    margin-top: 10px;
+                    color: var(--muted);
+                    font-size: 1.1rem;
+                    line-height: 1.5;
+                "
+            >
+                Kedua circuit memiliki polarity yang benar.
+                Namun, battery pertama menghasilkan 3V,
+                sedangkan battery kedua menghasilkan 9V.
+                Voltage yang terlalu tinggi dapat mendorong current
+                terlalu besar melalui LED sehingga LED menjadi sangat
+                terang, panas, lalu rusak.
+            </p>
+
+            <button
+                class="btn"
+                onclick="
+                    document.getElementById('vAnswer').style.display = 'none'
+                "
+                style="margin-top: 20px"
+            >
+                Tutup Penjelasan
+            </button>
+        </div>
+    </div>
+
+    <script>
+        (() => {
+            const slide = document.getElementById("voltageActivitySlide");
+            if (!slide || slide.dataset.initialized === "true") return;
+            slide.dataset.initialized = "true";
+
+            let completedStationCount = 0;
+
+            slide.querySelectorAll("[data-voltage-station]").forEach((station) => {
+                const workspace = station.querySelector(".circuit-workspace");
+                const svg = station.querySelector(".voltage-wire-svg");
+                const sources = [...station.querySelectorAll(".wire-source")];
+                const result = station.querySelector(".station-result");
+                const led = station.querySelector(".led-visual");
+                const completedConnections = new Set();
+
+                let draggedSource = null;
+                let previewPath = null;
+                let stationCompleted = false;
+
+                function getCenter(element) {
+                    const workspaceRect = workspace.getBoundingClientRect();
+                    const elementRect = element.getBoundingClientRect();
+                    return {
+                        x: elementRect.left + elementRect.width / 2 - workspaceRect.left,
+                        y: elementRect.top + elementRect.height / 2 - workspaceRect.top
+                    };
+                }
+
+                function drawWire(source, target, connectionType) {
+                    const sourcePoint = getCenter(source);
+                    const targetPoint = getCenter(target);
+                    const middleX = (sourcePoint.x + targetPoint.x) / 2;
+                    const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+                    path.setAttribute("d", `M ${sourcePoint.x} ${sourcePoint.y} C ${middleX} ${sourcePoint.y}, ${middleX} ${targetPoint.y}, ${targetPoint.x} ${targetPoint.y}`);
+                    path.setAttribute("class", `connected-wire ${connectionType}`);
+                    svg.appendChild(path);
+                }
+
+                function checkStation() {
+                    if (stationCompleted || completedConnections.size < 2) return;
+                    stationCompleted = true;
+                    completedStationCount++;
+
+                    const voltage = station.dataset.voltageStation;
+                    if (voltage === "3") {
+                        led.classList.add("safe");
+                        result.classList.add("safe");
+                        result.textContent = "Polarity benar. LED menyala normal dengan 3V.";
+                    } else {
+                        led.classList.add("damaged");
+                        result.classList.add("danger");
+                        result.textContent = "Polarity benar, tetapi 9V terlalu tinggi. LED menjadi terang lalu rusak.";
+                        setTimeout(() => {
+                            led.classList.remove("damaged");
+                            led.classList.add("burnt");
+                        }, 1900);
+                    }
+
+                    if (completedStationCount === 2) {
+                        document.getElementById("showVoltageExplanation").style.display = "inline-block";
+                        if (typeof confetti === "function") confetti();
+                    }
+                }
+
+                sources.forEach((source) => {
+                    source.addEventListener("pointerdown", (event) => {
+                        if (source.classList.contains("connected")) return;
+                        draggedSource = source;
+                        source.setPointerCapture(event.pointerId);
+
+                        previewPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
+                        previewPath.setAttribute("class", `connected-wire ${source.dataset.connection}`);
+                        previewPath.style.opacity = "0.6";
+                        svg.appendChild(previewPath);
+                        event.preventDefault();
+                    });
+
+                    source.addEventListener("pointermove", (event) => {
+                        if (draggedSource !== source || !previewPath) return;
+                        const sourcePoint = getCenter(source);
+                        const workspaceRect = workspace.getBoundingClientRect();
+                        const currentX = event.clientX - workspaceRect.left;
+                        const currentY = event.clientY - workspaceRect.top;
+                        const middleX = (sourcePoint.x + currentX) / 2;
+                        previewPath.setAttribute("d", `M ${sourcePoint.x} ${sourcePoint.y} C ${middleX} ${sourcePoint.y}, ${middleX} ${currentY}, ${currentX} ${currentY}`);
+                    });
+
+                    source.addEventListener("pointerup", (event) => {
+                        if (draggedSource !== source) return;
+                        source.releasePointerCapture(event.pointerId);
+
+                        // Temporarily hide preview and source to find the target underneath
+                        source.style.visibility = "hidden";
+                        if (previewPath) previewPath.style.visibility = "hidden";
+                        
+                        const dropTarget = document.elementFromPoint(event.clientX, event.clientY);
+                        
+                        source.style.visibility = "visible";
+                        if (previewPath) previewPath.style.visibility = "visible";
+
+                        if (dropTarget && dropTarget.classList.contains("wire-target") && !dropTarget.classList.contains("connected")) {
+                            const target = dropTarget;
+                            const sourceType = source.dataset.connection;
+                            const targetType = target.dataset.connection;
+
+                            if (sourceType !== targetType) {
+                                result.className = "station-result danger";
+                                result.textContent = "Polarity terbalik. Hubungkan positive ke anode dan negative ke cathode.";
+                                if (typeof toast === "function") toast("Sambungan belum tepat. Cocokkan polarity yang sama.");
+                            } else {
+                                drawWire(source, target, sourceType);
+                                source.classList.add("connected");
+                                target.classList.add("connected");
+                                completedConnections.add(sourceType);
+
+                                result.className = "station-result";
+                                result.textContent = completedConnections.size === 1 ? "Satu wire sudah terhubung. Sambungkan wire berikutnya." : "Circuit lengkap.";
+                                checkStation();
+                            }
+                        }
+
+                        if (previewPath) {
+                            previewPath.remove();
+                            previewPath = null;
+                        }
+                        draggedSource = null;
+                    });
+                });
+            });
+
+            document.getElementById("showVoltageExplanation").addEventListener("click", () => {
+                document.getElementById("vAnswer").style.display = "block";
+            });
+        })();
+    </script>
+</section>
+<section class="slide"><span class="chip"><b></b> #3 Voltage Matters</span><div class="content stack"><div><h2 class="slide-title">Voltage Mempengaruhi Dorongan dalam Circuit</h2><p class="lead">Voltage bukan “jumlah energi yang dipakai”, tetapi besarnya dorongan listrik. Dorongan yang lebih tinggi dapat membuat current menjadi lebih besar jika resistance tetap.</p></div><div class="push"><svg viewBox="0 0 1000 300"><defs><marker id="a1" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#38b56f"/></marker><marker id="a2" markerWidth="10" markerHeight="10" refX="8" refY="4" orient="auto"><path d="M0,0 L0,8 L9,4 z" fill="#ef5350"/></marker></defs><rect x="55" y="80" width="125" height="140" rx="22" fill="#f4b844"/><text x="118" y="152" text-anchor="middle" font-size="28" font-weight="700">3V</text><path d="M200 150 H410" stroke="#38b56f" stroke-width="12" marker-end="url(#a1)"/><ellipse cx="492" cy="150" rx="54" ry="66" fill="#ff6464" stroke="#fff" stroke-width="8"/><text x="492" y="254" text-anchor="middle" font-size="18" font-weight="700" fill="#38b56f">Suitable push</text><rect x="575" y="80" width="125" height="140" rx="22" fill="#222"/><text x="638" y="152" text-anchor="middle" font-size="28" font-weight="700" fill="#fff">9V</text><path d="M720 150 H920" stroke="#ef5350" stroke-width="24" marker-end="url(#a2)"/><ellipse cx="945" cy="150" rx="42" ry="52" fill="#fff1a9" stroke="#ef5350" stroke-width="8"/><text x="828" y="254" text-anchor="middle" font-size="18" font-weight="700" fill="#ef5350">Too much push</text></svg></div><div class="instruction">⚠️ Tanpa pembatas arus, LED 5 mm tidak aman jika langsung dihubungkan ke battery 9V.</div></div></section>
+
+<section class="slide"><span class="chip"><b></b> #3 Voltage Matters</span><div class="content stack"><div><h2 class="slide-title">Bayangkan Arus Sungai yang Terlalu Deras</h2><p class="lead">Air yang mengalir terlalu kuat dapat menghancurkan baru yang dilewatinya. Dalam analogi ini, batu mewakili LED dan derasnya air mewakili current yang terlalu besar.</p></div><div class="river-scene"><div class="river"></div><div class="river-label">Current Flow</div><div class="rock-led" id="rockLed">LED</div><button class="btn river-control" id="riverBtn">Increase Flow</button></div><p class="note center">LED juga memiliki batas. Jika dorongan dan current terlalu besar, komponen dapat panas atau rusak.</p></div></section>
+
+<section class="slide dark"><span class="chip"><b></b> #3 Voltage Matters</span><div class="content two max"><div class="shield">✓</div><div class="stack"><h2 class="slide-title left">Electronics Selalu Memiliki Perhitungan Keamanan</h2><p class="lead left">Nilai battery, LED, resistor, dan komponen lain perlu disesuaikan agar circuit bekerja dengan aman.</p><div class="card"><h3>Untuk pembelajaran ini</h3><p>Kita menggunakan voltage rendah dan komponen yang sudah ditentukan. Jangan mengganti battery atau menghubungkan sumber daya lain tanpa arahan guru.</p></div><div class="instruction">🛡️ Safe circuit first, creative robot next.</div></div></div></section>
+
+<section class="slide"><span class="chip"><b></b> #4 Complete the Circuit</span><div class="content stack"><div><h2 class="slide-title">Complete the Circuit</h2><p class="lead">Drag komponen ke slot yang tepat. LED akan menyala ketika seluruh jalur sudah lengkap.</p></div><div class="pool" id="completePool"><div class="token" draggable="true" data-slot="battery">🔋 Battery</div><div class="token" draggable="true" data-slot="wire1">〰️ Wire</div><div class="token" draggable="true" data-slot="led">💡 LED</div><div class="token" draggable="true" data-slot="wire2">〰️ Return Wire</div></div><div class="slots"><div class="slot" data-slot="battery">Power Source</div><div class="slot" data-slot="wire1">Connector</div><div class="slot" data-slot="led">Output</div><div class="slot" data-slot="wire2">Back to Battery</div></div><div class="card center" style="max-width:620px;margin:auto"><div id="completeLed" style="font-size:4rem;filter:grayscale(1);transition:.25s">💡</div><p id="completeMsg">Circuit belum lengkap.</p></div><div class="instruction">Konsep utama: circuit membutuhkan jalur lengkap yang kembali ke sumber energi.</div></div></section>
+
+<section class="slide"><span class="chip"><b></b> #5 Open or Closed?</span><div class="content stack"><div><h2 class="slide-title">Open Circuit atau Closed Circuit?</h2><p class="lead">Perhatikan setiap gambar, lalu pilih kondisi circuit yang tepat.</p></div><div class="choice-grid" id="choiceGrid"></div><div class="instruction">Closed berarti jalur lengkap. Open berarti ada jalur yang terputus.</div></div></section>
+
+<section class="slide" id="brokenPathSlide">
+    <span class="chip">
+        <b></b> #6 Find the Broken Path
+    </span>
+
+    <style>
+        #brokenPathSlide .rvis {
+            position: relative;
+            overflow: hidden;
+        }
+
+        #brokenPathSlide .rvis svg {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Hotspot tetap bisa diklik, tetapi tidak terlihat */
+        #brokenPathSlide .fault {
+            position: absolute;
+            z-index: 10;
+            padding: 0;
+            background: transparent;
+            border: none;
+            outline: none;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        /* Tetap menampilkan focus untuk akses keyboard */
+        #brokenPathSlide .fault:focus-visible {
+            opacity: 1;
+            background: rgba(67, 213, 230, 0.16);
+            outline: 3px solid var(--cyan);
+            border-radius: 10px;
+        }
+    </style>
+
+    <div class="content stack">
+        <div>
+            <h2 class="slide-title">
+                Find the Broken Path
+            </h2>
+
+            <p class="lead">
+                Klik bagian yang menyebabkan LED tidak menyala.
+                Setiap card memiliki masalah yang berbeda.
+            </p>
+        </div>
+
+        <div class="repair-grid">
+
+            <!-- MISSION 1: BROKEN WIRE -->
+            <div class="repair">
+                <div class="rvis">
+                    <svg viewBox="0 0 240 130">
+                        <path
+                            d="M40 80 V30 H100 M140 30 H200 V80"
+                            fill="none"
+                            stroke="#222"
+                            stroke-width="8"
+                            stroke-linecap="round"
+                        />
+
+                        <rect
+                            x="20"
+                            y="80"
+                            width="40"
+                            height="40"
+                            rx="6"
+                            fill="#f4b844"
+                        />
+
+                        <ellipse
+                            cx="200"
+                            cy="80"
+                            rx="20"
+                            ry="25"
+                            fill="#dfe7eb"
+                            stroke="#a0b0b8"
+                            stroke-width="4"
+                        />
+                    </svg>
+
+                    <!-- Tepat di atas celah wire -->
+                    <button
+                        class="fault"
+                        aria-label="Broken wire"
+                        style="
+                            left: 50%;
+                            top: 10%;
+                            width: 22%;
+                            height: 30%;
+                            transform: translateX(-50%);
+                        "
+                    ></button>
+                </div>
+
+                <h3>Mission 1</h3>
+
+                <div class="status">
+                    Find the broken wire.
+                </div>
+            </div>
+
+            <!-- MISSION 2: OPEN SWITCH -->
+            <div class="repair">
+                <div class="rvis">
+                    <svg viewBox="0 0 240 130">
+                        <path
+                            d="M40 80 V30 H100 M140 30 H200 V80"
+                            fill="none"
+                            stroke="#222"
+                            stroke-width="8"
+                            stroke-linecap="round"
+                        />
+
+                        <circle
+                            cx="100"
+                            cy="30"
+                            r="5"
+                            fill="#222"
+                        />
+
+                        <circle
+                            cx="140"
+                            cy="30"
+                            r="5"
+                            fill="#222"
+                        />
+
+                        <line
+                            x1="100"
+                            y1="30"
+                            x2="130"
+                            y2="10"
+                            stroke="#ef5350"
+                            stroke-width="8"
+                            stroke-linecap="round"
+                        />
+
+                        <rect
+                            x="20"
+                            y="80"
+                            width="40"
+                            height="40"
+                            rx="6"
+                            fill="#f4b844"
+                        />
+
+                        <ellipse
+                            cx="200"
+                            cy="80"
+                            rx="20"
+                            ry="25"
+                            fill="#dfe7eb"
+                            stroke="#a0b0b8"
+                            stroke-width="4"
+                        />
+                    </svg>
+
+                    <!-- Tepat di atas switch terbuka -->
+                    <button
+                        class="fault"
+                        aria-label="Open switch"
+                        style="
+                            left: 51%;
+                            top: 0%;
+                            width: 27%;
+                            height: 38%;
+                            transform: translateX(-50%);
+                        "
+                    ></button>
+                </div>
+
+                <h3>Mission 2</h3>
+
+                <div class="status">
+                    Find the open switch.
+                </div>
+            </div>
+
+            <!-- MISSION 3: REVERSED LED -->
+            <div class="repair">
+                <div class="rvis">
+                    <svg viewBox="0 0 240 130">
+                        <path
+                            d="M40 80 V30 H185 V75 M215 75 V120 H40 V115"
+                            fill="none"
+                            stroke="#222"
+                            stroke-width="8"
+                            stroke-linecap="round"
+                        />
+
+                        <rect
+                            x="20"
+                            y="80"
+                            width="40"
+                            height="40"
+                            rx="6"
+                            fill="#f4b844"
+                        />
+
+                        <text
+                            x="40"
+                            y="75"
+                            text-anchor="middle"
+                            font-size="16"
+                            font-weight="bold"
+                            fill="#ef5350"
+                        >
+                            +
+                        </text>
+
+                        <ellipse
+                            cx="200"
+                            cy="90"
+                            rx="20"
+                            ry="25"
+                            fill="#dfe7eb"
+                            stroke="#a0b0b8"
+                            stroke-width="4"
+                        />
+
+                        <text
+                            x="180"
+                            y="85"
+                            font-size="14"
+                            font-weight="bold"
+                            fill="#222"
+                        >
+                            -
+                        </text>
+
+                        <text
+                            x="220"
+                            y="85"
+                            font-size="14"
+                            font-weight="bold"
+                            fill="#ef5350"
+                        >
+                            +
+                        </text>
+                    </svg>
+
+                    <!-- Tepat menutupi LED dan polarity-nya -->
+                    <button
+                        class="fault"
+                        aria-label="Reversed LED"
+                        style="
+                            right: 1%;
+                            top: 42%;
+                            width: 30%;
+                            height: 50%;
+                        "
+                    ></button>
+                </div>
+
+                <h3>Mission 3</h3>
+
+                <div class="status">
+                    Find the reversed LED.
+                </div>
+            </div>
+        </div>
+
+        <div class="instruction">
+            Troubleshooting dimulai dari memeriksa power,
+            path, switch, dan polarity.
+        </div>
+    </div>
+</section>
+<section class="slide"><span class="chip"><b></b> #7 Flip the LED</span><div class="content stack"><div><h2 class="slide-title">Flip the LED</h2><p class="lead">Klik tombol untuk membalik arah LED. Perhatikan kapan LED menyala dan kapan tidak.</p></div><div class="flip-grid"><div class="flipbox" style="flex-direction:column;gap:0"><div class="flipled on" id="flipLed" style="z-index:2;margin-bottom:-10px"><div class="bulb"></div><span class="leg one"></span><span class="leg two"></span></div><div style="display:flex;gap:42px;z-index:1;margin-bottom:-5px"><div style="width:12px;height:60px;background:#ef5350;position:relative"><span style="position:absolute;left:-28px;top:10px;font-size:1.5rem;font-weight:bold;color:#ef5350">+</span></div><div style="width:12px;height:60px;background:#222;position:relative"><span style="position:absolute;right:-24px;top:10px;font-size:1.5rem;font-weight:bold;color:#222">-</span></div></div><div style="width:150px;height:80px;background:#f4b844;border-radius:16px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:bold;font-size:1.5rem">BATTERY</div></div><div class="stack"><div class="polarity"><span class="sym plus">+</span><div><strong id="flipTitle">Anode terhubung ke positive</strong><span id="flipText">Polarity benar. LED menyala.</span></div></div><button class="btn" id="flipBtn">Flip LED</button><div class="instruction">Konsep utama: LED memiliki arah pemasangan.</div></div></div></div></section>
+
+<section class="slide" id="whatWillHappenSlide">
+    <span class="chip">
+        <b></b> #8 What Will Happen?
+    </span>
+
+    <style>
+        #whatWillHappenSlide .prediction-layout {
+            display: grid;
+            grid-template-columns: 1.25fr 0.75fr;
+            gap: 24px;
+            width: 100%;
+            align-items: stretch;
+        }
+
+        #whatWillHappenSlide .scenario-panel {
+            padding: 20px;
+            background: #ffffff;
+            border: 3px solid #dcebf4;
+            border-radius: 24px;
+            box-shadow: 0 14px 28px rgba(5, 49, 87, 0.12);
+        }
+
+        #whatWillHappenSlide .scenario-heading {
+            margin-bottom: 12px;
+            color: var(--navy);
+            font-size: 1.15rem;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        #whatWillHappenSlide .scenario-illustration {
+            width: 100%;
+            min-height: 330px;
+            overflow: hidden;
+            background:
+                radial-gradient(
+                    circle at 50% 42%,
+                    rgba(67, 213, 230, 0.1),
+                    transparent 50%
+                ),
+                #f5fbff;
+            border: 2px solid #d9eaf3;
+            border-radius: 20px;
+        }
+
+        #whatWillHappenSlide .scenario-illustration svg {
+            display: block;
+            width: 100%;
+            height: 330px;
+        }
+
+        #whatWillHappenSlide .prediction-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding: 20px;
+            background: #ffffff;
+            border: 3px solid #dcebf4;
+            border-radius: 24px;
+            box-shadow: 0 14px 28px rgba(5, 49, 87, 0.12);
+        }
+
+        #whatWillHappenSlide .prediction-label {
+            color: var(--navy);
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+
+        #whatWillHappenSlide .prediction-option {
+            width: 100%;
+            padding: 14px 16px;
+            color: var(--ink);
+            font-family: "Fredoka", sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            text-align: left;
+            background: #f7fbff;
+            border: 2px solid #dce8f0;
+            border-radius: 14px;
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+        #whatWillHappenSlide .prediction-option:hover {
+            border-color: var(--cyan);
+            transform: translateX(4px);
+        }
+
+        #whatWillHappenSlide .prediction-option.selected {
+            background: #eafafd;
+            border-color: var(--cyan);
+            box-shadow: 0 0 0 4px rgba(67, 213, 230, 0.15);
+        }
+
+        #whatWillHappenSlide .prediction-option.correct {
+            color: #20734a;
+            background: #e8f9ef;
+            border-color: #38b56f;
+        }
+
+        #whatWillHappenSlide .prediction-option.wrong {
+            color: #a33636;
+            background: #fff0ef;
+            border-color: #ef5350;
+        }
+
+        #whatWillHappenSlide .prediction-feedback {
+            min-height: 88px;
+            padding: 14px 16px;
+            color: var(--muted);
+            font-size: 0.98rem;
+            line-height: 1.45;
+            background: #f4f9fc;
+            border-radius: 14px;
+        }
+
+        #whatWillHappenSlide .prediction-feedback.correct {
+            color: #20734a;
+            background: #e8f9ef;
+        }
+
+        #whatWillHappenSlide .prediction-feedback.wrong {
+            color: #a33636;
+            background: #fff0ef;
+        }
+
+        #whatWillHappenSlide .polarity-legend {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 18px;
+            margin-top: 10px;
+            font-size: 0.86rem;
+            font-weight: 600;
+        }
+
+        #whatWillHappenSlide .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+
+        #whatWillHappenSlide .legend-line {
+            width: 30px;
+            height: 7px;
+            border-radius: 99px;
+        }
+
+        #whatWillHappenSlide .positive-line {
+            background: #ef5350;
+        }
+
+        #whatWillHappenSlide .negative-line {
+            background: #245e9a;
+        }
+
+        #whatWillHappenSlide .scenario-instruction {
+            margin: 8px auto 0;
+            padding: 9px 16px;
+            color: #116c79;
+            font-size: 0.9rem;
+            font-weight: 600;
+            background: #edf9fb;
+            border: 2px solid #bdebf1;
+            border-radius: 999px;
+        }
+
+        #whatWillHappenSlide .result-led-glow {
+            animation: predictionLedGlow 0.8s ease infinite alternate;
+        }
+
+        @keyframes predictionLedGlow {
+            from {
+                filter: drop-shadow(
+                    0 0 8px rgba(255, 88, 88, 0.4)
+                );
+            }
+
+            to {
+                filter: drop-shadow(
+                    0 0 26px rgba(255, 88, 88, 0.95)
+                );
+            }
+        }
+
+        @media (max-width: 900px) {
+            #whatWillHappenSlide .prediction-layout {
+                grid-template-columns: 1fr;
+            }
+
+            #whatWillHappenSlide .scenario-illustration,
+            #whatWillHappenSlide .scenario-illustration svg {
+                min-height: 300px;
+                height: 300px;
+            }
+        }
+    </style>
+
+    <div class="content stack">
+        <div>
+            <h2 class="slide-title">
+                What Will Happen to the LED?
+            </h2>
+
+            <p class="lead">
+                Perhatikan hubungan antara kutub battery dan kaki LED.
+                Prediksi hasil circuit berdasarkan polarity dan kelengkapan jalurnya.
+            </p>
+        </div>
+
+        <div class="prediction-layout">
+            <div class="scenario-panel">
+                <div
+                    class="scenario-heading"
+                    id="whhScenarioTitle"
+                ></div>
+
+                <div
+                    class="scenario-illustration"
+                    id="whhScenarioIllustration"
+                ></div>
+
+                <div class="polarity-legend">
+                    <div class="legend-item">
+                        <span
+                            class="legend-line positive-line"
+                        ></span>
+                        Positive Wire
+                    </div>
+
+                    <div class="legend-item">
+                        <span
+                            class="legend-line negative-line"
+                        ></span>
+                        Negative Wire
+                    </div>
+                </div>
+            </div>
+
+            <div class="prediction-panel">
+                <div class="prediction-label">
+                    Apa yang akan terjadi?
+                </div>
+
+                <button
+                    class="prediction-option"
+                    data-whh-predict="on"
+                >
+                    A. LED menyala karena polarity benar dan circuit lengkap.
+                </button>
+
+                <button
+                    class="prediction-option"
+                    data-whh-predict="off"
+                >
+                    B. LED tetap mati karena polarity LED terbalik.
+                </button>
+
+                <button
+                    class="prediction-option"
+                    data-whh-predict="incomplete"
+                >
+                    C. LED tidak menyala karena circuit belum lengkap.
+                </button>
+
+                <button
+                    class="btn"
+                    id="whhRunButton"
+                    disabled
+                >
+                    Run Simulation
+                </button>
+
+                <div
+                    class="prediction-feedback"
+                    id="whhFeedback"
+                >
+                    Periksa polarity dan jalur wire, lalu pilih prediksimu.
+                </div>
+
+                <button
+                    class="btn2"
+                    id="whhNextButton"
+                    style="display: none"
+                >
+                    Next Scenario
+                </button>
+            </div>
+        </div>
+
+        <div class="scenario-instruction">
+            Red wire: positive. Blue wire: negative.
+            Positive LED adalah anode, negative LED adalah cathode.
+        </div>
+    </div>
+
+    <script>
+        (() => {
+            const slide = document.getElementById(
+                "whatWillHappenSlide"
+            );
+
+            if (!slide || slide.dataset.initialized === "true") {
+                return;
+            }
+
+            slide.dataset.initialized = "true";
+
+            const scenarios = [
+                {
+                    title:
+                        "Scenario 1 · Polarity Benar dan Circuit Lengkap",
+
+                    correct: "on",
+
+                    explanation:
+                        "Battery positive terhubung ke LED anode (+), sedangkan battery negative terhubung ke LED cathode (−). Jalurnya lengkap dan polarity benar, sehingga LED menyala.",
+
+                    type: "correct"
+                },
+                {
+                    title:
+                        "Scenario 2 · Salah Satu Wire Terputus",
+
+                    correct: "incomplete",
+
+                    explanation:
+                        "Polaritasnya sudah sesuai, tetapi jalur negative terputus. Circuit belum membentuk closed loop, sehingga current tidak dapat mengalir.",
+
+                    type: "broken"
+                },
+                {
+                    title:
+                        "Scenario 3 · LED Dipasang Terbalik",
+
+                    correct: "off",
+
+                    explanation:
+                        "Circuit terlihat lengkap, tetapi battery positive terhubung ke cathode (−) dan battery negative terhubung ke anode (+). Polarity LED terbalik, sehingga LED tidak menyala.",
+
+                    type: "reversed"
+                }
+            ];
+
+            const scenarioTitle =
+                document.getElementById(
+                    "whhScenarioTitle"
+                );
+
+            const illustration =
+                document.getElementById(
+                    "whhScenarioIllustration"
+                );
+
+            const feedback =
+                document.getElementById(
+                    "whhFeedback"
+                );
+
+            const runButton =
+                document.getElementById(
+                    "whhRunButton"
+                );
+
+            const nextButton =
+                document.getElementById(
+                    "whhNextButton"
+                );
+
+            const optionButtons = [
+                ...slide.querySelectorAll(
+                    "[data-whh-predict]"
+                )
+            ];
+
+            let scenarioIndex = 0;
+            let selectedPrediction = null;
+
+            function getScenarioSVG(type, showResult = false) {
+    const isCorrect = type === "correct";
+    const isBroken = type === "broken";
+    const isReversed = type === "reversed";
+
+    let positiveWire = "";
+    let negativeWire = "";
+
+    if (isCorrect) {
+        positiveWire = `
+            <path
+                d="M 220 112 H 700"
+                fill="none"
+                stroke="#ef5350"
+                stroke-width="11"
+                stroke-linecap="round"
+            />
+        `;
+
+        negativeWire = `
+            <path
+                d="M 220 238 H 700"
+                fill="none"
+                stroke="#245e9a"
+                stroke-width="11"
+                stroke-linecap="round"
+            />
+        `;
+    }
+
+    if (isBroken) {
+        positiveWire = `
+            <path
+                d="M 220 112 H 700"
+                fill="none"
+                stroke="#ef5350"
+                stroke-width="11"
+                stroke-linecap="round"
+            />
+        `;
+
+        negativeWire = `
+            <!-- Blue wire starts directly from Battery Negative -->
+            <path
+                d="M 220 238 H 470"
+                fill="none"
+                stroke="#245e9a"
+                stroke-width="11"
+                stroke-linecap="round"
+            />
+
+            <path
+                d="M 555 238 H 700"
+                fill="none"
+                stroke="#245e9a"
+                stroke-width="11"
+                stroke-linecap="round"
+            />
+
+            <line
+                x1="493"
+                y1="216"
+                x2="520"
+                y2="242"
+                stroke="#ef5350"
+                stroke-width="7"
+                stroke-linecap="round"
+            />
+
+            <line
+                x1="520"
+                y1="216"
+                x2="493"
+                y2="242"
+                stroke="#ef5350"
+                stroke-width="7"
+                stroke-linecap="round"
+            />
+
+            <text
+                x="510"
+                y="278"
+                text-anchor="middle"
+                font-size="17"
+                font-weight="700"
+                fill="#ef5350"
+            >
+                BROKEN WIRE
+            </text>
+        `;
+    }
+
+    if (isReversed) {
+        positiveWire = `
+            <!-- Battery Positive goes to LED Cathode -->
+            <path
+                d="M 220 112
+                   C 390 112,
+                     510 238,
+                     700 238"
+                fill="none"
+                stroke="#ef5350"
+                stroke-width="11"
+                stroke-linecap="round"
+            />
+        `;
+
+        negativeWire = `
+            <!-- Battery Negative goes to LED Anode -->
+            <path
+                d="M 220 238
+                   C 390 238,
+                     510 112,
+                     700 112"
+                fill="none"
+                stroke="#245e9a"
+                stroke-width="11"
+                stroke-linecap="round"
+            />
+        `;
+    }
+
+    const ledColor =
+        showResult && isCorrect
+            ? "#ff5656"
+            : showResult && isReversed
+                ? "#cfd9de"
+                : "#dce5e9";
+
+    let resultText = "";
+
+    if (showResult) {
+        if (isCorrect) {
+            resultText = `
+                <text
+                    x="735"
+                    y="44"
+                    text-anchor="middle"
+                    font-size="20"
+                    font-weight="700"
+                    fill="#23804f"
+                >
+                    LED ON
+                </text>
+            `;
+        } else if (isBroken) {
+            resultText = `
+                <text
+                    x="735"
+                    y="44"
+                    text-anchor="middle"
+                    font-size="18"
+                    font-weight="700"
+                    fill="#ef5350"
+                >
+                    CIRCUIT INCOMPLETE
+                </text>
+            `;
+        } else {
+            resultText = `
+                <text
+                    x="735"
+                    y="44"
+                    text-anchor="middle"
+                    font-size="20"
+                    font-weight="700"
+                    fill="#ef5350"
+                >
+                    LED OFF
+                </text>
+            `;
+        }
+    }
+
+    const topTerminalColor =
+        isReversed ? "#245e9a" : "#ef5350";
+
+    const bottomTerminalColor =
+        isReversed ? "#ef5350" : "#245e9a";
+
+    const topTerminalLabel =
+        isReversed ? "Anode +" : "Anode +";
+
+    const bottomTerminalLabel =
+        isReversed ? "Cathode −" : "Cathode −";
+
+    return `
+        <svg
+            viewBox="0 0 900 330"
+            role="img"
+            aria-label="Battery dan LED circuit"
+        >
+            <!-- Background guidance -->
+            <rect
+                x="22"
+                y="20"
+                width="856"
+                height="290"
+                rx="24"
+                fill="#f5fbff"
+            />
+
+            <!-- BATTERY -->
+            <rect
+                x="65"
+                y="80"
+                width="145"
+                height="190"
+                rx="24"
+                fill="#f4b844"
+                stroke="#ffffff"
+                stroke-width="8"
+            />
+
+            <rect
+                x="170"
+                y="80"
+                width="40"
+                height="190"
+                rx="0 24 24 0"
+                fill="#26323b"
+            />
+
+            <text
+                x="132"
+                y="160"
+                text-anchor="middle"
+                font-size="30"
+                font-weight="700"
+                fill="#183c58"
+            >
+                3V
+            </text>
+
+            <text
+                x="132"
+                y="192"
+                text-anchor="middle"
+                font-size="16"
+                font-weight="700"
+                fill="#183c58"
+            >
+                BATTERY
+            </text>
+
+            <!-- Battery Positive terminal -->
+            <circle
+                cx="210"
+                cy="112"
+                r="17"
+                fill="#ef5350"
+                stroke="#ffffff"
+                stroke-width="5"
+            />
+
+            <text
+                x="210"
+                y="69"
+                text-anchor="middle"
+                font-size="19"
+                font-weight="700"
+                fill="#ef5350"
+            >
+                Battery +
+            </text>
+
+            <!-- Battery Negative terminal -->
+            <circle
+                cx="210"
+                cy="238"
+                r="17"
+                fill="#245e9a"
+                stroke="#ffffff"
+                stroke-width="5"
+            />
+
+            <text
+                x="210"
+                y="302"
+                text-anchor="middle"
+                font-size="19"
+                font-weight="700"
+                fill="#245e9a"
+            >
+                Battery −
+            </text>
+
+            <!-- Complete wire paths -->
+            ${positiveWire}
+            ${negativeWire}
+
+            <!-- LED -->
+            <g>
+                <path
+                    d="
+                        M 694 145
+                        C 694 91,
+                          713 67,
+                          735 67
+                        C 757 67,
+                          776 91,
+                          776 145
+                        L 762 168
+                        H 708
+                        Z
+                    "
+                    fill="${ledColor}"
+                    stroke="#ffffff"
+                    stroke-width="8"
+                    ${
+                        showResult && isCorrect
+                            ? `style="
+                                filter:
+                                    drop-shadow(
+                                        0 0 22px
+                                        rgba(255,86,86,.9)
+                                    );
+                            "`
+                            : ""
+                    }
+                />
+
+                <rect
+                    x="708"
+                    y="160"
+                    width="54"
+                    height="22"
+                    rx="7"
+                    fill="#aeb9c1"
+                />
+
+                <!-- Long leg / Anode -->
+                <line
+                    x1="700"
+                    y1="112"
+                    x2="700"
+                    y2="250"
+                    stroke="#aeb9c1"
+                    stroke-width="10"
+                    stroke-linecap="round"
+                />
+
+                <!-- Short leg / Cathode -->
+                <line
+                    x1="770"
+                    y1="145"
+                    x2="770"
+                    y2="238"
+                    stroke="#aeb9c1"
+                    stroke-width="10"
+                    stroke-linecap="round"
+                />
+            </g>
+
+            <!-- LED upper terminal -->
+            <circle
+                cx="700"
+                cy="112"
+                r="17"
+                fill="${topTerminalColor}"
+                stroke="#ffffff"
+                stroke-width="5"
+            />
+
+            <!-- LED lower terminal -->
+            <circle
+                cx="700"
+                cy="238"
+                r="17"
+                fill="${bottomTerminalColor}"
+                stroke="#ffffff"
+                stroke-width="5"
+            />
+
+            <!-- LED polarity labels -->
+            <rect
+                x="715"
+                y="92"
+                width="128"
+                height="38"
+                rx="12"
+                fill="#ffffff"
+                stroke="${
+                    isReversed
+                        ? "#245e9a"
+                        : "#ef5350"
+                }"
+                stroke-width="3"
+            />
+
+            <text
+                x="779"
+                y="117"
+                text-anchor="middle"
+                font-size="17"
+                font-weight="700"
+                fill="${
+                    isReversed
+                        ? "#245e9a"
+                        : "#ef5350"
+                }"
+            >
+                ${
+                    isReversed
+                        ? "Anode +"
+                        : "Anode +"
+                }
+            </text>
+
+            <rect
+                x="715"
+                y="219"
+                width="128"
+                height="38"
+                rx="12"
+                fill="#ffffff"
+                stroke="${
+                    isReversed
+                        ? "#ef5350"
+                        : "#245e9a"
+                }"
+                stroke-width="3"
+            />
+
+            <text
+                x="779"
+                y="244"
+                text-anchor="middle"
+                font-size="17"
+                font-weight="700"
+                fill="${
+                    isReversed
+                        ? "#ef5350"
+                        : "#245e9a"
+                }"
+            >
+                Cathode −
+            </text>
+
+            <text
+                x="735"
+                y="295"
+                text-anchor="middle"
+                font-size="19"
+                font-weight="700"
+                fill="#073b70"
+            >
+                LED
+            </text>
+
+            ${resultText}
+        </svg>
+    `;
+}
+
+            function renderScenario() {
+                const scenario =
+                    scenarios[scenarioIndex];
+
+                scenarioTitle.textContent =
+                    `Scenario ${scenarioIndex + 1} of ${scenarios.length} · ${scenario.title}`;
+
+                illustration.innerHTML =
+                    getScenarioSVG(
+                        scenario.type,
+                        false
+                    );
+
+                selectedPrediction = null;
+
+                runButton.disabled = true;
+
+                nextButton.style.display = "none";
+
+                feedback.className =
+                    "prediction-feedback";
+
+                feedback.textContent =
+                    "Periksa hubungan Battery (+), Battery (−), Anode (+), dan Cathode (−).";
+
+                optionButtons.forEach(
+                    (button) => {
+                        button.disabled = false;
+
+                        button.classList.remove(
+                            "selected",
+                            "correct",
+                            "wrong"
+                        );
+                    }
+                );
+            }
+
+            optionButtons.forEach((button) => {
+                button.addEventListener(
+                    "click",
+                    () => {
+                        selectedPrediction =
+                            button.dataset
+                                .whhPredict;
+
+                        optionButtons.forEach(
+                            (otherButton) => {
+                                otherButton.classList.remove(
+                                    "selected"
+                                );
+                            }
+                        );
+
+                        button.classList.add(
+                            "selected"
+                        );
+
+                        runButton.disabled = false;
+
+                        feedback.className =
+                            "prediction-feedback";
+
+                        feedback.textContent =
+                            "Prediksi sudah dipilih. Klik Run Simulation untuk melihat hasilnya.";
+                    }
+                );
+            });
+
+            runButton.addEventListener(
+                "click",
+                () => {
+                    if (!selectedPrediction) {
+                        return;
+                    }
+
+                    const scenario =
+                        scenarios[scenarioIndex];
+
+                    const isCorrect =
+                        selectedPrediction ===
+                        scenario.correct;
+
+                    illustration.innerHTML =
+                        getScenarioSVG(
+                            scenario.type,
+                            true
+                        );
+
+                    optionButtons.forEach(
+                        (button) => {
+                            button.disabled = true;
+
+                            if (
+                                button.dataset
+                                    .whhPredict ===
+                                scenario.correct
+                            ) {
+                                button.classList.add(
+                                    "correct"
+                                );
+                            }
+
+                            if (
+                                button.dataset
+                                    .whhPredict ===
+                                    selectedPrediction &&
+                                !isCorrect
+                            ) {
+                                button.classList.add(
+                                    "wrong"
+                                );
+                            }
+                        }
+                    );
+
+                    feedback.className =
+                        `prediction-feedback ${
+                            isCorrect
+                                ? "correct"
+                                : "wrong"
+                        }`;
+
+                    feedback.textContent =
+                        `${
+                            isCorrect
+                                ? "Prediksi benar. "
+                                : "Belum tepat. "
+                        }${scenario.explanation}`;
+
+                    if (
+                        scenarioIndex <
+                        scenarios.length - 1
+                    ) {
+                        nextButton.style.display =
+                            "inline-block";
+                    } else if (
+                        isCorrect &&
+                        typeof confettiBurst ===
+                            "function"
+                    ) {
+                        confettiBurst();
+                    }
+                }
+            );
+
+            nextButton.addEventListener(
+                "click",
+                () => {
+                    if (
+                        scenarioIndex <
+                        scenarios.length - 1
+                    ) {
+                        scenarioIndex++;
+                        renderScenario();
+                    }
+                }
+            );
+
+            renderScenario();
+        })();
+    </script>
+</section>
+<section class="slide dark" id="quickQuizSlide"><span class="chip"><b></b> Quick Quiz</span><div class="content stack"><div><div class="kicker" style="color:var(--cyan)">CHECK YOUR UNDERSTANDING</div><h2 class="slide-title">Quick Quiz</h2></div><div class="quiz"><div class="quiz-prog" id="quizProg">Question 1 of 3</div><div class="quiz-q" id="quizQ">Bagian LED yang merupakan kutub positif disebut...</div><div class="quiz-options" id="quizOptions"><button type="button" class="option">A. Cathode (−)</button><button type="button" class="option">B. Anode (+)</button><button type="button" class="option">C. Switch</button></div><div class="quiz-fb" id="quizFb">Pilih satu jawaban.</div><button class="btn" id="quizNext" style="display:none;margin-top:12px">Next Question</button></div></div></section>
+
+<section class="slide"><span class="chip"><b></b> Review</span><div class="content stack"><div><div class="kicker">TODAY'S REVIEW</div><h2 class="slide-title">Apa yang Sudah Kita Pelajari?</h2></div><div class="review"><div class="card"><div class="big-icon">💡</div><h3>LED & Polarity</h3><p>LED memiliki anode (+) dan cathode (−).</p></div><div class="card"><div class="big-icon">🔋</div><h3>Power & Voltage</h3><p>Battery memberi dorongan listrik pada circuit.</p></div><div class="card"><div class="big-icon">🎚️</div><h3>Switch & Path</h3><p>Switch menyambungkan atau memutus jalur.</p></div><div class="card"><div class="big-icon">🧩</div><h3>Troubleshooting</h3><p>Periksa power, connection, switch, dan polarity.</p></div></div><div class="instruction">Next session: kita mulai berinteraksi dengan simulasi circuit yang lebih kompleks.</div></div></section>
+
+<section class="slide dark"><span class="chip"><b></b> Feedback</span><div class="content feedback max"><img class="robot" src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/eded3e71-16cf-401e-b1c1-3ff5f887dc38.png" alt="Robot"><div class="stack"><h2 class="slide-title left">Bagaimana Kelas Hari Ini Menurutmu?</h2><p class="lead left">Pilih satu respons cepat, lalu lanjutkan dengan feedback form dari gurumu.</p><div class="feedback-choices"><button class="feedback-choice"><div class="face">🙂</div><strong>Jelas</strong></button><button class="feedback-choice"><div class="face">🤔</div><strong>Masih Ada Pertanyaan</strong></button><button class="feedback-choice"><div class="face">⚡</div><strong>Siap Lanjut</strong></button></div><p class="note" id="feedbackNote">Respons ini tidak menyimpan skor atau data pribadi.</p></div></div></section>
+
+<div class="footer"><span class="counter" id="counter">01 / 32</span><span class="progress"><span class="bar" id="bar"></span></span></div>
+</main>
+<div class="toast" id="toast"></div>
+<script>
+const slides=[...document.querySelectorAll('.slide')],prev=document.getElementById('prev'),next=document.getElementById('next'),counter=document.getElementById('counter'),bar=document.getElementById('bar');let current=0;
+function nav(){prev.disabled=current===0;next.disabled=current===slides.length-1;counter.textContent=String(current+1).padStart(2,'0')+' / '+String(slides.length).padStart(2,'0');bar.style.width=((current+1)/slides.length*100)+'%'}
+function go(i){if(i<0||i>=slides.length||i===current)return;slides[current].classList.remove('active');current=i;slides[current].classList.add('active');nav()}
+prev.onclick=()=>go(current-1);next.onclick=()=>go(current+1);document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key==='PageDown')go(current+1);if(e.key==='ArrowLeft'||e.key==='PageUp')go(current-1)});nav();
+function toast(msg,t=2200){const x=document.getElementById('toast');x.textContent=msg;x.classList.add('show');clearTimeout(toast.timer);toast.timer=setTimeout(()=>x.classList.remove('show'),t)}
+function confetti(){const c=['#ffc33d','#ff8b2b','#43d5e6','#38b56f','#7367f0','#ef5350'];for(let i=0;i<42;i++){const p=document.createElement('i');p.className='confetti';p.style.left=innerWidth/2+'px';p.style.top=innerHeight/2+'px';p.style.background=c[i%c.length];p.style.setProperty('--x',(Math.random()*520-260)+'px');p.style.setProperty('--y',(Math.random()*360+120)+'px');document.body.appendChild(p);setTimeout(()=>p.remove(),1700)}}
+
+// Everyday electronics
+homeSwitch.onclick=()=>{const on=home.classList.toggle('on');homeMsg.textContent=on?'Lampu menyala. Coba matikan lagi.':'Lampu mati. Klik lagi untuk menyalakan.';homeMsg.classList.add('show')};
+tvRemote.onclick=()=>{const on=tvScreen.classList.toggle('on');toast(on?'TV menyala. Electrical energy berubah menjadi picture dan sound.':'TV mati. Aliran energi dihentikan.')};
+fanToggle.onclick=()=>{const on=fanToggle.classList.toggle('on');fan.classList.toggle('running',on);toast(on?'Motor berputar dan menghasilkan movement.':'Motor berhenti karena circuit dimatikan.')};
+wallSwitch.onclick=()=>{const on=wallPanel.classList.toggle('on');toast(on?'Closed path: current dapat mengalir.':'Open path: aliran terputus.')};
+
+// Click-wire board
+function initWire(board,done){const svg=board.querySelector('svg'),terms=[...board.querySelectorAll('.term')],nets=new Set(terms.map(x=>x.dataset.net)),completed=new Set();let selected=null,preview=null;
+ const point=el=>{const b=board.getBoundingClientRect(),r=el.getBoundingClientRect();return{x:r.left+r.width/2-b.left,y:r.top+r.height/2-b.top}};
+ const reset=()=>{terms.forEach(t=>t.classList.remove('sel'));selected=null;if(preview){preview.remove();preview=null}};
+ const draw=(a,b,cl)=>{const p=document.createElementNS('http://www.w3.org/2000/svg','path'),m=(a.x+b.x)/2;p.setAttribute('d',`M ${a.x} ${a.y} C ${m} ${a.y}, ${m} ${b.y}, ${b.x} ${b.y}`);p.setAttribute('class','wire '+cl);svg.appendChild(p)};
+ terms.forEach(t=>t.onclick=()=>{if(t.classList.contains('done'))return;if(!selected){selected=t;t.classList.add('sel');preview=document.createElementNS('http://www.w3.org/2000/svg','path');preview.setAttribute('class','preview');svg.appendChild(preview);return}if(selected===t){reset();return}if(selected.dataset.net===t.dataset.net){draw(point(selected),point(t),selected.dataset.wire);selected.classList.add('done');t.classList.add('done');completed.add(t.dataset.net);reset();if(completed.size===nets.size)done()}else{toast('Sambungan belum tepat. Cocokkan terminal dengan pasangan yang sesuai.');reset()}});
+ board.onmousemove=e=>{if(!selected||!preview)return;const b=board.getBoundingClientRect(),a=point(selected),z={x:e.clientX-b.left,y:e.clientY-b.top},m=(a.x+z.x)/2;preview.setAttribute('d',`M ${a.x} ${a.y} C ${m} ${a.y}, ${m} ${z.y}, ${z.x} ${z.y}`)};
+}
+initWire(ledBoard,()=>{wireLed.classList.add('on');ledBoardMsg.textContent='Circuit lengkap. LED menyala!';confetti();toast('Sambungan benar. Positive dan negative terhubung sesuai polarity.')});
+let switchReady=false;initWire(switchBoard,()=>{switchReady=true;switchMsg.textContent='Circuit selesai. Sekarang klik switch.';confetti()});
+builtSwitch.onclick=()=>{if(!switchReady){toast('Selesaikan semua wire terlebih dahulu.');return}const on=builtSwitch.classList.toggle('on');switchLed.classList.toggle('on',on);switchMsg.textContent=on?'Switch ON: LED menyala.':'Switch OFF: LED mati.'};
+
+// Voltage drag and drop
+let voltageDone=new Set();document.querySelectorAll('.v-wire').forEach(t=>{t.ondragstart=e=>e.dataTransfer.setData('text/plain',t.dataset.v)});document.querySelectorAll('.drop').forEach(d=>{d.ondragover=e=>{e.preventDefault();d.classList.add('over')};d.ondragleave=()=>d.classList.remove('over');d.ondrop=e=>{e.preventDefault();d.classList.remove('over');const v=e.dataTransfer.getData('text/plain');if(v!==d.dataset.accept){toast('Wire ini bukan untuk station tersebut.');return}d.textContent='Wire Connected';if(v==='3'){led3.classList.add('safe');lab3.textContent='LED menyala normal.'}else{led9.classList.add('damage');lab9.textContent='Terlalu terang → damaged.';setTimeout(()=>led9.style.background='#75665e',1400)}voltageDone.add(v);if(voltageDone.size===2)setTimeout(()=>document.getElementById('vAnswer').style.display='block',800)}});
+let riverStrong=false;riverBtn.onclick=()=>{riverStrong=!riverStrong;rockLed.classList.toggle('crack',riverStrong);riverBtn.textContent=riverStrong?'Reduce Flow':'Increase Flow';toast(riverStrong?'Arus terlalu besar dapat merusak LED.':'Aliran kembali ke tingkat yang lebih aman.')};
+
+// Complete circuit
+let dragComp=null,filled=new Set();document.querySelectorAll('#completePool .token').forEach(t=>{t.ondragstart=e=>{dragComp=t;e.dataTransfer.setData('text/plain',t.dataset.slot)}});document.querySelectorAll('.slot').forEach(s=>{s.ondragover=e=>{e.preventDefault();s.classList.add('over')};s.ondragleave=()=>s.classList.remove('over');s.ondrop=e=>{e.preventDefault();s.classList.remove('over');const k=e.dataTransfer.getData('text/plain');if(k!==s.dataset.slot){toast('Komponen belum cocok dengan fungsi slot tersebut.');return}s.textContent=dragComp.textContent;s.classList.add('filled');dragComp.style.display='none';filled.add(k);if(filled.size===4){completeLed.style.filter='none';completeLed.style.textShadow='0 0 28px #ffc33d';completeMsg.textContent='Circuit lengkap. LED menyala!';confetti()}}});
+
+// Open or closed
+const cases=[{o:false,l:'Switch terhubung',svg:'<path d="M55 40 V20 H300 V50 M 300 90 V120 H55 V100" fill="none" stroke="#222" stroke-width="8"/><line x1="300" y1="50" x2="300" y2="90" stroke="#222" stroke-width="8"/><circle cx="300" cy="50" r="6" fill="#222"/><circle cx="300" cy="90" r="6" fill="#222"/><rect x="30" y="40" width="50" height="60" rx="8" fill="#f4b844"/><ellipse cx="180" cy="20" rx="25" ry="30" fill="#ffef88" stroke="#fff" stroke-width="5"/>'},{o:true,l:'Wire terputus',svg:'<path d="M55 40 V20 H100 M 140 20 H300 V120 H55 V100" fill="none" stroke="#222" stroke-width="8"/><rect x="30" y="40" width="50" height="60" rx="8" fill="#f4b844"/><ellipse cx="180" cy="20" rx="25" ry="30" fill="#dfe7eb" stroke="#fff" stroke-width="5"/>'},{o:false,l:'Loop lengkap',svg:'<path d="M55 40 V20 H300 V120 H55 V100" fill="none" stroke="#222" stroke-width="8"/><rect x="30" y="40" width="50" height="60" rx="8" fill="#f4b844"/><ellipse cx="180" cy="20" rx="25" ry="30" fill="#ffef88" stroke="#fff" stroke-width="5"/>'},{o:true,l:'Switch OFF',svg:'<path d="M55 40 V20 H300 V50 M 300 90 V120 H55 V100" fill="none" stroke="#222" stroke-width="8"/><line x1="300" y1="90" x2="330" y2="60" stroke="#ef5350" stroke-width="8" stroke-linecap="round"/><circle cx="300" cy="50" r="6" fill="#222"/><circle cx="300" cy="90" r="6" fill="#222"/><rect x="30" y="40" width="50" height="60" rx="8" fill="#f4b844"/><ellipse cx="180" cy="20" rx="25" ry="30" fill="#dfe7eb" stroke="#fff" stroke-width="5"/>'}];cases.forEach(x=>{const c=document.createElement('div');c.className='choice';c.innerHTML=`<svg viewBox="0 0 350 140">${x.svg}</svg><div class="choice-btns"><button data-a="open">Open Circuit</button><button data-a="closed">Closed Circuit</button></div><div class="choice-fb"></div>`;c.querySelectorAll('button').forEach(b=>b.onclick=()=>{const ok=(b.dataset.a==='open')===x.o,fb=c.querySelector('.choice-fb');fb.textContent=ok?'Correct. '+x.l+'.':'Belum tepat. Periksa apakah jalurnya lengkap.';fb.style.color=ok?'#20734a':'#b33434'});choiceGrid.appendChild(c)});
+
+// Troubleshooting
+const repairs=[...document.querySelectorAll('.repair')];repairs.forEach(c=>c.querySelector('.fault').onclick=()=>{if(c.classList.contains('fixed'))return;c.classList.add('fixed');c.querySelector('.status').textContent='Fixed. LED dapat menyala.';if(repairs.every(x=>x.classList.contains('fixed'))){confetti();toast('Semua masalah berhasil ditemukan. Good troubleshooting.')}});
+
+// Flip LED
+let correct=true;flipBtn.onclick=()=>{correct=!correct;flipLed.classList.toggle('rev',!correct);flipLed.classList.toggle('on',correct);flipTitle.textContent=correct?'Anode terhubung ke positive':'Cathode menghadap ke positive';flipText.textContent=correct?'Polarity benar. LED menyala.':'Polarity terbalik. LED tidak menyala.'};
+
+// What Will Happen logic is initialized inside #whatWillHappenSlide.
+
+// Quiz
+(() => {
+    const quizProgEl = document.getElementById('quizProg');
+    const quizQEl = document.getElementById('quizQ');
+    const quizOptionsEl = document.getElementById('quizOptions');
+    const quizFbEl = document.getElementById('quizFb');
+    const quizNextEl = document.getElementById('quizNext');
+
+    if (!quizProgEl || !quizQEl || !quizOptionsEl || !quizFbEl || !quizNextEl) {
+        console.warn('Quick Quiz elements were not found.');
+        return;
+    }
+
+    const quizData = [
+        {
+            q: 'Bagian LED yang merupakan kutub positif disebut...',
+            o: [
+                'A. Cathode (−)',
+                'B. Anode (+)',
+                'C. Switch'
+            ],
+            a: 1,
+            e: 'Anode adalah kutub positif LED. Pada LED 5 mm, anode biasanya terhubung ke kaki yang lebih panjang.'
+        },
+        {
+            q: 'Apa yang terjadi ketika switch memutus jalur circuit?',
+            o: [
+                'A. Current berhenti mengalir dan LED mati',
+                'B. Voltage selalu meningkat',
+                'C. LED tetap menyala tanpa aliran listrik'
+            ],
+            a: 0,
+            e: 'Saat switch memutus jalur, circuit menjadi open. Current tidak dapat mengalir melalui LED.'
+        },
+        {
+            q: 'Mengapa LED tidak boleh langsung dihubungkan ke battery 9V tanpa pembatas arus?',
+            o: [
+                'A. Karena battery 9V tidak memiliki polarity',
+                'B. Karena LED hanya bisa digunakan di ruangan gelap',
+                'C. Karena current dapat terlalu besar dan merusak LED'
+            ],
+            a: 2,
+            e: 'Voltage yang terlalu tinggi dapat mendorong current terlalu besar melalui LED sehingga LED panas dan rusak.'
+        }
+    ];
+
+    let quizIndex = 0;
+
+    function renderQuiz() {
+        const q = quizData[quizIndex];
+
+        quizProgEl.textContent = `Question ${quizIndex + 1} of ${quizData.length}`;
+        quizQEl.textContent = q.q;
+        quizOptionsEl.innerHTML = '';
+        quizFbEl.textContent = 'Pilih satu jawaban.';
+        quizFbEl.style.background = '#f4f9fc';
+        quizFbEl.style.color = 'var(--muted)';
+        quizNextEl.style.display = 'none';
+
+        q.o.forEach((optionText, optionIndex) => {
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.className = 'option';
+            button.textContent = optionText;
+
+            button.addEventListener('click', () => {
+                const allButtons = [...quizOptionsEl.querySelectorAll('.option')];
+                allButtons.forEach(item => {
+                    item.disabled = true;
+                });
+
+                const isCorrect = optionIndex === q.a;
+
+                button.classList.add(isCorrect ? 'correct' : 'wrong');
+                allButtons[q.a].classList.add('correct');
+
+                quizFbEl.textContent = isCorrect
+                    ? `Benar. ${q.e}`
+                    : `Belum tepat. Jawaban yang benar adalah ${q.o[q.a]}. ${q.e}`;
+
+                quizFbEl.style.background = isCorrect ? '#eaf9f0' : '#fff1f0';
+                quizFbEl.style.color = isCorrect ? '#20734a' : '#a33636';
+
+                if (quizIndex < quizData.length - 1) {
+                    quizNextEl.style.display = 'inline-block';
+                } else {
+                    quizNextEl.style.display = 'none';
+                    if (typeof confetti === 'function') {
+                        confetti();
+                    }
+                }
+            });
+
+            quizOptionsEl.appendChild(button);
+        });
+    }
+
+    quizNextEl.addEventListener('click', () => {
+        if (quizIndex < quizData.length - 1) {
+            quizIndex += 1;
+            renderQuiz();
+        }
+    });
+
+    renderQuiz();
+})();
+
+// Feedback
+const fbs=[...document.querySelectorAll('.feedback-choice')];fbs.forEach(b=>b.onclick=()=>{fbs.forEach(x=>x.classList.remove('selected'));b.classList.add('selected');feedbackNote.textContent='Terima kasih. Lanjutkan dengan feedback form yang diberikan oleh guru.'});
+</script>
+</body>
+</html>
