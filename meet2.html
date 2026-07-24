@@ -1,0 +1,3557 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>RUANGGURU CODING — DIY Robotic Session 2</title>
+    <link rel="icon"
+        href="https://cdn-web-2.ruangguru.com/landing-pages/assets/e7d93748-818d-462d-be57-7db1e479cd62.png"
+        type="image/png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --navy: #073b70;
+            --navy2: #0d4f86;
+            --deep: #062b50;
+            --cyan: #43d5e6;
+            --orange: #ff8b2b;
+            --yellow: #ffc33d;
+            --ink: #153650;
+            --muted: #5e7487;
+            --green: #38b56f;
+            --red: #ef5350;
+            --white: #fff;
+            --cream: #fff9ef;
+            --shadow: 0 18px 46px rgba(2, 25, 50, .28)
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        html,
+        body {
+            height: 100%
+        }
+
+        body {
+            margin: 0;
+            overflow: hidden;
+            font-family: 'Fredoka', sans-serif;
+            color: var(--ink);
+            background: radial-gradient(circle at 80% 18%, rgba(67, 213, 230, .16) 0 12%, transparent 13%), radial-gradient(circle at 10% 82%, rgba(255, 195, 61, .14) 0 15%, transparent 16%), linear-gradient(135deg, var(--deep), var(--navy) 52%, var(--navy2))
+        }
+
+        body:before,
+        body:after {
+            content: "";
+            position: fixed;
+            width: 48vw;
+            height: 8px;
+            background: rgba(255, 255, 255, .035);
+            transform: rotate(-24deg);
+            border-radius: 20px;
+            box-shadow: 0 52px rgba(255, 255, 255, .03), 0 104px rgba(255, 255, 255, .025), 0 156px rgba(255, 255, 255, .02)
+        }
+
+        body:before {
+            left: 2vw;
+            top: 20vh
+        }
+
+        body:after {
+            right: -10vw;
+            bottom: 20vh
+        }
+
+        .brand {
+            position: fixed;
+            left: 22px;
+            top: 18px;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 9px 15px;
+            background: rgba(255, 255, 255, .97);
+            border-radius: 20px;
+            box-shadow: 0 10px 28px rgba(2, 24, 48, .3)
+        }
+
+        .brand img {
+            object-fit: contain;
+            width: auto
+        }
+
+        .brand .k {
+            height: 45px;
+            max-width: 170px
+        }
+
+        .brand .r {
+            height: 38px;
+            max-width: 145px
+        }
+
+        .brand i {
+            width: 2px;
+            height: 34px;
+            background: #dce7f0;
+            border-radius: 10px
+        }
+
+        .presentation {
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -48%);
+            width: min(88vw, 1440px);
+            aspect-ratio: 16/9;
+            max-height: 82vh;
+            border: 5px solid rgba(255, 255, 255, .9);
+            border-radius: 28px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            background: var(--cream)
+        }
+
+        .slide {
+            position: absolute;
+            inset: 0;
+            padding: 70px 74px 62px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 18px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateX(65px) scale(.985);
+            transition: .42s ease;
+            background: radial-gradient(circle at 88% 12%, rgba(67, 213, 230, .12), transparent 25%), linear-gradient(#fffefa, #fff8ed);
+            overflow: hidden
+        }
+
+        .slide.active {
+            opacity: 1;
+            visibility: visible;
+            transform: none;
+            z-index: 5
+        }
+
+        .slide.dark {
+            color: #fff;
+            background: radial-gradient(circle at 78% 44%, rgba(85, 170, 255, .24) 0 17%, rgba(85, 170, 255, .08) 18% 29%, transparent 30%), linear-gradient(135deg, #0b4a81, #083766 58%, #062b50)
+        }
+
+        .slide.orange {
+            color: #fff;
+            background: radial-gradient(circle at 82% 24%, rgba(255, 255, 255, .18), transparent 22%), linear-gradient(135deg, #ffa23d, #ff7e26)
+        }
+
+        .slide:after {
+            content: "";
+            position: absolute;
+            left: -8%;
+            right: -8%;
+            bottom: -32px;
+            height: 64px;
+            background: var(--orange);
+            transform: rotate(-1.5deg);
+            opacity: .94
+        }
+
+        .dark:after {
+            background: linear-gradient(90deg, var(--yellow), var(--orange))
+        }
+
+        .orange:after {
+            background: var(--navy)
+        }
+
+        .content {
+            position: relative;
+            z-index: 2;
+            width: 100%
+        }
+
+        .chip {
+            position: absolute;
+            left: 34px;
+            top: 25px;
+            z-index: 4;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 14px;
+            border-radius: 999px;
+            background: var(--navy);
+            color: #fff;
+            font-weight: 700;
+            font-size: .94rem;
+            box-shadow: 0 6px 16px rgba(7, 59, 112, .2)
+        }
+
+        .dark .chip {
+            background: rgba(255, 255, 255, .14);
+            border: 1px solid rgba(255, 255, 255, .22)
+        }
+
+        .chip b {
+            width: 9px;
+            height: 9px;
+            background: var(--yellow);
+            border-radius: 50%;
+            box-shadow: 0 0 0 4px rgba(255, 195, 61, .16)
+        }
+
+        h1,
+        h2,
+        h3,
+        p {
+            margin: 0
+        }
+
+        .display {
+            font-size: clamp(3.2rem, 5.8vw, 6rem);
+            line-height: .96;
+            font-weight: 700;
+            text-shadow: 0 5px rgba(12, 46, 86, .18)
+        }
+
+        .display .accent {
+            color: var(--yellow)
+        }
+
+        .slide-title {
+            font-size: clamp(2rem, 3.8vw, 3.65rem);
+            line-height: 1.06;
+            text-align: center;
+            color: var(--navy);
+            font-weight: 700
+        }
+
+        .dark .slide-title,
+        .orange .slide-title {
+            color: #fff
+        }
+
+        .kicker {
+            text-align: center;
+            color: var(--orange);
+            font-size: .95rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase
+        }
+
+        .lead {
+            font-size: clamp(1.12rem, 1.65vw, 1.52rem);
+            line-height: 1.52;
+            color: var(--muted);
+            text-align: center;
+            max-width: 960px;
+            font-weight: 500;
+            margin: 0 auto
+        }
+
+        .dark .lead,
+        .orange .lead {
+            color: rgba(255, 255, 255, .9)
+        }
+
+        .highlight {
+            color: var(--orange);
+            font-weight: 700
+        }
+
+        .cyan {
+            color: #00a6bf;
+            font-weight: 700
+        }
+
+        .yellow {
+            color: var(--yellow);
+            font-weight: 700
+        }
+
+        .center {
+            text-align: center
+        }
+
+        .left {
+            text-align: left
+        }
+
+        .stack {
+            display: grid;
+            gap: 15px
+        }
+
+        .w {
+            width: 100%
+        }
+
+        .max {
+            max-width: 1050px
+        }
+
+        .two {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+            align-items: center;
+            width: 100%
+        }
+
+        .three {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            width: 100%
+        }
+
+        .four {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            width: 100%
+        }
+
+        .agenda {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            width: 100%
+        }
+
+        .card {
+            background: #fff;
+            border: 2px solid #e5eef5;
+            border-radius: 24px;
+            padding: 23px;
+            box-shadow: 0 12px 28px rgba(5, 49, 87, .11)
+        }
+
+        .dark .card {
+            color: var(--ink)
+        }
+
+        .card h3,
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--navy);
+            margin-bottom: 7px
+        }
+
+        .card p {
+            font-size: 1rem;
+            line-height: 1.44;
+            color: var(--muted)
+        }
+
+        .icon-card {
+            min-height: 150px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            gap: 8px;
+            transition: .2s
+        }
+
+        .icon-card:hover {
+            transform: translateY(-6px);
+            border-color: var(--cyan)
+        }
+
+        .big-icon {
+            font-size: 3rem
+        }
+
+        .instruction {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 9px 15px;
+            border-radius: 999px;
+            background: #edf9fb;
+            border: 2px solid #bdebf1;
+            color: #116c79;
+            font-weight: 600;
+            font-size: .95rem
+        }
+
+        .dark .instruction {
+            background: rgba(255, 255, 255, .13);
+            border-color: rgba(255, 255, 255, .27);
+            color: #fff
+        }
+
+        .note {
+            font-size: .88rem;
+            color: var(--muted);
+            line-height: 1.44
+        }
+
+        .dark .note {
+            color: rgba(255, 255, 255, .76)
+        }
+
+        .btn,
+        .option {
+            font-family: 'Fredoka', sans-serif;
+            font-weight: 700;
+            cursor: pointer;
+            transition: .2s
+        }
+
+        .btn {
+            border: 0;
+            padding: 13px 24px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, var(--orange), var(--yellow));
+            color: #173a59;
+            box-shadow: 0 9px 18px rgba(255, 139, 43, .26);
+            font-size: 1.03rem
+        }
+
+        .btn:hover {
+            transform: translateY(-3px) scale(1.02)
+        }
+
+        .btn2 {
+            border: 0;
+            padding: 12px 20px;
+            border-radius: 15px;
+            background: var(--navy);
+            color: #fff;
+            font-family: 'Fredoka';
+            font-weight: 700;
+            cursor: pointer
+        }
+
+        .option {
+            width: 100%;
+            padding: 13px 16px;
+            border-radius: 14px;
+            border: 2px solid #dbe8f2;
+            background: #f7fbff;
+            color: var(--ink);
+            text-align: left;
+            font-size: 1.02rem
+        }
+
+        .option:hover {
+            border-color: var(--cyan);
+            transform: translateX(4px)
+        }
+
+        .option.correct {
+            background: #e7f9ef;
+            border-color: var(--green);
+            color: #197247
+        }
+
+        .option.wrong {
+            background: #fff0ef;
+            border-color: var(--red);
+            color: #a93232
+        }
+
+        .option:disabled {
+            cursor: default
+        }
+
+        .nav {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 54px;
+            height: 54px;
+            border-radius: 50%;
+            border: 3px solid rgba(255, 255, 255, .88);
+            background: var(--yellow);
+            color: var(--navy);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.45rem;
+            font-weight: 700;
+            cursor: pointer;
+            z-index: 1100;
+            box-shadow: 0 12px 28px rgba(2, 20, 40, .28);
+            transition: .2s
+        }
+
+        .nav:hover:not(:disabled) {
+            transform: translateY(-50%) scale(1.1);
+            background: var(--orange);
+            color: #fff
+        }
+
+        .nav:disabled {
+            opacity: .28;
+            cursor: not-allowed
+        }
+
+        #prev {
+            left: 18px
+        }
+
+        #next {
+            right: 18px
+        }
+
+        .footer {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 10px;
+            z-index: 10;
+            display: flex;
+            justify-content: center;
+            pointer-events: none
+        }
+
+        .counter {
+            font-size: .78rem;
+            font-weight: 700;
+            letter-spacing: .8px;
+            color: #6a8094;
+            background: rgba(255, 255, 255, .9);
+            border: 1px solid rgba(7, 59, 112, .12);
+            padding: 6px 12px;
+            border-radius: 999px
+        }
+
+        .progress {
+            position: absolute;
+            left: 22%;
+            right: 22%;
+            bottom: 5px;
+            height: 4px;
+            background: rgba(7, 59, 112, .12);
+            border-radius: 999px;
+            overflow: hidden
+        }
+
+        .bar {
+            height: 100%;
+            width: 0;
+            background: linear-gradient(90deg, var(--cyan), var(--orange));
+            transition: .3s
+        }
+
+        .cover {
+            display: grid;
+            grid-template-columns: 1.05fr .95fr;
+            gap: 28px;
+            align-items: center;
+            width: 100%
+        }
+
+        .cover-sub {
+            margin-top: 22px;
+            font-size: 1.24rem;
+            line-height: 1.5;
+            color: rgba(255, 255, 255, .86);
+            max-width: 620px
+        }
+
+        .pill {
+            display: inline-flex;
+            margin-top: 24px;
+            padding: 10px 18px;
+            border-radius: 16px;
+            background: var(--yellow);
+            color: var(--navy);
+            font-weight: 700
+        }
+
+        .robot {
+            width: 600px;
+            height: 600px;
+            position: relative;
+            margin: auto;
+            animation: float 3.2s ease-in-out infinite;
+            object-fit: contain;
+            display: block
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0)
+            }
+
+            50% {
+                transform: translateY(-12px)
+            }
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg)
+            }
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                filter: drop-shadow(0 0 6px rgba(255, 195, 61, .3))
+            }
+
+            50% {
+                filter: drop-shadow(0 0 32px rgba(255, 195, 61, .95))
+            }
+        }
+
+        @keyframes blink {
+
+            0%,
+            46% {
+                filter: brightness(.55) saturate(.6);
+                transform: scale(.98)
+            }
+
+            48%,
+            94% {
+                filter: brightness(1.2) saturate(1.2) drop-shadow(0 0 24px rgba(255, 65, 65, .85));
+                transform: scale(1.02)
+            }
+
+            96%,
+            100% {
+                filter: brightness(.55) saturate(.6);
+                transform: scale(.98)
+            }
+        }
+
+        @keyframes dash {
+            to {
+                stroke-dashoffset: -28
+            }
+        }
+
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0)
+            }
+
+            25% {
+                transform: translateX(-6px)
+            }
+
+            75% {
+                transform: translateX(6px)
+            }
+        }
+
+        @keyframes damage {
+
+            0%,
+            100% {
+                filter: brightness(1);
+                transform: scale(1)
+            }
+
+            25% {
+                filter: brightness(2.4);
+                transform: scale(1.09)
+            }
+
+            50% {
+                filter: brightness(.5) grayscale(.7);
+                transform: scale(.96)
+            }
+
+            75% {
+                filter: brightness(2.2);
+                transform: scale(1.1)
+            }
+        }
+
+        .home,
+        .tvscene,
+        .fanscene,
+        .river-scene {
+            width: 100%;
+            height: 340px;
+            border-radius: 28px;
+            position: relative;
+            overflow: hidden;
+            border: 5px solid #fff;
+            box-shadow: 0 16px 34px rgba(4, 40, 73, .18)
+        }
+
+        .home {
+            background: linear-gradient(#dff4ff 0 62%, #d9b27b 62%)
+        }
+
+        .home.on {
+            background: linear-gradient(#fff2bd 0 62%, #d9b27b 62%)
+        }
+
+        .window {
+            position: absolute;
+            left: 7%;
+            top: 14%;
+            width: 170px;
+            height: 130px;
+            border: 12px solid #fff;
+            border-radius: 12px;
+            background: linear-gradient(#73c4f2 0 68%, #86c56a 69%)
+        }
+
+        .window:before,
+        .window:after {
+            content: "";
+            position: absolute;
+            background: #fff
+        }
+
+        .window:before {
+            width: 8px;
+            top: 0;
+            bottom: 0;
+            left: 50%
+        }
+
+        .window:after {
+            height: 8px;
+            left: 0;
+            right: 0;
+            top: 50%
+        }
+
+        .sofa {
+            position: absolute;
+            left: 12%;
+            bottom: 10%;
+            width: 280px;
+            height: 104px;
+            background: #f2a14c;
+            border-radius: 30px 30px 16px 16px
+        }
+
+        .sofa:before,
+        .sofa:after {
+            content: "";
+            position: absolute;
+            top: -35px;
+            width: 128px;
+            height: 90px;
+            background: #ffb461;
+            border-radius: 30px
+        }
+
+        .sofa:before {
+            left: 8px
+        }
+
+        .sofa:after {
+            right: 8px
+        }
+
+        .lamp {
+            position: absolute;
+            right: 18%;
+            top: 9%;
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            background: #dce3e7;
+            transition: .25s
+        }
+
+        .lamp:before {
+            content: "";
+            position: absolute;
+            left: 50%;
+            top: -72px;
+            width: 8px;
+            height: 78px;
+            background: #40596b
+        }
+
+        .home.on .lamp {
+            background: #fff3ae;
+            box-shadow: 0 0 70px 35px rgba(255, 218, 94, .72)
+        }
+
+        .wallsw {
+            position: absolute;
+            right: 7%;
+            bottom: 22%;
+            width: 74px;
+            height: 108px;
+            border-radius: 16px;
+            background: #fff;
+            border: 5px solid #d8e3ea;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer
+        }
+
+        .rocker {
+            width: 34px;
+            height: 62px;
+            border-radius: 10px;
+            background: #dce6eb;
+            position: relative
+        }
+
+        .rocker:before {
+            content: "";
+            position: absolute;
+            left: 5px;
+            right: 5px;
+            top: 5px;
+            height: 24px;
+            border-radius: 7px;
+            background: #fff;
+            transition: .2s
+        }
+
+        .home.on .rocker:before {
+            transform: translateY(28px);
+            background: var(--yellow)
+        }
+
+        .scene-msg {
+            position: absolute;
+            right: 5%;
+            top: 54%;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--navy);
+            background: #fff;
+            padding: 10px 16px;
+            border-radius: 14px;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: .2s
+        }
+
+        .scene-msg.show {
+            opacity: 1;
+            transform: none
+        }
+
+        .tvscene {
+            background: linear-gradient(#e4f0f8 0 67%, #b98c61 68%)
+        }
+
+        .tv {
+            position: absolute;
+            left: 13%;
+            top: 14%;
+            width: 470px;
+            height: 240px;
+            border-radius: 24px;
+            background: #17222d;
+            border: 16px solid #25394a;
+            box-shadow: 0 20px 0 -2px #6d4d39
+        }
+
+        .screen {
+            position: absolute;
+            inset: 10px;
+            border-radius: 9px;
+            background: linear-gradient(135deg, #253441, #10151b);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 2rem;
+            transition: .25s
+        }
+
+        .screen.on {
+            background: linear-gradient(135deg, #50c8ff, #7367f0 55%, #ff8b2b)
+        }
+
+        .broadcast {
+            opacity: 0;
+            transform: scale(.8);
+            transition: .25s;
+            text-align: center
+        }
+
+        .screen.on .broadcast {
+            opacity: 1;
+            transform: scale(1)
+        }
+
+        .remote {
+            position: absolute;
+            right: 15%;
+            top: 22%;
+            width: 105px;
+            height: 225px;
+            border-radius: 30px;
+            background: #26394a;
+            border: 5px solid #fff;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 24px;
+            gap: 18px;
+            transform: rotate(-8deg);
+            transition: .2s
+        }
+
+        .remote:hover {
+            transform: rotate(-4deg) scale(1.04)
+        }
+
+        .power {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: #e84c4c;
+            border: 4px solid #f8a0a0
+        }
+
+        .dots {
+            display: grid;
+            grid-template-columns: repeat(3, 14px);
+            gap: 9px
+        }
+
+        .dots i {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: #cbd7df
+        }
+
+        .fanscene {
+            background: linear-gradient(#e3f8ff 0 70%, #e9c89c 71%)
+        }
+
+        .fan {
+            position: absolute;
+            left: 50%;
+            top: 48%;
+            transform: translate(-50%, -50%);
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            border: 18px solid #7fa5be;
+            background: #edf8fc
+        }
+
+        .blades {
+            position: absolute;
+            inset: 24px;
+            border-radius: 50%
+        }
+
+        .fan.running .blades {
+            animation: spin .38s linear infinite
+        }
+
+        .blade {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: 70px;
+            height: 125px;
+            background: #6bd0dd;
+            border-radius: 70% 25% 70% 25%;
+            transform-origin: 0 0
+        }
+
+        .blade:nth-child(1) {
+            transform: rotate(0) translate(-5px, -5px)
+        }
+
+        .blade:nth-child(2) {
+            transform: rotate(120deg) translate(-5px, -5px)
+        }
+
+        .blade:nth-child(3) {
+            transform: rotate(240deg) translate(-5px, -5px)
+        }
+
+        .hub {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 62px;
+            height: 62px;
+            border-radius: 50%;
+            background: var(--orange);
+            border: 8px solid #fff2d8;
+            z-index: 2
+        }
+
+        .stand {
+            position: absolute;
+            left: 50%;
+            top: 72%;
+            transform: translateX(-50%);
+            width: 44px;
+            height: 90px;
+            background: #769bb2;
+            border-radius: 12px;
+            box-shadow: 0 75px 0 35px #688ca3
+        }
+
+        .fantoggle {
+            position: absolute;
+            right: 10%;
+            bottom: 18%;
+            width: 120px;
+            height: 58px;
+            border-radius: 999px;
+            background: #d7e3e9;
+            border: 5px solid #fff;
+            cursor: pointer
+        }
+
+        .fantoggle:before {
+            content: "OFF";
+            position: absolute;
+            left: 5px;
+            top: 5px;
+            width: 44px;
+            height: 38px;
+            border-radius: 999px;
+            background: #8298a7;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: .8rem;
+            font-weight: 700;
+            transition: .2s
+        }
+
+        .fantoggle.on {
+            background: #c9f3da
+        }
+
+        .fantoggle.on:before {
+            content: "ON";
+            transform: translateX(59px);
+            background: var(--green)
+        }
+
+        .device-row {
+            display: flex;
+            gap: 26px;
+            justify-content: center;
+            width: 100%
+        }
+
+        .device {
+            flex: 1;
+            max-width: 290px;
+            background: #fff;
+            border-radius: 24px;
+            padding: 26px;
+            text-align: center;
+            border: 2px solid #e5edf4
+        }
+
+        .device .v {
+            font-size: 5rem
+        }
+
+        .device strong {
+            font-size: 1.2rem;
+            color: var(--navy)
+        }
+
+        .orb {
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #fff8bd 0 20%, #ffd053 21% 43%, #ff9a2f 44% 59%, rgba(255, 154, 47, .18) 60%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 8rem;
+            animation: pulse 2s infinite
+        }
+
+        .chapter-hero {
+            display: grid;
+            grid-template-columns: 1.15fr .85fr;
+            gap: 32px;
+            align-items: center;
+            width: 100%
+        }
+
+        .blink-led {
+            width: min(310px, 80%);
+            display: block;
+            margin: auto;
+            animation: blink 2.3s infinite;
+            transform-origin: center bottom
+        }
+
+        .inspect,
+        .battery-grid {
+            display: grid;
+            grid-template-columns: .9fr 1.1fr;
+            gap: 28px;
+            width: 100%;
+            align-items: center
+        }
+
+        .imgbox {
+            background: linear-gradient(135deg, #edf8ff, #fff8ec);
+            border: 3px solid #d8ebf5;
+            border-radius: 28px;
+            padding: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 350px
+        }
+
+        .imgbox img {
+            max-height: 320px;
+            max-width: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 18px 18px rgba(0, 0, 0, .16))
+        }
+
+        .labels {
+            display: grid;
+            gap: 15px
+        }
+
+        .label {
+            border-radius: 20px;
+            padding: 18px 20px;
+            background: #fff;
+            border-left: 8px solid var(--orange);
+            box-shadow: 0 10px 22px rgba(5, 49, 87, .1)
+        }
+
+        .label.c {
+            border-left-color: var(--cyan)
+        }
+
+        .label strong {
+            display: block;
+            font-size: 1.2rem;
+            color: var(--navy);
+            margin-bottom: 4px
+        }
+
+        .label span {
+            font-size: 1rem;
+            color: var(--muted);
+            line-height: 1.44
+        }
+
+        .polarity {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 18px 20px;
+            background: #fff;
+            border-radius: 20px;
+            border: 2px solid #e7eff6
+        }
+
+        .sym {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 1.8rem;
+            font-weight: 700;
+            flex: none
+        }
+
+        .plus {
+            background: #ef5350
+        }
+
+        .minus {
+            background: #222
+        }
+
+        .polarity strong {
+            font-size: 1.2rem;
+            color: var(--navy);
+            display: block
+        }
+
+        .polarity span {
+            color: var(--muted)
+        }
+
+        .wireboard {
+            position: relative;
+            width: 100%;
+            min-height: 390px;
+            border-radius: 28px;
+            background: linear-gradient(135deg, #edf8ff, #fffaf1);
+            border: 3px solid #d7e9f3;
+            overflow: hidden
+        }
+
+        .wireboard svg {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 2
+        }
+
+        .wire {
+            fill: none;
+            stroke-width: 8;
+            stroke-linecap: round
+        }
+
+        .wire.pos {
+            stroke: #ef5350
+        }
+
+        .wire.neg {
+            stroke: #222
+        }
+
+        .wire.ctrl {
+            stroke: #ff9b2f
+        }
+
+        .preview {
+            fill: none;
+            stroke: #46bfd0;
+            stroke-width: 6;
+            stroke-linecap: round;
+            stroke-dasharray: 12 10;
+            animation: dash .6s linear infinite
+        }
+
+        .term {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: 5px solid #fff;
+            box-shadow: 0 5px 12px rgba(0, 0, 0, .18);
+            cursor: pointer;
+            z-index: 5;
+            transition: .16s
+        }
+
+        .term:hover {
+            transform: scale(1.18)
+        }
+
+        .term.sel {
+            box-shadow: 0 0 0 7px rgba(67, 213, 230, .26)
+        }
+
+        .term.done {
+            opacity: .45;
+            cursor: default
+        }
+
+        .term.pos {
+            background: #ef5350
+        }
+
+        .term.neg {
+            background: #222
+        }
+
+        .term.ctrl {
+            background: #ff9b2f
+        }
+
+        .bbattery {
+            position: absolute;
+            left: 7%;
+            top: 28%;
+            width: 130px;
+            height: 170px;
+            border-radius: 20px;
+            background: linear-gradient(90deg, #f5b447 0 72%, #222 73%);
+            border: 7px solid #fff;
+            z-index: 3
+        }
+
+        .bbattery:before {
+            content: "CR2032";
+            position: absolute;
+            left: 20px;
+            top: 56px;
+            font-weight: 700
+        }
+
+        .bbattery:after {
+            content: "3V";
+            position: absolute;
+            left: 42px;
+            top: 86px;
+            font-weight: 700
+        }
+
+        .bled {
+            position: absolute;
+            right: 9%;
+            top: 17%;
+            width: 150px;
+            height: 220px;
+            z-index: 3
+        }
+
+        .bulb {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            transform: translateX(-50%);
+            width: 105px;
+            height: 125px;
+            border-radius: 55px 55px 38px 38px;
+            background: #a9d8e0;
+            border: 8px solid #fff;
+            transition: .25s
+        }
+
+        .bled.on .bulb {
+            background: #ff5757;
+            box-shadow: 0 0 42px 18px rgba(255, 77, 77, .55)
+        }
+
+        .leg {
+            position: absolute;
+            top: 118px;
+            width: 10px;
+            background: #b6bfc6;
+            border-radius: 4px
+        }
+
+        .leg.p {
+            left: 53px;
+            height: 95px
+        }
+
+        .leg.n {
+            right: 53px;
+            height: 72px
+        }
+
+        .bmsg {
+            position: absolute;
+            left: 50%;
+            bottom: 18px;
+            transform: translateX(-50%);
+            padding: 10px 18px;
+            border-radius: 14px;
+            background: #fff;
+            color: var(--navy);
+            font-weight: 700;
+            z-index: 7;
+            min-width: 240px;
+            text-align: center
+        }
+
+        .concept {
+            position: relative;
+            overflow: hidden;
+            min-height: 235px
+        }
+
+        .concept .num {
+            position: absolute;
+            right: -12px;
+            bottom: -36px;
+            font-size: 9rem;
+            font-weight: 700;
+            color: rgba(7, 59, 112, .06)
+        }
+
+        .concept .ci {
+            font-size: 3rem;
+            margin-bottom: 8px
+        }
+
+        .pipe,
+        .push {
+            width: 100%;
+            height: 350px;
+            background: #fff;
+            border-radius: 28px;
+            border: 3px solid #d9e9f3;
+            padding: 14px
+        }
+
+        .pipe svg,
+        .push svg {
+            width: 100%;
+            height: 100%
+        }
+
+        .water {
+            animation: dash .8s linear infinite
+        }
+
+        .wallpanel {
+            min-height: 350px;
+            border-radius: 28px;
+            background: linear-gradient(#dfeef7, #f8fbfd);
+            position: relative;
+            border: 5px solid #fff
+        }
+
+        .wallbulb {
+            position: absolute;
+            left: 50%;
+            top: 58px;
+            transform: translateX(-50%);
+            width: 112px;
+            height: 112px;
+            border-radius: 55% 55% 45% 45%;
+            background: #dce5e9;
+            transition: .25s
+        }
+
+        .wallpanel.on .wallbulb {
+            background: #fff0a1;
+            box-shadow: 0 0 64px 30px rgba(255, 213, 80, .65)
+        }
+
+        .switchui {
+            position: absolute;
+            left: 50%;
+            bottom: 45px;
+            transform: translateX(-50%);
+            width: 96px;
+            height: 136px;
+            border-radius: 18px;
+            background: #fff;
+            border: 6px solid #d8e4ea;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center
+        }
+
+        .switchui .rocker {
+            width: 46px;
+            height: 80px
+        }
+
+        .wallpanel.on .rocker:before {
+            transform: translateY(36px);
+            background: var(--yellow)
+        }
+
+        .loops {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            width: 100%
+        }
+
+        .loop {
+            background: #fff;
+            border-radius: 24px;
+            padding: 18px;
+            border: 3px solid #e2edf4
+        }
+
+        .loop h3 {
+            text-align: center;
+            color: var(--navy);
+            font-size: 1.25rem;
+            margin-bottom: 8px
+        }
+
+        .loop svg {
+            width: 100%;
+            height: 230px
+        }
+
+        .smodule {
+            position: absolute;
+            left: 44%;
+            top: 28%;
+            width: 155px;
+            height: 120px;
+            border-radius: 22px;
+            background: #fff;
+            border: 4px solid #dceaf2;
+            z-index: 3;
+            display: flex;
+            align-items: center;
+            justify-content: center
+        }
+
+        .minisw {
+            width: 85px;
+            height: 45px;
+            border-radius: 999px;
+            background: #d7e2e8;
+            cursor: pointer;
+            position: relative;
+            border: 4px solid #fff
+        }
+
+        .minisw:before {
+            content: "OFF";
+            position: absolute;
+            left: 3px;
+            top: 3px;
+            width: 34px;
+            height: 31px;
+            border-radius: 999px;
+            background: #879ca9;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: .66rem;
+            font-weight: 700;
+            transition: .2s
+        }
+
+        .minisw.on {
+            background: #c6f0d7
+        }
+
+        .minisw.on:before {
+            content: "ON";
+            transform: translateX(41px);
+            background: var(--green)
+        }
+
+        .voltage {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            width: 100%
+        }
+
+        .station {
+            min-height: 350px;
+            background: #fff;
+            border-radius: 26px;
+            border: 3px solid #dcebf4;
+            padding: 18px;
+            text-align: center
+        }
+
+        .battery-token {
+            width: 116px;
+            height: 164px;
+            border-radius: 20px;
+            background: linear-gradient(90deg, #f4b844 0 72%, #222 73%);
+            border: 6px solid #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.55rem;
+            font-weight: 700;
+            cursor: grab;
+            margin: 6px auto 12px
+        }
+
+        .battery-token.nine {
+            background: linear-gradient(90deg, #20262b 0 66%, #e68c23 67%);
+            color: #fff
+        }
+
+        .drop {
+            border: 3px dashed #a9c8da;
+            border-radius: 18px;
+            min-height: 84px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6f8798;
+            font-weight: 600;
+            background: #f6fbfe
+        }
+
+        .drop.over {
+            border-color: var(--cyan);
+            background: #e9fbfd
+        }
+
+        .labled {
+            margin: 14px auto 8px;
+            width: 74px;
+            height: 92px;
+            border-radius: 40px 40px 28px 28px;
+            background: #dbe3e7;
+            border: 7px solid #f7fbfd;
+            transition: .25s
+        }
+
+        .labled.safe {
+            background: #ff5f5f;
+            box-shadow: 0 0 34px 16px rgba(255, 74, 74, .5)
+        }
+
+        .labled.damage {
+            background: #fff4c3;
+            animation: damage .65s 2;
+            box-shadow: 0 0 70px 28px rgba(255, 224, 91, .85)
+        }
+
+        .dlabel {
+            font-size: .95rem;
+            font-weight: 700;
+            color: var(--red);
+            min-height: 24px
+        }
+
+        .river-scene {
+            background: linear-gradient(#dff4ff 0 50%, #8ac45c 51%)
+        }
+
+        .river {
+            position: absolute;
+            left: -5%;
+            right: -5%;
+            top: 48%;
+            height: 130px;
+            background: linear-gradient(#58c7ef, #2b95cf);
+            transform: rotate(-4deg)
+        }
+
+        .river:before,
+        .river:after {
+            content: "";
+            position: absolute;
+            left: -10%;
+            right: -10%;
+            height: 16px;
+            border-radius: 50%;
+            border-top: 6px solid rgba(255, 255, 255, .7);
+            animation: dash 1s linear infinite
+        }
+
+        .river:before {
+            top: 24px
+        }
+
+        .river:after {
+            top: 74px
+        }
+
+        .rock-led {
+            position: absolute;
+            right: 20%;
+            top: 50%;
+            width: 110px;
+            height: 110px;
+            border-radius: 46%;
+            background: #8b7c72;
+            border: 7px solid #675a52;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: 700;
+            z-index: 2
+        }
+
+        .rock-led.crack {
+            animation: shake .25s 5;
+            background: #6b5b52
+        }
+
+        .rock-led.crack:after {
+            content: "⚡";
+            position: absolute;
+            font-size: 3.2rem;
+            color: var(--yellow)
+        }
+
+        .river-label {
+            position: absolute;
+            left: 8%;
+            top: 21%;
+            padding: 9px 15px;
+            border-radius: 14px;
+            background: #fff;
+            color: var(--navy);
+            font-weight: 700
+        }
+
+        .river-control {
+            position: absolute;
+            left: 8%;
+            bottom: 12%;
+            z-index: 3
+        }
+
+        .shield {
+            width: 260px;
+            height: 290px;
+            margin: auto;
+            background: linear-gradient(135deg, var(--cyan), var(--navy));
+            clip-path: polygon(50% 0, 92% 16%, 84% 72%, 50% 100%, 16% 72%, 8% 16%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 5rem;
+            filter: drop-shadow(0 18px 20px rgba(0, 0, 0, .18))
+        }
+
+        .pool {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 16px;
+            border-radius: 20px;
+            background: #f1f7fb;
+            border: 2px solid #dbe9f2;
+            width: 100%
+        }
+
+        .token {
+            padding: 12px 18px;
+            border-radius: 16px;
+            background: #fff;
+            border: 2px solid #d9e6ee;
+            font-weight: 700;
+            cursor: grab
+        }
+
+        .slots {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+            width: 100%
+        }
+
+        .slot {
+            min-height: 112px;
+            border: 3px dashed #a9c7d9;
+            border-radius: 20px;
+            background: #f9fcfe;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: #6c8496;
+            font-weight: 700;
+            padding: 10px
+        }
+
+        .slot.filled {
+            border-style: solid;
+            border-color: var(--green);
+            background: #ecfaf2;
+            color: #20734a
+        }
+
+        .slot.over {
+            border-color: var(--cyan);
+            background: #e9fbfd
+        }
+
+        .choice-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
+            width: 100%
+        }
+
+        .choice {
+            background: #fff;
+            border-radius: 22px;
+            border: 3px solid #e1edf4;
+            padding: 16px
+        }
+
+        .choice svg {
+            width: 100%;
+            height: 140px
+        }
+
+        .choice-btns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px
+        }
+
+        .choice-btns button {
+            padding: 10px;
+            border-radius: 12px;
+            border: 2px solid #dce8ef;
+            background: #f8fbfd;
+            font-family: 'Fredoka';
+            font-weight: 700;
+            cursor: pointer
+        }
+
+        .choice-fb {
+            min-height: 24px;
+            text-align: center;
+            font-weight: 700;
+            margin-top: 8px
+        }
+
+        .repair-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+            width: 100%
+        }
+
+        .repair {
+            background: #fff;
+            border-radius: 22px;
+            border: 3px solid #e1edf4;
+            padding: 16px;
+            text-align: center
+        }
+
+        .rvis {
+            height: 130px;
+            position: relative;
+            border-radius: 16px;
+            background: #f1f7fb;
+            margin-bottom: 12px;
+            overflow: hidden
+        }
+
+        .fault {
+            position: absolute;
+            cursor: pointer;
+            border: 3px dashed var(--red);
+            border-radius: 12px;
+            background: transparent
+        }
+
+        .repair.fixed .fault {
+            border-color: var(--green);
+            background: rgba(56, 181, 111, .15)
+        }
+
+        .status {
+            font-weight: 700;
+            color: var(--red)
+        }
+
+        .repair.fixed .status {
+            color: var(--green)
+        }
+
+        .flip-grid,
+        .predict,
+        .feedback {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 28px;
+            align-items: center;
+            width: 100%
+        }
+
+        .flipbox {
+            min-height: 330px;
+            background: #fff;
+            border-radius: 28px;
+            border: 3px solid #dcebf4;
+            display: flex;
+            align-items: center;
+            justify-content: center
+        }
+
+        .flipled {
+            position: relative;
+            width: 150px;
+            height: 240px;
+            transition: .45s
+        }
+
+        .flipled.rev {
+            transform: rotateY(180deg)
+        }
+
+        .flipled .bulb {
+            width: 110px;
+            height: 130px
+        }
+
+        .flipled.on .bulb {
+            background: #ff5959;
+            box-shadow: 0 0 44px 20px rgba(255, 69, 69, .55)
+        }
+
+        .flipled .leg.one {
+            left: 48px;
+            height: 105px
+        }
+
+        .flipled .leg.two {
+            right: 48px;
+            height: 72px
+        }
+
+        .scenario {
+            background: #fff;
+            border-radius: 26px;
+            border: 3px solid #dcebf4;
+            padding: 20px;
+            min-height: 340px
+        }
+
+        .scenario-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--navy);
+            text-align: center;
+            margin-bottom: 12px
+        }
+
+        .scenario-vis {
+            height: 190px;
+            border-radius: 18px;
+            background: #eff7fb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4.2rem
+        }
+
+        .predict-fb {
+            min-height: 72px;
+            padding: 14px;
+            border-radius: 16px;
+            background: #f4f9fc;
+            color: var(--muted);
+            line-height: 1.4
+        }
+
+        .quiz {
+            width: min(860px, 100%);
+            background: #fff;
+            border-radius: 28px;
+            padding: 30px;
+            border: 3px solid #dcebf4;
+            color: var(--ink);
+            margin: 0 auto
+        }
+
+        .quiz-prog {
+            font-size: .9rem;
+            font-weight: 700;
+            color: var(--orange);
+            margin-bottom: 10px
+        }
+
+        .quiz-q {
+            font-size: 1.55rem;
+            font-weight: 700;
+            color: var(--navy);
+            line-height: 1.3;
+            margin-bottom: 18px
+        }
+
+        .quiz-options {
+            display: grid;
+            gap: 12px
+        }
+
+        .quiz-fb {
+            min-height: 64px;
+            margin-top: 14px;
+            padding: 14px 16px;
+            border-radius: 16px;
+            background: #f4f9fc;
+            color: var(--muted);
+            line-height: 1.45
+        }
+
+        .review {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            width: 100%
+        }
+
+        .review .card {
+            min-height: 150px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center
+        }
+
+        .feedback-choices {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px
+        }
+
+        .feedback-choice {
+            padding: 22px 10px;
+            border-radius: 20px;
+            background: #fff;
+            border: 3px solid #e0ebf2;
+            text-align: center;
+            cursor: pointer;
+            transition: .2s
+        }
+
+        .feedback-choice:hover,
+        .feedback-choice.selected {
+            transform: translateY(-5px);
+            border-color: var(--cyan);
+            background: #effcfd
+        }
+
+        .face {
+            font-size: 3rem
+        }
+
+        .toast {
+            position: fixed;
+            left: 50%;
+            bottom: 34px;
+            transform: translate(-50%, 28px);
+            z-index: 3000;
+            padding: 14px 20px;
+            border-radius: 16px;
+            background: #102f4c;
+            color: #fff;
+            font-weight: 700;
+            opacity: 0;
+            pointer-events: none;
+            transition: .25s;
+            max-width: min(620px, 88vw);
+            text-align: center
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translate(-50%, 0)
+        }
+
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 16px;
+            border-radius: 3px;
+            z-index: 3500;
+            pointer-events: none;
+            animation: fall 1.5s ease-out forwards
+        }
+
+        @keyframes fall {
+            to {
+                transform: translate(var(--x), var(--y)) rotate(680deg);
+                opacity: 0
+            }
+        }
+
+        @media(max-width:1100px) {
+            .presentation {
+                width: 94vw
+            }
+
+            .slide {
+                padding: 66px 50px 56px
+            }
+
+            .agenda,
+            .review,
+            .four {
+                grid-template-columns: repeat(2, 1fr)
+            }
+        }
+
+        @media(max-width:760px) {
+            body {
+                overflow: auto
+            }
+
+            .brand {
+                left: 8px;
+                top: 8px;
+                padding: 7px 10px;
+                gap: 8px
+            }
+
+            .brand .k {
+                height: 30px
+            }
+
+            .brand .r {
+                height: 26px
+            }
+
+            .brand i {
+                height: 25px
+            }
+
+            .presentation {
+                position: absolute;
+                top: 64px;
+                transform: translateX(-50%);
+                width: 100vw;
+                height: calc(100vh - 64px);
+                max-height: none;
+                aspect-ratio: auto;
+                border-radius: 0;
+                border: 0
+            }
+
+            .slide {
+                padding: 68px 20px 62px;
+                overflow-y: auto;
+                justify-content: flex-start
+            }
+
+            .nav {
+                width: 42px;
+                height: 42px;
+                top: auto;
+                bottom: 12px
+            }
+
+            #prev {
+                left: 12px
+            }
+
+            #next {
+                right: 12px
+            }
+
+            .chip {
+                left: 16px;
+                top: 18px
+            }
+
+            .two,
+            .three,
+            .cover,
+            .chapter-hero,
+            .inspect,
+            .battery-grid,
+            .voltage,
+            .flip-grid,
+            .predict,
+            .feedback,
+            .loops {
+                grid-template-columns: 1fr
+            }
+
+            .agenda,
+            .review,
+            .four,
+            .choice-grid,
+            .repair-grid {
+                grid-template-columns: 1fr
+            }
+
+            .slots {
+                grid-template-columns: 1fr 1fr
+            }
+
+            .display {
+                text-align: center;
+                font-size: 3rem
+            }
+
+            .home,
+            .tvscene,
+            .fanscene {
+                height: 420px
+            }
+
+            .tv {
+                left: 5%;
+                width: 68%;
+                height: 210px
+            }
+
+            .remote {
+                right: 5%;
+                width: 90px;
+                height: 205px
+            }
+
+            .slide:after {
+                display: none
+            }
+        }
+
+
+        /* Session 2 additions */
+        .review-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            width: 100%
+        }
+
+        .review-card {
+            background: #fff;
+            border: 3px solid #e1edf4;
+            border-radius: 22px;
+            padding: 14px;
+            text-align: center;
+            box-shadow: 0 10px 22px rgba(5, 49, 87, .1)
+        }
+
+        .review-card svg {
+            width: 100%;
+            height: 145px;
+            display: block
+        }
+
+        .drop-zone {
+            min-height: 70px;
+            border: 3px dashed #a9c7d9;
+            border-radius: 16px;
+            background: #f8fcfe;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            color: #6c8496;
+            font-weight: 700;
+            transition: .2s
+        }
+
+        .drop-zone.over {
+            border-color: var(--cyan);
+            background: #e9fbfd
+        }
+
+        .drop-zone.correct {
+            border-style: solid;
+            border-color: var(--green);
+            background: #eaf9f0;
+            color: #20734a
+        }
+
+        .drop-zone.wrong {
+            border-style: solid;
+            border-color: var(--red);
+            background: #fff1f0;
+            color: #a33636
+        }
+
+        .drag-bank {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 12px;
+            border-radius: 18px;
+            background: #eef6fb;
+            border: 2px solid #dbe9f2
+        }
+
+        .drag-chip {
+            padding: 10px 14px;
+            border-radius: 14px;
+            background: #fff;
+            border: 2px solid #d7e5ee;
+            font-weight: 700;
+            cursor: grab;
+            box-shadow: 0 7px 14px rgba(0, 0, 0, .06);
+            user-select: none
+        }
+
+        .drag-chip.selected {
+            border-color: var(--cyan);
+            box-shadow: 0 0 0 4px rgba(67, 213, 230, .16)
+        }
+
+        .drag-chip.used {
+            opacity: .35;
+            pointer-events: none
+        }
+
+        .info-visual {
+            background: #fff;
+            border: 3px solid #dcebf4;
+            border-radius: 26px;
+            padding: 18px;
+            box-shadow: 0 14px 28px rgba(5, 49, 87, .12)
+        }
+
+        .info-visual svg {
+            width: 100%;
+            height: 330px;
+            display: block
+        }
+
+        .resistor-photo {
+            max-width: 100%;
+            max-height: 360px;
+            object-fit: contain;
+            border-radius: 22px;
+            filter: drop-shadow(0 16px 18px rgba(0, 0, 0, .15))
+        }
+
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px
+        }
+
+        .compare-col {
+            border-radius: 20px;
+            padding: 18px;
+            background: #fff;
+            border: 3px solid #e2edf4
+        }
+
+        .compare-col.bad {
+            border-color: #f5b4b1
+        }
+
+        .compare-col.good {
+            border-color: #a8e2c1
+        }
+
+        .compare-col h3 {
+            text-align: center;
+            color: var(--navy)
+        }
+
+        .compare-col ul {
+            margin: 10px 0 0;
+            padding-left: 20px;
+            color: var(--muted);
+            line-height: 1.7
+        }
+
+        .calc-box {
+            background: #f4f9fc;
+            border: 2px solid #dcebf4;
+            border-radius: 18px;
+            padding: 14px;
+            font-weight: 600;
+            line-height: 1.5
+        }
+
+        .safe {
+            color: #20734a
+        }
+
+        .danger {
+            color: #b33434
+        }
+
+        .warning {
+            color: #b06a00
+        }
+
+        .wire-workspace {
+            position: relative;
+            min-height: 380px;
+            background: linear-gradient(135deg, #eef8ff, #fff9ef);
+            border: 3px solid #d7e9f3;
+            border-radius: 26px;
+            overflow: hidden
+        }
+
+        .wire-workspace svg {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 2
+        }
+
+        .wire-path {
+            fill: none;
+            stroke-width: 8;
+            stroke-linecap: round
+        }
+
+        .wire-path.pos {
+            stroke: #ef5350
+        }
+
+        .wire-path.neg {
+            stroke: #222
+        }
+
+        .preview-wire {
+            fill: none;
+            stroke: #43d5e6;
+            stroke-width: 6;
+            stroke-linecap: round;
+            stroke-dasharray: 12 10;
+            animation: dash .65s linear infinite
+        }
+
+        .node {
+            position: absolute;
+            z-index: 8;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: 5px solid #fff;
+            box-shadow: 0 5px 12px rgba(0, 0, 0, .2);
+            cursor: pointer
+        }
+
+        .node.pos {
+            background: #ef5350
+        }
+
+        .node.neg {
+            background: #222
+        }
+
+        .node.mid {
+            background: #ff8b2b
+        }
+
+        .node.selected {
+            box-shadow: 0 0 0 7px rgba(67, 213, 230, .26)
+        }
+
+        .node.done {
+            opacity: .45;
+            cursor: default
+        }
+
+        .battery9 {
+            position: absolute;
+            left: 6%;
+            top: 27%;
+            width: 130px;
+            height: 180px;
+            border-radius: 20px;
+            background: linear-gradient(90deg, #252a2f 0 66%, #e78e25 67%);
+            border: 7px solid #fff;
+            z-index: 3;
+            color: #fff;
+            font-size: 1.7rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center
+        }
+
+        .resistor-v {
+            position: absolute;
+            left: 42%;
+            top: 24%;
+            width: 150px;
+            height: 75px;
+            z-index: 3;
+            display: flex;
+            align-items: center;
+            justify-content: center
+        }
+
+        .resistor-body {
+            width: 130px;
+            height: 40px;
+            border-radius: 18px;
+            background: #d7b484;
+            border: 5px solid #fff;
+            box-shadow: 0 7px 14px rgba(0, 0, 0, .14);
+            font-weight: 700;
+            color: #4d3826;
+            display: flex;
+            align-items: center;
+            justify-content: center
+        }
+
+        .led-v {
+            position: absolute;
+            right: 8%;
+            top: 18%;
+            width: 145px;
+            height: 220px;
+            z-index: 3
+        }
+
+        .led-v .bulb {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 120px;
+            border-radius: 54px 54px 36px 36px;
+            background: #dce5e9;
+            border: 8px solid #fff;
+            transition: .25s
+        }
+
+        .led-v.on .bulb {
+            background: #ff5959;
+            box-shadow: 0 0 42px 18px rgba(255, 70, 70, .55)
+        }
+
+        .led-v .leg {
+            position: absolute;
+            top: 113px;
+            width: 10px;
+            background: #abb6be;
+            border-radius: 5px
+        }
+
+        .led-v .leg.a {
+            left: 48px;
+            height: 95px
+        }
+
+        .led-v .leg.c {
+            right: 48px;
+            height: 72px
+        }
+
+        .status-box {
+            padding: 11px 16px;
+            border-radius: 15px;
+            background: #fff;
+            color: var(--navy);
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(0, 0, 0, .1);
+            text-align: center
+        }
+
+        .series-stage,
+        .parallel-stage {
+            background: #fff;
+            border: 3px solid #dcebf4;
+            border-radius: 26px;
+            padding: 16px;
+            box-shadow: 0 14px 28px rgba(5, 49, 87, .12)
+        }
+
+        .series-stage svg,
+        .parallel-stage svg {
+            width: 100%;
+            height: 320px;
+            display: block
+        }
+
+        .branch-controls {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px
+        }
+
+        .toggle-card {
+            padding: 12px;
+            border-radius: 16px;
+            background: #fff;
+            border: 2px solid #dce8ef;
+            text-align: center
+        }
+
+        .facts {
+            display: grid;
+            gap: 10px
+        }
+
+        .fact {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            padding: 12px 14px;
+            border: 2px solid #dce8ef;
+            border-radius: 15px;
+            background: #fff
+        }
+
+        .fact.correct {
+            border-color: var(--green);
+            background: #eaf9f0
+        }
+
+        .fact.wrong {
+            border-color: var(--red);
+            background: #fff1f0
+        }
+
+        .timer {
+            font-size: 4rem;
+            font-weight: 700;
+            color: var(--navy);
+            text-align: center;
+            letter-spacing: 3px
+        }
+
+        .timer-controls {
+            display: flex;
+            justify-content: center;
+            gap: 10px
+        }
+
+        .checklist {
+            display: grid;
+            gap: 10px
+        }
+
+        .check-item {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            padding: 11px 13px;
+            border-radius: 14px;
+            background: #f7fbff;
+            border: 2px solid #dbe8f2
+        }
+
+        .symbol-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px
+        }
+
+        .symbol-card {
+            background: #fff;
+            border: 3px solid #e1edf4;
+            border-radius: 22px;
+            padding: 16px;
+            text-align: center
+        }
+
+        .symbol-card img {
+            width: 100%;
+            height: 170px;
+            object-fit: contain
+        }
+
+        .symbol-card h3 {
+            color: var(--navy)
+        }
+
+        @media(max-width:760px) {
+
+            .review-cards,
+            .symbol-grid,
+            .branch-controls {
+                grid-template-columns: 1fr
+            }
+
+            .comparison {
+                grid-template-columns: 1fr
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="brand"><img class="k"
+            src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/5b36ddb1-5ff5-490e-af31-9a171820e051.png"
+            alt="Kalananti"><i></i><img class="r"
+            src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/7e71d258-897f-42b7-9c8b-2ff76376ffc6.png"
+            alt="Ruangguru Coding"></div><button class="nav" id="prev">◀</button><button class="nav"
+        id="next">▶</button>
+    <main class="presentation" id="presentation">
+        <section class="slide dark active">
+            <div class="cover content">
+                <div>
+                    <div class="kicker left" style="color:var(--cyan)">WELCOME TO DIY ROBOTIC CLASS</div>
+                    <h1 class="display">Intro to<br><span class="accent">Electronics 2</span></h1>
+                    <p class="cover-sub">Mengenal resistor, menghitung current secara sederhana, serta membandingkan
+                        rangkaian LED series dan parallel.</p>
+                    <div class="pill">SESSION 2 · RESISTORS & MULTI-LED CIRCUITS</div>
+                </div><img class="robot"
+                    src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/eded3e71-16cf-401e-b1c1-3ff5f887dc38.png"
+                    alt="Robot">
+            </div>
+        </section>
+        <section class="slide"><span class="chip"><b></b> Today's Agenda</span>
+            <div class="content stack">
+                <div>
+                    <div class="kicker">WHAT WE WILL LEARN TODAY</div>
+                    <h2 class="slide-title">Rencana Belajar Hari Ini</h2>
+                </div>
+                <div class="agenda">
+                    <div class="card icon-card">
+                        <div class="big-icon">🔁</div>
+                        <h3>Circuit Review</h3>
+                        <p>Closed loop, open loop, dan polarity.</p>
+                    </div>
+                    <div class="card icon-card">
+                        <div class="big-icon">🟫</div>
+                        <h3>Meet the Resistor</h3>
+                        <p>Memahami pembatas current.</p>
+                    </div>
+                    <div class="card icon-card">
+                        <div class="big-icon">💡💡</div>
+                        <h3>Series Circuit</h3>
+                        <p>Beberapa LED pada satu jalur.</p>
+                    </div>
+                    <div class="card icon-card">
+                        <div class="big-icon">⑂</div>
+                        <h3>Parallel Circuit</h3>
+                        <p>Beberapa cabang yang bekerja sendiri.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="slide" id="reviewDrop1"><span class="chip"><b></b> Quick Review</span>
+            <div class="content stack">
+                <div>
+                    <h2 class="slide-title">Circuit Check</h2>
+                    <p class="lead">Drag pernyataan ke gambar yang tepat.</p>
+                </div>
+                <div class="review-cards">
+                    <div class="review-card">
+                        <h3>Diagram A</h3><svg viewBox="0 0 330 150">
+                            <path d="M55 45 V25 H280 V120 H55 V105" fill="none" stroke="#222" stroke-width="8" />
+                            <rect x="28" y="48" width="54" height="58" rx="8" fill="#f4b844" />
+                            <ellipse cx="190" cy="25" rx="28" ry="34" fill="#ffef88" stroke="#fff" stroke-width="6" />
+                        </svg>
+                        <div class="drop-zone" data-answer="on">Drop answer here</div>
+                    </div>
+                    <div class="review-card">
+                        <h3>Diagram B</h3><svg viewBox="0 0 330 150">
+                            <path d="M55 45 V25 H120 M165 25 H280 V120 H55 V105" fill="none" stroke="#222"
+                                stroke-width="8" />
+                            <rect x="28" y="48" width="54" height="58" rx="8" fill="#f4b844" />
+                            <ellipse cx="220" cy="25" rx="28" ry="34" fill="#dfe7eb" stroke="#fff" stroke-width="6" />
+                            <line x1="132" y1="10" x2="153" y2="37" stroke="#ef5350" stroke-width="6" />
+                            <line x1="153" y1="10" x2="132" y2="37" stroke="#ef5350" stroke-width="6" />
+                        </svg>
+                        <div class="drop-zone" data-answer="open">Drop answer here</div>
+                    </div>
+                    <div class="review-card">
+                        <h3>Diagram C</h3><svg viewBox="0 0 330 150">
+                            <path d="M55 45 V25 H280 V120 H55 V105" fill="none" stroke="#222" stroke-width="8" />
+                            <rect x="28" y="48" width="54" height="58" rx="8" fill="#f4b844" />
+                            <text x="55" y="62" text-anchor="middle" font-size="14" font-weight="700" fill="#ef5350">+</text>
+                            <text x="55" y="100" text-anchor="middle" font-size="14" font-weight="700" fill="#222">−</text>
+                            <ellipse cx="220" cy="25" rx="28" ry="34" fill="#dfe7eb" stroke="#fff" stroke-width="6" />
+                            <text x="190" y="21" fill="#222" font-weight="700">−</text><text x="247" y="21"
+                                fill="#ef5350" font-weight="700">+</text>
+                        </svg>
+                        <div class="drop-zone" data-answer="reverse">Drop answer here</div>
+                    </div>
+                </div>
+                <div class="drag-bank">
+                    <div class="drag-chip" draggable="true" data-value="on">LED turns on: circuit lengkap dan polarity
+                        benar.</div>
+                    <div class="drag-chip" draggable="true" data-value="open">LED stays off: circuit terbuka.</div>
+                    <div class="drag-chip" draggable="true" data-value="reverse">LED stays off: LED terpasang terbalik.
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="slide" id="reviewDrop2"><span class="chip"><b></b> Quick Review</span>
+            <div class="content stack">
+                <div>
+                    <h2 class="slide-title">Apa Penyebab Hasil Circuit Ini?</h2>
+                    <p class="lead">Drag penyebab yang paling tepat.</p>
+                </div>
+                <div class="review-cards">
+                    <div class="review-card">
+                        <h3>3V + Tiga LED Redup</h3><svg viewBox="0 0 360 150">
+                            <path d="M55 45 V25 H310 V120 H55 V105" fill="none" stroke="#222" stroke-width="8" />
+                            <rect x="28" y="48" width="54" height="58" rx="8" fill="#f4b844" /><text x="55" y="83"
+                                text-anchor="middle" font-size="17" font-weight="700">3V</text>
+                            <ellipse cx="145" cy="25" rx="20" ry="25" fill="#eee" />
+                            <ellipse cx="215" cy="25" rx="20" ry="25" fill="#eee" />
+                            <ellipse cx="285" cy="25" rx="20" ry="25" fill="#eee" />
+                        </svg>
+                        <div class="drop-zone" data-answer="low">Drop cause here</div>
+                    </div>
+                    <div class="review-card">
+                        <h3>9V Langsung ke LED</h3><svg viewBox="0 0 360 150">
+                            <path d="M55 45 V25 H310 V120 H55 V105" fill="none" stroke="#222" stroke-width="8" />
+                            <rect x="28" y="48" width="54" height="58" rx="8" fill="#222" /><text x="55" y="83"
+                                text-anchor="middle" font-size="17" font-weight="700" fill="#fff">9V</text>
+                            <ellipse cx="230" cy="25" rx="28" ry="34" fill="#fff19c" stroke="#ef5350"
+                                stroke-width="6" />
+                            <path d="M208 4 L252 46 M208 46 L252 4" stroke="#ef5350" stroke-width="5" />
+                        </svg>
+                        <div class="drop-zone" data-answer="high">Drop cause here</div>
+                    </div>
+                    <div class="review-card">
+                        <h3>9V + Resistor + LED Mati</h3><svg viewBox="0 0 360 150">
+                            <path d="M55 45 V25 H310 V120 H55 V105" fill="none" stroke="#222" stroke-width="8" />
+                            <rect x="28" y="48" width="54" height="58" rx="8" fill="#222" /><text x="55" y="83"
+                                text-anchor="middle" font-size="17" font-weight="700" fill="#fff">9V</text>
+                            <rect x="130" y="11" width="60" height="28" rx="12" fill="#d7b484" />
+                            <ellipse cx="260" cy="25" rx="28" ry="34" fill="#dfe7eb" /><text x="230" y="20" fill="#222"
+                                font-weight="700">−</text><text x="286" y="20" fill="#ef5350" font-weight="700">+</text>
+                        </svg>
+                        <div class="drop-zone" data-answer="reverse">Drop cause here</div>
+                    </div>
+                </div>
+                <div class="drag-bank">
+                    <div class="drag-chip" draggable="true" data-value="low">Voltage terlalu rendah untuk menyalakan
+                        semua LED dengan baik.</div>
+                    <div class="drag-chip" draggable="true" data-value="high">Voltage terlalu tinggi dan tidak ada
+                        pembatas current.</div>
+                    <div class="drag-chip" draggable="true" data-value="reverse">LED terpasang terbalik meskipun ada
+                        resistor.</div>
+                </div>
+            </div>
+        </section>
+        <section class="slide"><span class="chip"><b></b> Quick Review</span>
+            <div class="content two max">
+                <div class="stack">
+                    <div class="kicker left">TOO LITTLE OR TOO MUCH?</div>
+                    <h2 class="slide-title left">LED Juga Punya Batas</h2>
+                    <p class="lead left">Battery 3V dapat terasa kurang kuat untuk beberapa LED sekaligus. Battery 9V
+                        memberi dorongan besar, tetapi jika langsung ke satu LED, current bisa terlalu besar.</p>
+                    <div class="instruction">⚖️ Targetnya bukan hanya menyala, tetapi menyala dengan aman.</div>
+                </div>
+                <div class="info-visual"><svg viewBox="0 0 600 330">
+                        <rect x="35" y="80" width="110" height="120" rx="22" fill="#f4b844" /><text x="90" y="150"
+                            text-anchor="middle" font-size="34" font-weight="700">3V</text>
+                        <path d="M160 140 H280" stroke="#7fc3e0" stroke-width="10" stroke-dasharray="16 12" />
+                        <g opacity=".42">
+                            <ellipse cx="340" cy="140" rx="34" ry="42" fill="#fff" />
+                            <ellipse cx="420" cy="140" rx="34" ry="42" fill="#fff" />
+                            <ellipse cx="500" cy="140" rx="34" ry="42" fill="#fff" />
+                        </g>
+                        <rect x="35" y="235" width="110" height="60" rx="18" fill="#222" /><text x="90" y="273"
+                            text-anchor="middle" font-size="28" font-weight="700" fill="#fff">9V</text>
+                        <path d="M160 265 H390" stroke="#ef5350" stroke-width="22" />
+                        <ellipse cx="475" cy="265" rx="38" ry="46" fill="#fff2a6" stroke="#ef5350" stroke-width="7" />
+                        <path d="M450 237 L500 290 M450 290 L500 237" stroke="#ef5350" stroke-width="6" />
+                    </svg></div>
+            </div>
+        </section>
+        <section class="slide dark"><span class="chip"><b></b> #1 Meet the Resistor</span>
+            <div class="content two max">
+                <div class="stack">
+                    <div class="kicker left" style="color:var(--cyan)">CHAPTER 1</div>
+                    <h2 class="slide-title left">Meet the Resistor</h2>
+                    <p class="lead left">Resistor adalah komponen yang membatasi current agar tidak terlalu besar.
+                        Resistor membantu menjaga LED agar tidak menerima aliran listrik berlebihan.</p>
+                    <div class="card">
+                        <h3>Resistor pada kit kita</h3>
+                        <p>Nilainya 220 ohm (220Ω).</p>
+                    </div>
+                </div>
+                <div class="card center"><img class="resistor-photo"
+                        src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/598244f2-faf8-43a2-b01f-c73f64515e06.jpg"
+                        alt="Resistor 220 ohm">
+                    <h3 style="margin-top:12px">220Ω Resistor</h3>
+                </div>
+            </div>
+        </section>
+        <section class="slide"><span class="chip"><b></b> #1 Meet the Resistor</span>
+            <div class="content stack">
+                <div>
+                    <h2 class="slide-title">Resistor Seperti Jalur Sungai yang Menyempit</h2>
+                    <p class="lead">Air tetap mengalir, tetapi jalur yang menyempit membuat aliran lebih terkontrol.
+                        Resistor tidak “menghabiskan listrik”.</p>
+                </div>
+                <div class="info-visual"><svg viewBox="0 0 1000 330">
+                        <rect x="45" y="105" width="125" height="130" rx="24" fill="#ff9b32" /><text x="107" y="165"
+                            text-anchor="middle" font-size="25" font-weight="700">PUMP</text><text x="107" y="195"
+                            text-anchor="middle" font-size="17">Battery 9V</text>
+                        <path d="M170 170 H420" stroke="#43b7e7" stroke-width="70" />
+                        <path d="M420 170 H620" stroke="#43b7e7" stroke-width="28" />
+                        <path d="M620 170 H830" stroke="#43b7e7" stroke-width="50" />
+                        <path d="M190 170 H810" stroke="#fff" stroke-width="8" stroke-dasharray="20 15" class="water" />
+                        <text x="520" y="125" text-anchor="middle" font-size="18" font-weight="700"
+                            fill="#ff8b2b">Resistor = jalur menyempit</text>
+                        <ellipse cx="885" cy="170" rx="48" ry="58" fill="#ff6565" stroke="#fff" stroke-width="8" />
+                    </svg></div>
+                <div class="comparison">
+                    <div class="compare-col bad">
+                        <h3>Tanpa Resistor</h3>
+                        <p class="center">Battery 9V → LED<br><strong class="danger">Current dapat terlalu
+                                besar.</strong></p>
+                    </div>
+                    <div class="compare-col good">
+                        <h3>Dengan Resistor</h3>
+                        <p class="center">Battery 9V → Resistor → LED<br><strong class="safe">Current menjadi lebih
+                                terkontrol.</strong></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="slide"><span class="chip"><b></b> #1 Meet the Resistor</span>
+            <div class="content stack">
+                <div>
+                    <h2 class="slide-title">Sebelum dan Sesudah Resistor</h2>
+                    <p class="lead">Battery tetap 9V. Resistor membatasi current yang melewati circuit.</p>
+                </div>
+                <div class="info-visual"><svg viewBox="0 0 1000 330">
+                        <rect x="40" y="92" width="120" height="150" rx="24" fill="#222" /><text x="100" y="172"
+                            text-anchor="middle" fill="#fff" font-size="36" font-weight="700">9V</text>
+                        <path d="M170 165 H360" stroke="#ff4a4a" stroke-width="14" /><text x="265" y="130"
+                            text-anchor="middle" font-size="20" font-weight="700" fill="#e63946">9V (Tegangan Penuh)</text>
+                        <rect x="380" y="130" width="160" height="70" rx="28" fill="#d7b484" /><text x="460" y="173"
+                            text-anchor="middle" font-size="20" font-weight="700">220Ω</text>
+                        <path d="M550 165 H745" stroke="#ff8c8c" stroke-width="6" /><text x="648" y="130"
+                            text-anchor="middle" font-size="20" font-weight="700" fill="#e63946">~2V (Tegangan Aman)</text>
+                        <text x="648" y="210" text-anchor="middle" font-size="17" fill="#5e7487">LED merah: I ≈ 32mA</text>
+                        <ellipse cx="840" cy="165" rx="70" ry="85" fill="rgba(255, 77, 77, 0.25)" />
+                        <ellipse cx="840" cy="165" rx="45" ry="55" fill="#ff4d4d" stroke="#fff" stroke-width="6" /><text
+                            x="500" y="305" text-anchor="middle" font-size="17" font-weight="700" fill="#b06a00">220Ω
+                            membuat LED menyala dengan pas dan aman. Resistor membuang sisa tegangan sebagai panas.</text>
+                    </svg></div>
+            </div>
+        </section>
+        <section class="slide" id="wireCircuitSlide"><span class="chip"><b></b> #1 Meet the Resistor</span>
+            <div class="content stack">
+                <div>
+                    <h2 class="slide-title">Connect the Circuit</h2>
+                    <p class="lead">Coba hubungkan LED langsung ke battery dulu, lalu reset. Setelah itu, coba hubungkan melalui resistor dan lihat bedanya!</p>
+                </div>
+                <div class="wire-workspace" id="safeWireBoard"><svg></svg>
+                    <div class="battery9">9V</div>
+                    <div class="resistor-v">
+                        <div class="resistor-body">220Ω</div>
+                    </div>
+                    <div class="led-v" id="safeWireLed">
+                        <div class="bulb"></div><span class="leg a"></span><span class="leg c"></span>
+                    </div>
+                    <div class="node pos" data-id="batt_pos" data-wire="pos" style="left:17%;top:31%"></div>
+                    <div class="node mid" data-id="res_in" data-wire="pos" style="left:40%;top:30%"></div>
+                    <div class="node mid" data-id="res_out" data-wire="pos" style="left:55%;top:30%"></div>
+                    <div class="node pos" data-id="led_pos" data-wire="pos" style="right:14%;top:56%"></div>
+                    <div class="node neg" data-id="led_neg" data-wire="neg" style="right:7%;top:49%"></div>
+                    <div class="node neg" data-id="batt_neg" data-wire="neg" style="left:17%;bottom:18%"></div>
+                    <div class="status-box" id="safeWireStatus"
+                        style="position:absolute;left:50%;bottom:16px;transform:translateX(-50%);z-index:10;min-width:320px">Selesaikan
+                        sambungan circuit.</div>
+                </div>
+                <div class="center" style="margin-top:-6px">
+                    <span class="instruction" style="margin-right:12px">🔴 Positive merah. ⚫ Negative hitam.</span>
+                    <button class="btn2" id="safeWireReset">Reset Activity</button>
+                </div>
+            </div>
+        </section>
+        <section class="slide" id="missingProtectionSlide"><span class="chip"><b></b> #1 Meet the Resistor</span>
+            <div class="content stack">
+                <div>
+                    <h2 class="slide-title">Add the Missing Protection</h2>
+                    <p class="lead">Drag komponen ke dalam diagram (bagian putus-putus).</p>
+                </div>
+                <div class="two">
+                    <div class="info-visual center" id="missingSvgDrop" style="cursor:pointer;position:relative"><svg viewBox="0 0 620 300">
+                            <rect x="35" y="95" width="110" height="130" rx="22" fill="#222" /><text x="90" y="170"
+                                text-anchor="middle" font-size="32" font-weight="700" fill="#fff">9V</text>
+                            <path d="M145 160 H225" stroke="#ef5350" stroke-width="10" />
+                            <rect id="missingSlotRect" x="225" y="120" width="150" height="80" rx="18" fill="#f6fbfe" stroke="#aac7d8"
+                                stroke-width="4" stroke-dasharray="10 8" /><text id="missingProtectionDropText" x="300" y="166" text-anchor="middle"
+                                font-size="18" font-weight="700" fill="#718797">DROP HERE</text>
+                            <path d="M375 160 H475" stroke="#ef5350" stroke-width="10" />
+                            <ellipse id="missingLedSvg" cx="520" cy="160" rx="48" ry="58" fill="#dce5e9" stroke="#fff"
+                                stroke-width="8" />
+                            <path d="M520 218 V255 H90 V225" fill="none" stroke="#222" stroke-width="10" />
+                        </svg>
+                        <div class="status-box" id="missingProtectionStatus" style="font-size:1.1rem;margin-top:-10px">Pilih pelindung current.</div>
+                    </div>
+                    <div class="stack">
+                        <div class="drag-bank" id="missingProtectionBank" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:24px;border-radius:24px;background:#eef6fb;border:3px solid #dce8ef">
+                            <div class="drag-chip" draggable="true" data-value="wire" style="font-size:1.1rem;padding:16px;text-align:center">〰️ Wire</div>
+                            <div class="drag-chip" draggable="true" data-value="switch" style="font-size:1.1rem;padding:16px;text-align:center">🎚️ Switch</div>
+                            <div class="drag-chip" draggable="true" data-value="resistor" style="font-size:1.1rem;padding:16px;text-align:center">🟫 Resistor</div>
+                            <div class="drag-chip" draggable="true" data-value="motor" style="font-size:1.1rem;padding:16px;text-align:center">⚙️ Motor</div>
+                        </div>
+                        <button class="btn2" id="missingProtectionReset" style="font-size:1.1rem;padding:16px">Reset Activity</button>
+                    </div>
+                </div>
+                <div class="comparison" style="gap:24px;margin-top:12px">
+                    <div class="compare-col bad" style="padding:20px;border-width:4px;display:flex;flex-direction:column;align-items:center;text-align:center">
+                        <h3 style="font-size:1.4rem;color:#b33434">💥 Tanpa Resistor</h3>
+                        <p style="font-size:1.1rem;font-weight:600;color:#5e7487;margin-top:8px">Tegangan 9V masuk langsung. Arus terlalu besar membuat LED sangat terang lalu rusak.</p>
+                    </div>
+                    <div class="compare-col good" style="padding:20px;border-width:4px;display:flex;flex-direction:column;align-items:center;text-align:center">
+                        <h3 style="font-size:1.4rem;color:#20734a">✅ Dengan Resistor</h3>
+                        <p style="font-size:1.1rem;font-weight:600;color:#5e7487;margin-top:8px">Resistor mengurangi tegangan dan membatasi arus sehingga LED menyala dengan aman.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="slide" id="seriesPredictionSlide"><span class="chip"><b></b> #2 Multiple LEDs in Series</span>
+            <div class="content stack">
+                <div>
+                    <h2 class="slide-title">Apa yang Terjadi pada Dua LED Series?</h2>
+                    <p class="lead">Battery 9V melewati resistor 220Ω, LED putih, LED biru, lalu kembali ke battery.</p>
+                </div>
+                <div class="two">
+                    <div class="series-stage"><svg viewBox="0 0 760 320">
+                            <path d="M95 105 H210" stroke="#ef5350" stroke-width="10" />
+                            <rect x="40" y="120" width="110" height="130" rx="22" fill="#222" /><text x="95" y="195"
+                                text-anchor="middle" fill="#fff" font-size="30" font-weight="700">9V</text>
+                            <rect x="210" y="75" width="130" height="60" rx="22" fill="#d7b484" /><text x="275" y="112"
+                                text-anchor="middle" font-size="18" font-weight="700">220Ω</text>
+                            <path d="M340 105 H430" stroke="#ef5350" stroke-width="10" />
+                            <ellipse id="seriesWhiteLed" cx="475" cy="105" rx="42" ry="52" fill="#f4f6f7" stroke="#b0b8bc" stroke-width="5" />
+                            <text x="475" y="165" text-anchor="middle" font-size="16" font-weight="700" fill="#718797" id="swLabel">WHITE</text>
+                            <path d="M517 105 H590" stroke="#ef5350" stroke-width="10" />
+                            <ellipse id="seriesBlueLed" cx="635" cy="105" rx="42" ry="52" fill="#e8f3fb" stroke="#7cb6e6" stroke-width="5" />
+                            <text x="635" y="165" text-anchor="middle" font-size="16" font-weight="700" fill="#718797" id="sbLabel">BLUE</text>
+                            <path d="M635 157 V255 H95 V250" fill="none" stroke="#222" stroke-width="10" />
+                        </svg></div>
+                    <div class="stack"><button class="option" data-series-predict="on">A. LED putih dan LED biru
+                            menyala.</button><button class="option" data-series-predict="off">B. LED putih dan LED biru
+                            tidak menyala.</button><button class="btn" id="runSeriesPrediction" style="display:none">Run
+                            Circuit</button>
+                        <div class="status-box" id="seriesPredictionStatus">Pilih prediksi.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="slide" id="seriesBreakSlide"><span class="chip"><b></b> #2 Multiple LEDs in Series</span>
+            <div class="content stack">
+                <div>
+                    <h2 class="slide-title">Series Berarti Satu Jalur</h2>
+                    <p class="lead">Jika satu LED dicabut, jalur menjadi open dan kedua LED mati.</p>
+                </div>
+                <div class="series-stage" style="position:relative"><svg viewBox="0 0 920 320">
+                        <rect x="35" y="120" width="110" height="130" rx="22" fill="#222" /><text x="90" y="195"
+                            text-anchor="middle" fill="#fff" font-size="30" font-weight="700">9V</text>
+                        <path d="M90 120 V70 H250" stroke="#ef5350" stroke-width="10" />
+                        <rect x="250" y="40" width="120" height="60" rx="22" fill="#d7b484" />
+                        <path d="M370 70 H470" stroke="#ef5350" stroke-width="10" />
+                        <ellipse id="seriesBreakLed1" cx="520" cy="70" rx="44" ry="54" fill="#fff9c8" stroke="#b0b8bc" stroke-width="4" filter="drop-shadow(0 0 12px rgba(255,249,200,0.8))" />
+                        <path id="seriesMiddleWire" d="M564 70 H665" stroke="#ef5350" stroke-width="10" />
+                        <ellipse id="seriesBreakLed2" cx="715" cy="70" rx="44" ry="54" fill="#6eb7ff" stroke="#7cb6e6" stroke-width="4" filter="drop-shadow(0 0 12px rgba(110,183,255,0.8))" />
+                        <path d="M715 124 V250 H90" fill="none" stroke="#222" stroke-width="10" />
+                        <rect id="seriesBreakBg" x="270" y="235" width="540" height="46" rx="14" fill="#eaf9f0" />
+                        <text
+                            id="seriesBreakLabel" x="540" y="266" text-anchor="middle" font-size="24" font-weight="700"
+                            fill="#20734a">Closed loop: kedua LED menyala</text>
+                    </svg>
+                    <button class="btn2" id="toggleSeriesLed1" style="position:absolute;top:10px;left:56.5%;transform:translateX(-50%);font-size:0.9rem;padding:8px 12px;box-shadow:0 6px 12px rgba(0,0,0,0.15)">Cabut LED Putih</button>
+                    <button class="btn2" id="toggleSeriesLed2" style="position:absolute;top:10px;left:77.7%;transform:translateX(-50%);font-size:0.9rem;padding:8px 12px;box-shadow:0 6px 12px rgba(0,0,0,0.15)">Cabut LED Biru</button>
+                </div>
+            </div>
+        </section>
+        <section class="slide" id="seriesResistorQuestion"><span class="chip"><b></b> #2 Multiple LEDs in Series</span>
+            <div class="content two max">
+                <div class="series-stage"><svg viewBox="0 0 760 320">
+                        <rect x="40" y="120" width="110" height="130" rx="22" fill="#222" /><text x="95" y="195"
+                            text-anchor="middle" fill="#fff" font-size="30" font-weight="700">9V</text>
+                        <path d="M95 105 H210" stroke="#ef5350" stroke-width="10" />
+                        <rect x="210" y="75" width="130" height="60" rx="22" fill="#d7b484" />
+                        <path d="M340 105 H430" stroke="#ef5350" stroke-width="10" />
+                        <ellipse cx="475" cy="105" rx="42" ry="52" fill="#fff9c8" />
+                        <path d="M517 105 H590" stroke="#ef5350" stroke-width="10" />
+                        <ellipse cx="635" cy="105" rx="42" ry="52" fill="#6eb7ff" />
+                        <path d="M635 157 V255 H95 V250" fill="none" stroke="#222" stroke-width="10" />
+                    </svg></div>
+                <div class="stack">
+                    <h2 class="slide-title left">Apa Fungsi Resistor Pada Rangkaian Seri?</h2><button class="option"
+                        data-series-resistor="a">A. Menambah voltage battery.</button><button class="option"
+                        data-series-resistor="b">B. Membatasi current yang melewati kedua LED.</button><button
+                        class="option" data-series-resistor="c">C. Membuat LED berubah warna.</button>
+                    <div class="status-box" id="seriesResistorFeedback">Pilih satu jawaban.</div>
+                </div>
+            </div>
+        </section>
+        <section class="slide orange"><span class="chip"><b></b> #2 Multiple LEDs in Series</span>
+            <div class="content stack">
+                <div>
+                    <h2 class="slide-title">Series Membagi “Jatah” Voltage</h2>
+                    <p class="lead">Bayangkan battery membawa 9 kupon energi. Setiap komponen mengambil sebagian kupon
+                        saat current melewatinya.</p>
+                </div>
+                <div class="three">
+                    <div class="card icon-card">
+                        <div class="big-icon">🔋</div>
+                        <h3>Mulai: 9 Kupon</h3>
+                        <p>Battery menyediakan 9V.</p>
+                    </div>
+                    <div class="card icon-card">
+                        <div class="big-icon">🟫</div>
+                        <h3>Resistor: 3 Kupon</h3>
+                        <p>Membatasi current.</p>
+                    </div>
+                    <div class="card icon-card">
+                        <div class="big-icon">💡💡</div>
+                        <h3>Dua LED: 6 Kupon</h3>
+                        <p>Masing-masing sekitar 3V.</p>
+                    </div>
+                </div>
+                <div class="card center">
+                    <h3>9V = 3V + 3V + 3V</h3>
+                    <p>Dalam series, voltage total terbagi di antara komponen. Current yang sama melewati semuanya.</p>
+                </div>
+            </div>
+        </section>
+        <section class="slide" id="parallelLabSlide"><span class="chip"><b></b> #3 Multiple LEDs in Parallel</span>
+            <div class="content stack">
+                <div>
+                    <h2 class="slide-title">Parallel Circuit Lab</h2>
+                    <p class="lead">Coba cabut (hide) resistor atau LED untuk melihat apa yang terjadi.</p>
+                </div>
+                <div class="parallel-stage"><svg viewBox="0 0 980 330">
+                        <rect x="35" y="95" width="110" height="150" rx="22" fill="#222" /><text x="90" y="180"
+                            text-anchor="middle" fill="#fff" font-size="32" font-weight="700">9V</text>
+                        <path d="M145 120 H820 M145 220 H820" stroke="#ef5350" stroke-width="10" />
+                        <g id="pR1">
+                            <rect x="350" y="87" width="130" height="66" rx="24" fill="#d7b484" /><text x="415" y="126"
+                                text-anchor="middle" font-size="18" font-weight="700">R1 220Ω</text>
+                        </g>
+                        <g id="pL1">
+                            <ellipse id="pL1Bulb" cx="650" cy="120" rx="45" ry="55" fill="#ff6969" filter="drop-shadow(0 0 12px rgba(255,105,105,0.8))" /><text x="650"
+                                y="195" text-anchor="middle" font-weight="bold" fill="#718797">LED 1</text>
+                        </g>
+                        <g id="pR2">
+                            <rect x="350" y="187" width="130" height="66" rx="24" fill="#d7b484" /><text x="415" y="226"
+                                text-anchor="middle" font-size="18" font-weight="700">R2 220Ω</text>
+                        </g>
+                        <g id="pL2">
+                            <ellipse id="pL2Bulb" cx="650" cy="220" rx="45" ry="55" fill="#6eb7ff" filter="drop-shadow(0 0 12px rgba(110,183,255,0.8))" /><text x="650"
+                                y="295" text-anchor="middle" font-weight="bold" fill="#718797">LED 2</text>
+                        </g>
+                        <path d="M820 120 V270 H90 V245 M820 220 V270" fill="none" stroke="#222" stroke-width="10" />
+                    </svg></div>
+                <div class="branch-controls">
+                    <div class="toggle-card"><strong>Resistor 1</strong><br><button class="btn2"
+                            data-toggle-part="pR1">Cabut</button></div>
+                    <div class="toggle-card"><strong>LED 1</strong><br><button class="btn2"
+                            data-toggle-part="pL1">Cabut</button></div>
+                    <div class="toggle-card"><strong>Resistor 2</strong><br><button class="btn2"
+                            data-toggle-part="pR2">Cabut</button></div>
+                    <div class="toggle-card"><strong>LED 2</strong><br><button class="btn2"
+                            data-toggle-part="pL2">Cabut</button></div>
+                </div>
+                <div style="display:flex;gap:16px;align-items:center;margin-top:6px">
+                    <button class="btn2" id="resetParallel" style="flex:none;height:100%;padding:14px 22px;font-size:1.05rem">Reset</button>
+                    <div class="status-box" id="parallelStatus" style="flex:1;text-align:left;font-size:1.15rem;margin:0">Cabang 1: menyala normal. Cabang 2: menyala normal. Setiap cabang dapat bekerja mandiri.</div>
+                </div>
+            </div>
+        </section>
+        <section class="slide" id="parallelFactsSlide"><span class="chip"><b></b> #3 Multiple LEDs in Parallel</span>
+            <div class="content two max">
+                <div class="stack">
+                    <h2 class="slide-title left">Checklist Fakta Parallel</h2>
+                    <div class="facts" style="font-size:1.05rem;display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px">
+                        <label class="fact" style="padding:16px;border-radius:12px;background:#f6f9fc"><input style="transform:scale(1.5);margin-right:16px" type="checkbox" data-fact="true"> 🛤️ Setiap cabang memiliki jalur current sendiri dari battery.</label>
+                        <label class="fact" style="padding:16px;border-radius:12px;background:#f6f9fc"><input style="transform:scale(1.5);margin-right:16px" type="checkbox" data-fact="true"> 💡 Jika satu LED dicabut, LED di cabang lain tetap menyala normal.</label>
+                        <label class="fact" style="padding:16px;border-radius:12px;background:#f6f9fc"><input style="transform:scale(1.5);margin-right:16px" type="checkbox" data-fact="false"> 🚫 Jika satu LED mati, semua LED ikut mati seketika.</label>
+                        <label class="fact" style="padding:16px;border-radius:12px;background:#f6f9fc"><input style="transform:scale(1.5);margin-right:16px" type="checkbox" data-fact="true"> 🟫 Setiap LED pada paralel membutuhkan resistornya sendiri agar tidak terbakar.</label>
+                        <label class="fact" style="padding:16px;border-radius:12px;background:#f6f9fc"><input style="transform:scale(1.5);margin-right:16px" type="checkbox" data-fact="false"> 📉 Tegangan (Voltage) terbagi rata, sehingga semakin banyak LED paralel akan semakin redup.</label>
+                    </div>
+                    <button class="btn" id="checkParallelFacts" style="margin-top:20px;font-size:1.1rem;padding:12px 24px">Check Answers</button>
+                </div>
+                <div class="card center">
+                    <div class="big-icon">⑂</div>
+                    <h3>Parallel = Banyak Cabang</h3>
+                    <p id="parallelFactsFeedback">Centang fakta yang benar.</p>
+                </div>
+            </div>
+        </section>
+        <section class="slide"><span class="chip"><b></b> #3 Multiple LEDs in Parallel</span>
+            <div class="content two max">
+                <div class="info-visual"><svg viewBox="0 0 700 360">
+                        <rect x="35" y="110" width="110" height="140" rx="22" fill="#222" /><text x="90" y="190"
+                            text-anchor="middle" font-size="32" font-weight="700" fill="#fff">9V</text>
+                        <path d="M145 145 H610 M145 225 H610" stroke="#ef5350" stroke-width="10" />
+                        <rect x="320" y="112" width="110" height="65" rx="22" fill="#d7b484" />
+                        <ellipse cx="520" cy="145" rx="42" ry="52" fill="#ff6969" />
+                        <rect x="320" y="192" width="110" height="65" rx="22" fill="#d7b484" />
+                        <ellipse cx="520" cy="225" rx="42" ry="52" fill="#6eb7ff" />
+                        <path d="M610 145 V295 H90 V250 M610 225 V295" fill="none" stroke="#222" stroke-width="10" />
+                    </svg></div>
+                <div class="stack">
+                    <h2 class="slide-title left">Parallel Itu Seperti Dua Jalan</h2>
+                    <p class="lead left">Dari battery, jalur bercabang. Setiap LED punya jalan sendiri.</p>
+                    <div class="card">
+                        <h3>Mengapa setiap LED perlu resistor?</h3>
+                        <p>Setiap LED membutuhkan pengontrol current pada jalurnya sendiri.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="slide orange"><span class="chip"><b></b> #3 Multiple LEDs in Parallel</span>
+            <div class="content stack">
+                <div>
+                    <h2 class="slide-title">Parallel Membagi Current ke Beberapa Cabang</h2>
+                    <p class="lead">Bayangkan satu jalan besar bercabang menjadi beberapa jalan kecil.</p>
+                </div>
+                <div class="info-visual"><svg viewBox="0 0 980 330">
+                        <path d="M80 165 H350" stroke="#43b7e7" stroke-width="70" />
+                        <path d="M350 165 C460 165 460 85 570 85 H900" fill="none" stroke="#43b7e7" stroke-width="36" />
+                        <path d="M350 165 C460 165 460 245 570 245 H900" fill="none" stroke="#43b7e7"
+                            stroke-width="36" />
+                        <circle cx="760" cy="85" r="42" fill="#ff6969" />
+                        <circle cx="760" cy="245" r="42" fill="#6eb7ff" />
+                    </svg></div>
+                <div class="card center">
+                    <h3>Total current terbagi ke cabang-cabang.</h3>
+                    <p>Karena itu setiap cabang memerlukan resistor sendiri.</p>
+                </div>
+            </div>
+        </section>
+        <section class="slide" id="protectLedSlide"><span class="chip"><b></b> #4 Activity: Protect the LED</span>
+            <div class="content stack">
+                <div>
+                    <h2 class="slide-title">Protect the LED</h2>
+                    <p class="lead">Drag resistor atau wire ke slot kosong.</p>
+                </div>
+                <div class="two">
+                    <div class="info-visual center" id="protectSvgDrop" style="cursor:pointer;position:relative"><svg viewBox="0 0 640 300">
+                            <rect x="35" y="95" width="110" height="130" rx="22" fill="#222" /><text x="90" y="170"
+                                text-anchor="middle" fill="#fff" font-size="32" font-weight="700">9V</text>
+                            <path d="M145 160 H235" stroke="#ef5350" stroke-width="10" />
+                            <rect id="protectSlotRect" x="235" y="120" width="150" height="80" rx="18" fill="#f7fbff" stroke="#aac7d8"
+                                stroke-width="4" stroke-dasharray="10 8" /><text id="protectDropText" x="310" y="166" text-anchor="middle" font-size="18" font-weight="700" fill="#718797">DROP HERE</text>
+                            <path d="M385 160 H485" stroke="#ef5350" stroke-width="10" />
+                            <ellipse id="protectLedSvg" cx="535" cy="160" rx="48" ry="58" fill="#dce5e9" />
+                            <path d="M535 218 V255 H90 V225" fill="none" stroke="#222" stroke-width="10" />
+                        </svg>
+                        <div class="status-box" id="protectLedStatus" style="font-size:1.1rem;margin-top:-10px">Circuit belum lengkap.</div>
+                    </div>
+                    <div class="stack">
+                        <div class="drag-bank" id="protectBank" style="display:flex;gap:12px;padding:24px;border-radius:24px;background:#eef6fb;border:3px solid #dce8ef;justify-content:center">
+                            <div class="drag-chip" draggable="true" data-value="resistor" style="font-size:1.1rem;padding:16px 24px">🟫 Resistor</div>
+                            <div class="drag-chip" draggable="true" data-value="wire" style="font-size:1.1rem;padding:16px 24px">〰️ Wire</div>
+                        </div>
+                        <button class="btn2" id="protectReset" style="font-size:1.1rem;padding:16px">Reset Activity</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="slide" id="chooseResistorSlide"><span class="chip"><b></b> #5 Activity: Choose the
+                Resistor</span>
+            <div class="content stack">
+                <div>
+                    <h2 class="slide-title">Choose the Resistor</h2>
+                    <p class="lead">Pilih nilai resistor lalu Test Circuit.</p>
+                </div>
+                <div class="two">
+                    <div class="info-visual center"><svg viewBox="0 0 650 300">
+                            <rect x="35" y="95" width="110" height="130" rx="22" fill="#222" /><text x="90" y="170"
+                                text-anchor="middle" fill="#fff" font-size="32" font-weight="700">9V</text>
+                            <path d="M145 160 H245" stroke="#ef5350" stroke-width="10" />
+                            <rect x="245" y="125" width="150" height="70" rx="24" fill="#eee" /><text
+                                id="resistorChoiceText" x="320" y="168" text-anchor="middle" font-size="19"
+                                font-weight="700">Choose Ω</text>
+                            <path d="M395 160 H500" stroke="#ef5350" stroke-width="10" />
+                            <ellipse id="choiceLedSvg" cx="550" cy="160" rx="48" ry="58" fill="#dce5e9" />
+                            <path d="M550 218 V255 H90 V225" fill="none" stroke="#222" stroke-width="10" />
+                        </svg></div>
+                    <div class="stack"><button class="option" data-resistor-value="100">100Ω</button><button
+                            class="option" data-resistor-value="220">220Ω</button><button class="option"
+                            data-resistor-value="440">440Ω</button><button class="btn" id="testResistor" disabled>Test
+                            Circuit</button>
+                        <div class="calc-box" id="resistorCalculation" style="font-size:1.1rem;color:#5e7487;background:#f6f9fc">LED bekerja optimal pada ~2V.<br>Jika arus (current) terlalu besar, LED akan cepat rusak.</div>
+                        <div class="status-box" id="resistorResult">Pilih nilai resistor.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="slide" id="completeSafeSlide"><span class="chip"><b></b> #6 Activity: Complete the Safe
+                Circuit</span>
+            <div class="content stack">
+                <div>
+                    <h2 class="slide-title">Complete the Safe Circuit</h2>
+                    <p class="lead">Susun battery, protection, LED, dan return path.</p>
+                </div>
+                <div class="drag-bank" id="safePartsBank">
+                    <div class="drag-chip" draggable="true" data-part="battery">🔋 Battery 9V</div>
+                    <div class="drag-chip" draggable="true" data-part="resistor">🟫 Resistor</div>
+                    <div class="drag-chip" draggable="true" data-part="wire">〰️ Wire tanpa resistor</div>
+                    <div class="drag-chip" draggable="true" data-part="led-correct">💡 LED benar</div>
+                    <div class="drag-chip" draggable="true" data-part="led-reverse">🔄 LED terbalik</div>
+                    <div class="drag-chip" draggable="true" data-part="return">↩️ Return Wire</div>
+                </div>
+                <div class="four">
+                    <div class="drop-zone safe-slot" data-slot-index="0">1. Power Source</div>
+                    <div class="drop-zone safe-slot" data-slot-index="1">2. Current Protection</div>
+                    <div class="drop-zone safe-slot" data-slot-index="2">3. LED Orientation</div>
+                    <div class="drop-zone safe-slot" data-slot-index="3">4. Return Path</div>
+                </div>
+                <div class="card center">
+                    <div id="completeSafeLed" style="font-size:4.5rem;filter:grayscale(1)">💡</div>
+                    <p id="completeSafeStatus">Susun circuit lalu Test.</p><button class="btn"
+                        id="testCompleteSafe">Test Circuit</button> <button class="btn2"
+                        id="resetCompleteSafe">Reset</button>
+                </div>
+            </div>
+        </section>
+        <section class="slide" id="seriesParallelQuizSlide"><span class="chip"><b></b> #7 Activity: Series or
+                Parallel?</span>
+            <div class="content stack">
+                <div>
+                    <h2 class="slide-title">Series or Parallel?</h2>
+                    <p class="lead">Identifikasi bentuk circuit lalu prediksi hasil jika LED 1 dilepas.</p>
+                </div>
+                <div class="two">
+                    <div class="info-visual" id="spCircuitVisual"></div>
+                    <div class="stack">
+                        <div id="spQuestion1">
+                            <h3>1. Circuit ini termasuk...</h3><button class="option"
+                                data-sp-type="series">Series</button><button class="option"
+                                data-sp-type="parallel">Parallel</button>
+                        </div>
+                        <div id="spQuestion2" style="display:none">
+                            <h3>2. Jika LED 1 dilepas...</h3><button class="option" data-sp-effect="alloff">Semua LED
+                                mati.</button><button class="option" data-sp-effect="oneoff">Hanya LED 1 yang
+                                mati.</button><button class="option" data-sp-effect="brighter">Semua LED semakin
+                                terang.</button>
+                        </div>
+                        <div class="status-box" id="spFeedback">Jawab pertanyaan pertama.</div><button class="btn2"
+                            id="spNextCircuit" style="display:none">Next Circuit</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="slide"><span class="chip"><b></b> #8 Draw a Circuit</span>
+            <div class="content two max">
+                <div class="card center"><img
+                        src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/302aaea7-2d9e-496a-8a9e-a980a53b3752.png"
+                        alt="Circuit" style="width:100%;max-height:430px;object-fit:contain"></div>
+                <div class="stack">
+                    <div class="kicker left">READ THE CIRCUIT</div>
+                    <h2 class="slide-title left">Kamu Bisa Menebak Circuit Ini?</h2>
+                    <p class="lead left">Tunjuk battery, resistor, LED, dan jalur kembali ke battery.</p>
+                    <div class="card">
+                        <h3>Jawaban</h3>
+                        <p>Ini circuit LED sederhana yang disusun series dan membentuk closed loop.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="slide"><span class="chip"><b></b> #8 Draw a Circuit</span>
+            <div class="content two max">
+                <div class="card center"><img
+                        src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/d3974113-e993-4eb6-9c05-c3d311367033.png"
+                        alt="Circuit dengan label" style="width:100%;max-height:430px;object-fit:contain"></div>
+                <div class="stack">
+                    <h2 class="slide-title left">Circuit Diagram Memakai Simbol</h2>
+                    <p class="lead left">Setiap komponen memiliki simbol agar circuit mudah dibaca dan digambar.</p>
+                    <div class="instruction">✏️ Simbol adalah bahasa gambar electronics.</div>
+                </div>
+            </div>
+        </section>
+        <section class="slide"><span class="chip"><b></b> #8 Draw a Circuit</span>
+            <div class="content stack">
+                <div>
+                    <h2 class="slide-title">Kenali Simbol Circuit</h2>
+                </div>
+                <div class="symbol-grid">
+                    <div class="symbol-card"><img
+                            src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/19617059-41c6-47dd-8f84-8816721f0f75.png">
+                        <h3>Battery / Power</h3>
+                    </div>
+                    <div class="symbol-card"><img
+                            src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/29e46f21-5ae5-4afa-b3a1-b2711d45466e.png">
+                        <h3>Resistor</h3>
+                    </div>
+                    <div class="symbol-card"><img
+                            src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/5deddaab-dcf3-48d8-bb86-9bf05a15bd10.png">
+                        <h3>LED</h3>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="slide dark"><span class="chip"><b></b> #8 Draw a Circuit</span>
+            <div class="content two max">
+                <div class="stack">
+                    <div class="kicker left" style="color:var(--cyan)">PREPARE YOUR TOOLS</div>
+                    <h2 class="slide-title left">Saatnya Menggambar Circuit</h2>
+                    <p class="lead left">Siapkan kertas, cardboard jika tersedia, spidol, pensil, atau alat tulis lain.
+                    </p>
+                    <div class="card">
+                        <h3>Gunakan warna</h3>
+                        <p>Merah untuk positive, hitam untuk negative.</p>
+                    </div>
+                </div>
+                <div class="card icon-card" style="min-height:360px">
+                    <div style="font-size:7rem">📝</div>
+                    <h3>Paper Circuit Challenge</h3>
+                    <p>Fokus pada jalur, urutan komponen, dan closed loop.</p>
+                </div>
+            </div>
+        </section>
+        <section class="slide" id="seriesTimerSlide"><span class="chip"><b></b> #8 Draw a Circuit</span>
+            <div class="content stack center">
+                <div>
+                    <h2 class="slide-title">Challenge 1: Gambar Circuit Series</h2>
+                    <p class="lead">Battery 9V, satu resistor, dan dua LED pada satu closed loop.</p>
+                </div>
+                <div class="timer" id="seriesTimer">02:00</div>
+                <div class="timer-controls"><button class="btn" id="startSeriesTimer">Start</button><button class="btn2"
+                        id="pauseSeriesTimer">Pause</button><button class="btn2" id="resetSeriesTimer">Reset</button>
+                </div>
+            </div>
+        </section>
+        <section class="slide"><span class="chip"><b></b> #8 Draw a Circuit</span>
+            <div class="content two max">
+                <div class="info-visual"><svg viewBox="0 0 760 360">
+                        <rect x="35" y="130" width="100" height="120" rx="20" fill="#222" /><text x="85" y="198"
+                            text-anchor="middle" fill="#fff" font-size="28" font-weight="700">9V</text>
+                        <path d="M85 130 V75 H220" stroke="#ef5350" stroke-width="10" />
+                        <rect x="220" y="45" width="120" height="60" rx="22" fill="#d7b484" />
+                        <path d="M340 75 H425" stroke="#ef5350" stroke-width="10" />
+                        <ellipse cx="475" cy="75" rx="42" ry="52" fill="#fff9c8" />
+                        <path d="M517 75 H590" stroke="#ef5350" stroke-width="10" />
+                        <ellipse cx="635" cy="75" rx="42" ry="52" fill="#6eb7ff" />
+                        <path d="M635 127 V285 H85 V250" fill="none" stroke="#222" stroke-width="10" />
+                    </svg></div>
+                <div class="stack">
+                    <h2 class="slide-title left">Self-Check Series</h2>
+                    <div class="checklist" style="font-size:1.1rem;display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px">
+                        <label class="check-item" style="padding:16px;background:#f6f9fc;border-radius:12px;cursor:pointer"><input type="checkbox" style="transform:scale(1.5);margin-right:16px"> 🔋 Ada sumber listrik (Battery 9V).</label>
+                        <label class="check-item" style="padding:16px;background:#f6f9fc;border-radius:12px;cursor:pointer"><input type="checkbox" style="transform:scale(1.5);margin-right:16px"> 🟫 Ada resistor pembatas current.</label>
+                        <label class="check-item" style="padding:16px;background:#f6f9fc;border-radius:12px;cursor:pointer"><input type="checkbox" style="transform:scale(1.5);margin-right:16px"> 🛤️ Dua LED berada pada satu jalur yang bersambung.</label>
+                        <label class="check-item" style="padding:16px;background:#f6f9fc;border-radius:12px;cursor:pointer"><input type="checkbox" style="transform:scale(1.5);margin-right:16px"> ↩️ Jalur tertutup dan kembali ke negative battery.</label>
+                        <label class="check-item" style="padding:16px;background:#f6f9fc;border-radius:12px;cursor:pointer"><input type="checkbox" style="transform:scale(1.5);margin-right:16px"> 🔄 Polarity LED benar (+ ke +, - ke - dsb).</label>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="slide" id="parallelTimerSlide"><span class="chip"><b></b> #8 Draw a Circuit</span>
+            <div class="content stack center">
+                <div>
+                    <h2 class="slide-title">Challenge 2: Gambar Circuit Parallel</h2>
+                    <p class="lead">Battery 9V dengan tiga cabang. Setiap cabang memiliki resistor dan LED.</p>
+                </div>
+                <div class="timer" id="parallelTimer">02:00</div>
+                <div class="timer-controls"><button class="btn" id="startParallelTimer">Start</button><button
+                        class="btn2" id="pauseParallelTimer">Pause</button><button class="btn2"
+                        id="resetParallelTimer">Reset</button></div>
+            </div>
+        </section>
+        <section class="slide"><span class="chip"><b></b> #8 Draw a Circuit</span>
+            <div class="content two max">
+                <div class="info-visual"><svg viewBox="0 0 800 420">
+                        <rect x="35" y="145" width="100" height="130" rx="20" fill="#222" /><text x="85" y="220"
+                            text-anchor="middle" fill="#fff" font-size="28" font-weight="700">9V</text>
+                        <path d="M135 175 H675 M135 210 H675 M135 245 H675" stroke="#ef5350" stroke-width="9" />
+                        <rect x="260" y="140" width="110" height="52" rx="20" fill="#d7b484" />
+                        <ellipse cx="520" cy="166" rx="38" ry="48" fill="#ff6969" />
+                        <rect x="260" y="185" width="110" height="52" rx="20" fill="#d7b484" />
+                        <ellipse cx="520" cy="211" rx="38" ry="48" fill="#6eb7ff" />
+                        <rect x="260" y="230" width="110" height="52" rx="20" fill="#d7b484" />
+                        <ellipse cx="520" cy="256" rx="38" ry="48" fill="#a1f0b9" />
+                        <path d="M675 166 V330 H85 V275 M675 211 V330 M675 256 V330" fill="none" stroke="#222"
+                            stroke-width="10" />
+                    </svg></div>
+                <div class="stack">
+                    <h2 class="slide-title left">Self-Check Parallel</h2>
+                    <div class="checklist" style="font-size:1.1rem;display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px">
+                        <label class="check-item" style="padding:16px;background:#f6f9fc;border-radius:12px;cursor:pointer"><input type="checkbox" style="transform:scale(1.5);margin-right:16px"> 🔋 Ada sumber listrik (Battery 9V).</label>
+                        <label class="check-item" style="padding:16px;background:#f6f9fc;border-radius:12px;cursor:pointer"><input type="checkbox" style="transform:scale(1.5);margin-right:16px"> ⑂ Sirkuit memiliki tiga cabang (jalur) terpisah.</label>
+                        <label class="check-item" style="padding:16px;background:#f6f9fc;border-radius:12px;cursor:pointer"><input type="checkbox" style="transform:scale(1.5);margin-right:16px"> 🟫 Setiap cabang memiliki resistornya sendiri.</label>
+                        <label class="check-item" style="padding:16px;background:#f6f9fc;border-radius:12px;cursor:pointer"><input type="checkbox" style="transform:scale(1.5);margin-right:16px"> 💡 Setiap cabang memiliki satu LED menyala.</label>
+                        <label class="check-item" style="padding:16px;background:#f6f9fc;border-radius:12px;cursor:pointer"><input type="checkbox" style="transform:scale(1.5);margin-right:16px"> ↩️ Semua cabang tersambung kembali ke negative battery.</label>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="slide dark" id="quickQuizSlide"><span class="chip"><b></b> Quick Quiz</span>
+            <div class="content stack">
+                <div>
+                    <div class="kicker" style="color:var(--cyan)">CHECK YOUR UNDERSTANDING</div>
+                    <h2 class="slide-title">Quick Quiz</h2>
+                </div>
+                <div class="quiz">
+                    <div class="quiz-prog" id="quizProg"></div>
+                    <div class="quiz-q" id="quizQ"></div>
+                    <div class="quiz-options" id="quizOptions"></div>
+                    <div class="quiz-fb" id="quizFb">Pilih satu jawaban.</div><button class="btn" id="quizNext"
+                        style="display:none;margin-top:12px">Next Question</button>
+                </div>
+            </div>
+        </section>
+        <section class="slide"><span class="chip"><b></b> Review</span>
+            <div class="content stack">
+                <div>
+                    <div class="kicker">TODAY'S REVIEW</div>
+                    <h2 class="slide-title">Apa yang Sudah Kita Pelajari?</h2>
+                </div>
+                <div class="agenda">
+                    <div class="card icon-card">
+                        <div class="big-icon">🟫</div>
+                        <h3>Resistor</h3>
+                        <p>Membatasi current.</p>
+                    </div>
+                    <div class="card icon-card">
+                        <div class="big-icon">💡💡</div>
+                        <h3>Series</h3>
+                        <p>Satu jalur.</p>
+                    </div>
+                    <div class="card icon-card">
+                        <div class="big-icon">⑂</div>
+                        <h3>Parallel</h3>
+                        <p>Beberapa cabang.</p>
+                    </div>
+                    <div class="card icon-card">
+                        <div class="big-icon">✏️</div>
+                        <h3>Circuit Diagram</h3>
+                        <p>Komponen digambar dengan simbol.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="slide dark"><span class="chip"><b></b> Feedback</span>
+            <div class="content feedback max"><img class="robot"
+                    src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/eded3e71-16cf-401e-b1c1-3ff5f887dc38.png"
+                    alt="Robot">
+                <div class="stack">
+                    <h2 class="slide-title left">Bagaimana Kelas Hari Ini Menurutmu?</h2>
+                    <p class="lead left">Pilih satu respons cepat.</p>
+                    <div class="feedback-choices"><button class="feedback-choice">
+                            <div class="face">🙂</div><strong>Jelas</strong>
+                        </button><button class="feedback-choice">
+                            <div class="face">🤔</div><strong>Masih Ada Pertanyaan</strong>
+                        </button><button class="feedback-choice">
+                            <div class="face">⚡</div><strong>Siap Lanjut</strong>
+                        </button></div>
+                    <p class="note" id="feedbackNote">Respons ini tidak menyimpan skor atau data pribadi.</p>
+                </div>
+            </div>
+        </section>
+        <div class="footer"><span class="counter" id="counter">01 / 34</span><span class="progress"><span class="bar"
+                    id="bar"></span></span></div>
+    </main>
+    <div class="toast" id="toast"></div>
+    <script>
+        const $ = id => document.getElementById(id); const slides = [...document.querySelectorAll('.slide')], prev = $('prev'), next = $('next'), counter = $('counter'), bar = $('bar'); let current = 0;
+        function nav() { prev.disabled = current === 0; next.disabled = current === slides.length - 1; counter.textContent = String(current + 1).padStart(2, '0') + ' / ' + String(slides.length).padStart(2, '0'); bar.style.width = ((current + 1) / slides.length * 100) + '%' }
+        function go(i) { if (i < 0 || i >= slides.length || i === current) return; slides[current].classList.remove('active'); current = i; slides[current].classList.add('active'); nav() } prev.onclick = () => go(current - 1); next.onclick = () => go(current + 1); document.addEventListener('keydown', e => { if (e.key === 'ArrowRight' || e.key === 'PageDown') go(current + 1); if (e.key === 'ArrowLeft' || e.key === 'PageUp') go(current - 1) }); nav();
+        function toast(msg, t = 2300) { const x = $('toast'); x.textContent = msg; x.classList.add('show'); clearTimeout(toast.timer); toast.timer = setTimeout(() => x.classList.remove('show'), t) }
+        function confetti() { const c = ['#ffc33d', '#ff8b2b', '#43d5e6', '#38b56f', '#7367f0', '#ef5350']; for (let i = 0; i < 40; i++) { const p = document.createElement('i'); p.className = 'confetti'; p.style.left = innerWidth / 2 + 'px'; p.style.top = innerHeight / 2 + 'px'; p.style.background = c[i % c.length]; p.style.setProperty('--x', (Math.random() * 500 - 250) + 'px'); p.style.setProperty('--y', (Math.random() * 340 + 100) + 'px'); document.body.appendChild(p); setTimeout(() => p.remove(), 1700) } }
+        function initDragMatch(section) { if (!section) return; let active = null; const chips = [...section.querySelectorAll('.drag-chip')], drops = [...section.querySelectorAll('.drop-zone')]; chips.forEach(chip => { chip.ondragstart = e => { active = chip; e.dataTransfer.setData('text/plain', chip.dataset.value) }; chip.onclick = () => { chips.forEach(x => x.classList.remove('selected')); active = chip; chip.classList.add('selected') } }); drops.forEach(drop => { drop.ondragover = e => { e.preventDefault(); drop.classList.add('over') }; drop.ondragleave = () => drop.classList.remove('over'); drop.ondrop = e => { e.preventDefault(); drop.classList.remove('over'); place(drop, active || chips.find(c => c.dataset.value === e.dataTransfer.getData('text/plain'))) }; drop.onclick = () => { if (active) place(drop, active) } }); function place(drop, chip) { if (!chip) return; const ok = chip.dataset.value === drop.dataset.answer; drop.textContent = chip.textContent; drop.className = 'drop-zone ' + (ok ? 'correct' : 'wrong'); if (ok) { chip.classList.add('used'); chip.classList.remove('selected'); active = null; if (drops.every(d => d.classList.contains('correct'))) confetti() } else toast('Belum tepat. Periksa kembali gambar circuit.') } }
+        initDragMatch($('reviewDrop1')); initDragMatch($('reviewDrop2'));
+        function initWireBoard(board) { const svg = board.querySelector('svg'), nodes = [...board.querySelectorAll('.node')]; let selected = null, preview = null, connections = []; const point = el => { const b = board.getBoundingClientRect(), r = el.getBoundingClientRect(); return { x: r.left + r.width / 2 - b.left, y: r.top + r.height / 2 - b.top } }; const reset = () => { nodes.forEach(n => n.classList.remove('selected')); selected = null; if (preview) { preview.remove(); preview = null } }; const draw = (a, b, cl) => { const p = document.createElementNS('http://www.w3.org/2000/svg', 'path'), m = (a.x + b.x) / 2; p.setAttribute('d', `M ${a.x} ${a.y} C ${m} ${a.y},${m} ${b.y},${b.x} ${b.y}`); p.setAttribute('class', 'wire-path ' + cl); svg.appendChild(p) }; nodes.forEach(n => n.onclick = () => { if (n.classList.contains('done')) return; if (!selected) { selected = n; n.classList.add('selected'); preview = document.createElementNS('http://www.w3.org/2000/svg', 'path'); preview.setAttribute('class', 'preview-wire'); svg.appendChild(preview); return } if (selected === n) { reset(); return } const pair = [selected.dataset.id, n.dataset.id].sort().join('-'); const valid = ['batt_pos-res_in', 'led_pos-res_out', 'batt_neg-led_neg', 'batt_pos-led_pos'].includes(pair); if (valid) { draw(point(selected), point(n), selected.dataset.wire); selected.classList.add('done'); n.classList.add('done'); connections.push(pair); reset(); const hasDirect = connections.includes('batt_pos-led_pos'), hasNeg = connections.includes('batt_neg-led_neg'), hasRes = connections.includes('batt_pos-res_in') && connections.includes('led_pos-res_out'); if (hasDirect && hasNeg) { $('safeWireLed').className = 'led-v damage'; $('safeWireStatus').textContent = 'Bahaya! LED putus karena menerima 9V langsung.'; $('safeWireStatus').style.color = '#d32f2f' } else if (hasRes && hasNeg) { $('safeWireLed').className = 'led-v on'; $('safeWireStatus').textContent = 'Circuit lengkap dengan resistor. LED menyala aman!'; $('safeWireStatus').style.color = '#20734a'; confetti() } } else { toast('Jalur tidak tepat.'); reset() } }); board.onmousemove = e => { if (!selected || !preview) return; const b = board.getBoundingClientRect(), a = point(selected), z = { x: e.clientX - b.left, y: e.clientY - b.top }, m = (a.x + z.x) / 2; preview.setAttribute('d', `M ${a.x} ${a.y} C ${m} ${a.y},${m} ${z.y},${z.x} ${z.y}`) }; board.resetBoard = () => { connections = []; nodes.forEach(n => n.classList.remove('done', 'selected')); svg.innerHTML = ''; $('safeWireLed').className = 'led-v'; $('safeWireStatus').textContent = 'Selesaikan sambungan circuit.'; $('safeWireStatus').style.color = 'var(--navy)' }; }
+        initWireBoard($('safeWireBoard')); if($('safeWireReset')) $('safeWireReset').onclick = () => $('safeWireBoard').resetBoard();
+        let missing = null; const mCh = [...$('missingProtectionBank').querySelectorAll('.drag-chip')]; mCh.forEach(c => { c.ondragstart = e => { missing = c; e.dataTransfer.setData('text/plain', c.dataset.value) }; c.onclick = () => { mCh.forEach(x => x.classList.remove('selected')); missing = c; c.classList.add('selected') } }); function applyMissing(v) { $('missingProtectionDropText').textContent = v === 'resistor' ? 'Resistor 220Ω' : v === 'wire' ? 'Wire' : v === 'switch' ? 'Switch' : 'Motor'; if (v === 'resistor') { $('missingSlotRect').setAttribute('fill', '#eaf9f0'); $('missingSlotRect').setAttribute('stroke', '#38b56f'); $('missingSlotRect').setAttribute('stroke-dasharray', 'none'); $('missingLedSvg').setAttribute('fill', '#ff5959'); $('missingProtectionStatus').textContent = 'Benar. Resistor membatasi current.'; $('missingProtectionStatus').style.color = '#20734a'; confetti() } else if (v === 'wire') { $('missingSlotRect').setAttribute('fill', '#fff1f0'); $('missingSlotRect').setAttribute('stroke', '#ef5350'); $('missingSlotRect').setAttribute('stroke-dasharray', 'none'); $('missingLedSvg').setAttribute('fill', '#fff1a3'); $('missingProtectionStatus').textContent = 'LED terlalu terang karena current tidak dibatasi.'; $('missingProtectionStatus').style.color = '#d32f2f'; } else { $('missingSlotRect').setAttribute('fill', '#fff1f0'); $('missingSlotRect').setAttribute('stroke', '#ef5350'); $('missingSlotRect').setAttribute('stroke-dasharray', 'none'); $('missingProtectionStatus').textContent = 'Komponen ini bukan current limiter.'; $('missingProtectionStatus').style.color = '#d32f2f'; } } $('missingSvgDrop').ondragover = e => e.preventDefault(); $('missingSvgDrop').ondrop = e => { e.preventDefault(); applyMissing(e.dataTransfer.getData('text/plain')) }; $('missingSvgDrop').onclick = () => { if (missing) applyMissing(missing.dataset.value) }; $('missingProtectionReset').onclick = () => { $('missingSlotRect').setAttribute('fill', '#f6fbfe'); $('missingSlotRect').setAttribute('stroke', '#aac7d8'); $('missingSlotRect').setAttribute('stroke-dasharray', '10 8'); $('missingProtectionDropText').textContent = 'DROP HERE'; $('missingLedSvg').setAttribute('fill', '#dce5e9'); $('missingProtectionStatus').textContent = 'Pilih pelindung current.'; $('missingProtectionStatus').style.color = 'var(--navy)' };
+        let spred = null; document.querySelectorAll('[data-series-predict]').forEach(b => b.onclick = () => { spred = b.dataset.seriesPredict; document.querySelectorAll('[data-series-predict]').forEach(x => x.classList.remove('selected')); b.classList.add('selected'); setTimeout(() => $('runSeriesPrediction').click(), 100) }); $('runSeriesPrediction').onclick = () => { const ok = spred === 'on'; $('seriesWhiteLed').setAttribute('fill', '#fff9c8'); $('seriesWhiteLed').setAttribute('filter', 'drop-shadow(0 0 12px rgba(255,249,200,0.8))'); $('seriesBlueLed').setAttribute('fill', '#6eb7ff'); $('seriesBlueLed').setAttribute('filter', 'drop-shadow(0 0 12px rgba(110,183,255,0.8))'); document.querySelector('[data-series-predict="on"]').classList.add('correct'); if (!ok) document.querySelector('[data-series-predict="off"]').classList.add('wrong'); $('seriesPredictionStatus').textContent = (ok ? 'Prediksi benar. ' : 'Belum tepat. ') + 'Dengan dua LED sekitar 3V dan resistor 220Ω, current sekitar 13,6mA sehingga keduanya menyala.' };
+        let sLed1 = true, sLed2 = true; const updateSeriesBreak = () => { const on = sLed1 && sLed2; $('seriesBreakLed1').setAttribute('visibility', sLed1 ? 'visible' : 'hidden'); $('seriesBreakLed1').setAttribute('fill', on ? '#fff9c8' : '#f4f6f7'); $('seriesBreakLed1').setAttribute('filter', on ? 'drop-shadow(0 0 12px rgba(255,249,200,0.8))' : 'none'); $('seriesBreakLed2').setAttribute('visibility', sLed2 ? 'visible' : 'hidden'); $('seriesBreakLed2').setAttribute('fill', on ? '#6eb7ff' : '#e8f3fb'); $('seriesBreakLed2').setAttribute('filter', on ? 'drop-shadow(0 0 12px rgba(110,183,255,0.8))' : 'none'); $('toggleSeriesLed1').textContent = sLed1 ? 'Cabut LED Putih' : 'Pasang LED Putih'; $('toggleSeriesLed2').textContent = sLed2 ? 'Cabut LED Biru' : 'Pasang LED Biru'; if(on) { $('seriesBreakLabel').textContent = 'Closed loop: kedua LED menyala'; $('seriesBreakLabel').setAttribute('fill', '#20734a'); if($('seriesBreakBg')) $('seriesBreakBg').setAttribute('fill', '#eaf9f0'); } else { $('seriesBreakLabel').textContent = 'Open loop: jalur terputus, semua mati'; $('seriesBreakLabel').setAttribute('fill', '#ef5350'); if($('seriesBreakBg')) $('seriesBreakBg').setAttribute('fill', '#fff1f0'); } }; $('toggleSeriesLed1').onclick = () => { sLed1 = !sLed1; updateSeriesBreak() }; $('toggleSeriesLed2').onclick = () => { sLed2 = !sLed2; updateSeriesBreak() };
+        document.querySelectorAll('[data-series-resistor]').forEach(b => b.onclick = () => { const ok = b.dataset.seriesResistor === 'b'; document.querySelectorAll('[data-series-resistor]').forEach(x => x.disabled = true); b.classList.add(ok ? 'correct' : 'wrong'); document.querySelector('[data-series-resistor="b"]').classList.add('correct'); $('seriesResistorFeedback').textContent = (ok ? 'Benar. ' : 'Belum tepat. ') + 'Resistor membatasi current yang melewati kedua LED.' });
+        const pState = { pR1: true, pL1: true, pR2: true, pL2: true }; function runParallel() { let m = [];[['1', 'pR1', 'pL1', 'pL1Bulb', '#ff6969'], ['2', 'pR2', 'pL2', 'pL2Bulb', '#6eb7ff']].forEach(([n, r, l, b, c]) => { if (!pState[l]) { $(b).setAttribute('fill', '#dce5e9'); $(b).setAttribute('filter', 'none'); m.push('Cabang '+n+': putus.') } else if (!pState[r]) { $(b).setAttribute('fill', '#fff1a3'); $(b).setAttribute('filter', 'drop-shadow(0 0 16px rgba(255,241,163,1))'); m.push('Cabang '+n+': rusak tanpa resistor!') } else { $(b).setAttribute('fill', c); $(b).setAttribute('filter', `drop-shadow(0 0 12px ${c}cc)`); m.push('Cabang '+n+': aman.') } }); $('parallelStatus').textContent = m.join(' ') + ' Cabang bekerja mandiri.' } document.querySelectorAll('[data-toggle-part]').forEach(b => b.onclick = () => { const id = b.dataset.togglePart; pState[id] = !pState[id]; $(id).style.display = pState[id] ? 'block' : 'none'; b.textContent = pState[id] ? 'Cabut' : 'Pasang'; runParallel() }); if($('resetParallel')) $('resetParallel').onclick = () => { Object.keys(pState).forEach(id => { pState[id] = true; $(id).style.display = 'block'; document.querySelector(`[data-toggle-part="${id}"]`).textContent = 'Cabut' }); runParallel() }; runParallel();
+        $('checkParallelFacts').onclick = () => { let perfect = true; document.querySelectorAll('#parallelFactsSlide .fact').forEach(l => { const cb = l.querySelector('input'), truth = cb.dataset.fact === 'true', ok = cb.checked === truth; l.classList.remove('correct', 'wrong'); l.classList.add(truth ? 'correct' : 'wrong'); if (!ok) perfect = false }); $('parallelFactsFeedback').textContent = perfect ? 'Semua benar. Parallel memiliki beberapa jalur mandiri.' : 'Pelajari lagi fakta yang berwarna merah.'; if (perfect) confetti() };
+        let protect = null; const pCh = [...$('protectBank').querySelectorAll('.drag-chip')]; pCh.forEach(c => { c.ondragstart = e => { protect = c; e.dataTransfer.setData('text/plain', c.dataset.value) }; c.onclick = () => { pCh.forEach(x => x.classList.remove('selected')); protect = c; c.classList.add('selected') } }); function applyProtect(v) { $('protectDropText').textContent = v === 'resistor' ? 'Resistor' : 'Wire'; if (v === 'resistor') { $('protectSlotRect').setAttribute('fill', '#eaf9f0'); $('protectSlotRect').setAttribute('stroke', '#38b56f'); $('protectSlotRect').setAttribute('stroke-dasharray', 'none'); $('protectLedSvg').setAttribute('fill', '#ff5959'); $('protectLedStatus').textContent = 'Benar! LED menyala aman.'; $('protectLedStatus').style.color = '#20734a'; confetti() } else { $('protectSlotRect').setAttribute('fill', '#fff1f0'); $('protectSlotRect').setAttribute('stroke', '#ef5350'); $('protectSlotRect').setAttribute('stroke-dasharray', 'none'); $('protectLedSvg').setAttribute('fill', '#fff1a3'); $('protectLedStatus').textContent = 'Bahaya! LED terlalu terang lalu rusak.'; $('protectLedStatus').style.color = '#d32f2f'; setTimeout(() => $('protectLedSvg').setAttribute('fill', '#746963'), 1000) } } $('protectSvgDrop').ondragover = e => e.preventDefault(); $('protectSvgDrop').ondrop = e => { e.preventDefault(); applyProtect(e.dataTransfer.getData('text/plain')) }; $('protectSvgDrop').onclick = () => { if (protect) applyProtect(protect.dataset.value) }; $('protectReset').onclick = () => { $('protectSlotRect').setAttribute('fill', '#f7fbff'); $('protectSlotRect').setAttribute('stroke', '#aac7d8'); $('protectSlotRect').setAttribute('stroke-dasharray', '10 8'); $('protectDropText').textContent = 'DROP HERE'; $('protectLedSvg').setAttribute('fill', '#dce5e9'); $('protectLedStatus').textContent = 'Circuit belum lengkap.'; $('protectLedStatus').style.color = 'var(--navy)' };
+        let rVal = null; document.querySelectorAll('[data-resistor-value]').forEach(b => b.onclick = () => { rVal = Number(b.dataset.resistorValue); document.querySelectorAll('[data-resistor-value]').forEach(x => x.classList.remove('selected')); b.classList.add('selected'); $('testResistor').disabled = false; $('resistorChoiceText').textContent = rVal + 'Ω' }); $('testResistor').onclick = () => { if (rVal === 100) { $('choiceLedSvg').setAttribute('fill', '#fff1a3'); $('resistorResult').textContent = 'Hambatan terlalu kecil! Arus sangat besar dan merusak LED.' } else if (rVal === 220) { $('choiceLedSvg').setAttribute('fill', '#ff705f'); $('resistorResult').textContent = 'Menyala cukup terang. Arus cukup tinggi tapi masih ditoleransi.' } else { $('choiceLedSvg').setAttribute('fill', '#ff5959'); $('resistorResult').textContent = 'Menyala normal. Arus sangat aman untuk penggunaan lama.'; confetti() } };
+        let safeActive = null, slots = [null, null, null, null]; const sCh = [...$('safePartsBank').querySelectorAll('.drag-chip')]; sCh.forEach(c => { c.ondragstart = e => { safeActive = c; e.dataTransfer.setData('text/plain', c.dataset.part) }; c.onclick = () => { sCh.forEach(x => x.classList.remove('selected')); safeActive = c; c.classList.add('selected') } }); document.querySelectorAll('.safe-slot').forEach(slot => { slot.ondragover = e => e.preventDefault(); slot.ondrop = e => { e.preventDefault(); placeSafe(slot, e.dataTransfer.getData('text/plain')) }; slot.onclick = () => { if (safeActive) placeSafe(slot, safeActive.dataset.part) } }); function placeSafe(slot, v) { slots[Number(slot.dataset.slotIndex)] = v; const map = { battery: '🔋 Battery 9V', resistor: '🟫 Resistor', wire: '〰️ Wire', 'led-correct': '💡 LED benar', 'led-reverse': '🔄 LED terbalik', return: '↩️ Return Wire' }; slot.textContent = map[v]; slot.classList.add('correct') } $('testCompleteSafe').onclick = () => { const [a, b, c, d] = slots; if (a !== 'battery' || d !== 'return') return $('completeSafeStatus').textContent = 'Power source atau return path belum tepat.'; if (b === 'wire') return $('completeSafeStatus').textContent = 'Circuit lengkap tetapi tidak aman tanpa resistor.'; if (b !== 'resistor') return $('completeSafeStatus').textContent = 'Tambahkan resistor.'; if (c === 'led-reverse') return $('completeSafeStatus').textContent = 'LED mati karena polarity terbalik.'; if (c === 'led-correct') { $('completeSafeLed').style.filter = 'none'; $('completeSafeLed').style.textShadow = '0 0 26px #ffc33d'; $('completeSafeStatus').textContent = 'Circuit benar dan aman.'; confetti() } else $('completeSafeStatus').textContent = 'Pilih orientation LED.' }; $('resetCompleteSafe').onclick = () => { slots = [null, null, null, null]; document.querySelectorAll('.safe-slot').forEach((s, i) => { s.className = 'drop-zone safe-slot'; s.textContent = ['1. Power Source', '2. Current Protection', '3. LED Orientation', '4. Return Path'][i] }); $('completeSafeLed').style.filter = 'grayscale(1)'; $('completeSafeLed').style.textShadow = 'none'; $('completeSafeStatus').textContent = 'Susun circuit lalu Test.' };
+        const spSc = [{ type: 'series', effect: 'alloff', svg: `<svg viewBox="0 0 720 330" style="width:100%;height:330px"><rect x="35" y="120" width="100" height="120" rx="20" fill="#222"/><text x="85" y="190" text-anchor="middle" fill="#fff" font-size="28" font-weight="700">9V</text><path d="M85 120 V70 H250" stroke="#ef5350" stroke-width="10"/><rect x="250" y="42" width="110" height="56" rx="20" fill="#d7b484"/><path d="M360 70 H440" stroke="#ef5350" stroke-width="10"/><ellipse cx="490" cy="70" rx="40" ry="50" fill="#ff6969"/><path d="M530 70 H595" stroke="#ef5350" stroke-width="10"/><ellipse cx="640" cy="70" rx="40" ry="50" fill="#6eb7ff"/><path d="M640 120 V270 H85 V240" fill="none" stroke="#222" stroke-width="10"/></svg>` }, { type: 'parallel', effect: 'oneoff', svg: `<svg viewBox="0 0 720 330" style="width:100%;height:330px"><rect x="35" y="110" width="100" height="130" rx="20" fill="#222"/><text x="85" y="185" text-anchor="middle" fill="#fff" font-size="28" font-weight="700">9V</text><path d="M135 140 H620 M135 215 H620" stroke="#ef5350" stroke-width="10"/><rect x="300" y="110" width="100" height="58" rx="20" fill="#d7b484"/><ellipse cx="520" cy="140" rx="40" ry="50" fill="#ff6969"/><rect x="300" y="185" width="100" height="58" rx="20" fill="#d7b484"/><ellipse cx="520" cy="215" rx="40" ry="50" fill="#6eb7ff"/><path d="M620 140 V280 H85 V240 M620 215 V280" fill="none" stroke="#222" stroke-width="10"/></svg>` }]; let spi = 0, typeDone = false; function renderSP() { $('spCircuitVisual').innerHTML = spSc[spi].svg; $('spQuestion1').style.display = 'block'; $('spQuestion2').style.display = 'none'; $('spNextCircuit').style.display = 'none'; $('spFeedback').textContent = 'Jawab pertanyaan pertama.'; document.querySelectorAll('[data-sp-type],[data-sp-effect]').forEach(b => { b.disabled = false; b.classList.remove('correct', 'wrong') }); typeDone = false } document.querySelectorAll('[data-sp-type]').forEach(b => b.onclick = () => { const ok = b.dataset.spType === spSc[spi].type; document.querySelectorAll('[data-sp-type]').forEach(x => x.disabled = true); b.classList.add(ok ? 'correct' : 'wrong'); document.querySelector(`[data-sp-type="${spSc[spi].type}"]`).classList.add('correct'); $('spFeedback').textContent = spSc[spi].type === 'series' ? 'Satu jalur = series.' : 'Beberapa cabang = parallel.'; $('spQuestion2').style.display = 'block'; typeDone = true }); document.querySelectorAll('[data-sp-effect]').forEach(b => b.onclick = () => { if (!typeDone) return; const ok = b.dataset.spEffect === spSc[spi].effect; document.querySelectorAll('[data-sp-effect]').forEach(x => x.disabled = true); b.classList.add(ok ? 'correct' : 'wrong'); document.querySelector(`[data-sp-effect="${spSc[spi].effect}"]`).classList.add('correct'); $('spFeedback').textContent = spSc[spi].type === 'series' ? 'Satu LED dilepas memutus seluruh jalur.' : 'Cabang lain tetap lengkap.'; if (spi < 1) $('spNextCircuit').style.display = 'inline-block'; else if (ok) confetti() }); $('spNextCircuit').onclick = () => { spi++; renderSP() }; renderSP();
+        function timer(display, start, pause, reset) { let r = 120, i = null; const paint = () => display.textContent = String(Math.floor(r / 60)).padStart(2, '0') + ':' + String(r % 60).padStart(2, '0'); start.onclick = () => { if (i) return; i = setInterval(() => { r--; paint(); if (r <= 0) { clearInterval(i); i = null; toast('Waktu selesai.'); confetti() } }, 1000) }; pause.onclick = () => { clearInterval(i); i = null }; reset.onclick = () => { clearInterval(i); i = null; r = 120; paint() }; paint() } timer($('seriesTimer'), $('startSeriesTimer'), $('pauseSeriesTimer'), $('resetSeriesTimer')); timer($('parallelTimer'), $('startParallelTimer'), $('pauseParallelTimer'), $('resetParallelTimer'));
+        const qd = [{ q: 'Apa fungsi utama resistor?', o: ['A. Menambah warna LED', 'B. Membatasi current', 'C. Mengubah battery menjadi switch'], a: 1, e: 'Resistor membatasi current.' }, { q: 'Jika satu LED dicabut dari circuit series?', o: ['A. Semua LED mati', 'B. LED lain tetap menyala', 'C. Semua makin terang'], a: 0, e: 'Series hanya punya satu jalur.' }, { q: 'Mengapa setiap LED parallel perlu resistor sendiri?', o: ['A. Agar tiap cabang memiliki pengontrol current', 'B. Agar semua mati bersamaan', 'C. Agar voltage hilang'], a: 0, e: 'Setiap cabang membawa current sendiri.' }, { q: 'Resistor mana yang lebih aman untuk satu LED merah dengan 9V?', o: ['A. 100Ω', 'B. 220Ω', 'C. 440Ω'], a: 2, e: '440Ω menghasilkan current sekitar 16mA.' }]; let qi = 0; function rq() { const q = qd[qi]; $('quizProg').textContent = `Question ${qi + 1} of ${qd.length}`; $('quizQ').textContent = q.q; $('quizOptions').innerHTML = ''; $('quizFb').textContent = 'Pilih satu jawaban.'; $('quizNext').style.display = 'none'; q.o.forEach((t, i) => { const b = document.createElement('button'); b.className = 'option'; b.textContent = t; b.onclick = () => { [...$('quizOptions').children].forEach(x => x.disabled = true); const ok = i === q.a; b.classList.add(ok ? 'correct' : 'wrong'); $('quizOptions').children[q.a].classList.add('correct'); $('quizFb').textContent = (ok ? 'Benar. ' : 'Belum tepat. ') + q.e; if (qi < qd.length - 1) $('quizNext').style.display = 'inline-block'; else if (ok) confetti() }; $('quizOptions').appendChild(b) }) } $('quizNext').onclick = () => { qi++; rq() }; rq();
+        const fbs = [...document.querySelectorAll('.feedback-choice')]; fbs.forEach(b => b.onclick = () => { fbs.forEach(x => x.classList.remove('selected')); b.classList.add('selected'); $('feedbackNote').textContent = 'Terima kasih. Lanjutkan dengan feedback form dari guru.' });
+    </script>
+</body>
+
+</html>
