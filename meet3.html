@@ -1,0 +1,1835 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>RUANGGURU CODING — LED Light Saber</title>
+<link rel="icon" href="https://cdn-web-2.ruangguru.com/landing-pages/assets/e7d93748-818d-462d-be57-7db1e479cd62.png" type="image/png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --navy: #073b70;
+        --navy2: #0d4f86;
+        --deep: #062b50;
+        --cyan: #43d5e6;
+        --orange: #ff8b2b;
+        --yellow: #ffc33d;
+        --ink: #153650;
+        --muted: #5e7487;
+        --green: #38b56f;
+        --red: #ef5350;
+        --white: #fff;
+        --cream: #fff9ef;
+        --shadow: 0 18px 46px rgba(2, 25, 50, .28)
+    }
+
+    * {
+        box-sizing: border-box
+    }
+
+    html,
+    body {
+        height: 100%
+    }
+
+    body {
+        margin: 0;
+        overflow: hidden;
+        font-family: 'Fredoka', sans-serif;
+        color: var(--ink);
+        background: radial-gradient(circle at 80% 18%, rgba(67, 213, 230, .16) 0 12%, transparent 13%), radial-gradient(circle at 10% 82%, rgba(255, 195, 61, .14) 0 15%, transparent 16%), linear-gradient(135deg, var(--deep), var(--navy) 52%, var(--navy2))
+    }
+
+    body:before,
+    body:after {
+        content: "";
+        position: fixed;
+        width: 48vw;
+        height: 8px;
+        background: rgba(255, 255, 255, .035);
+        transform: rotate(-24deg);
+        border-radius: 20px;
+        box-shadow: 0 52px rgba(255, 255, 255, .03), 0 104px rgba(255, 255, 255, .025), 0 156px rgba(255, 255, 255, .02)
+    }
+
+    body:before {
+        left: 2vw;
+        top: 20vh
+    }
+
+    body:after {
+        right: -10vw;
+        bottom: 20vh
+    }
+
+    .brand {
+        position: fixed;
+        left: 22px;
+        top: 18px;
+        z-index: 1000;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 9px 15px;
+        background: rgba(255, 255, 255, .97);
+        border-radius: 20px;
+        box-shadow: 0 10px 28px rgba(2, 24, 48, .3)
+    }
+
+    .brand img {
+        object-fit: contain;
+        width: auto
+    }
+
+    .brand .k {
+        height: 45px;
+        max-width: 170px
+    }
+
+    .brand .r {
+        height: 38px;
+        max-width: 145px
+    }
+
+    .brand i {
+        width: 2px;
+        height: 34px;
+        background: #dce7f0;
+        border-radius: 10px
+    }
+
+    .presentation {
+        position: fixed;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -48%);
+        width: min(88vw, 1440px);
+        aspect-ratio: 16/9;
+        max-height: 82vh;
+        border: 5px solid rgba(255, 255, 255, .9);
+        border-radius: 28px;
+        overflow: hidden;
+        box-shadow: var(--shadow);
+        background: var(--cream)
+    }
+
+    .slide {
+        position: absolute;
+        inset: 0;
+        padding: 70px 74px 62px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 18px;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateX(65px) scale(.985);
+        transition: .42s ease;
+        background: radial-gradient(circle at 88% 12%, rgba(67, 213, 230, .12), transparent 25%), linear-gradient(#fffefa, #fff8ed);
+        overflow: hidden
+    }
+
+    .slide.active {
+        opacity: 1;
+        visibility: visible;
+        transform: none;
+        z-index: 5
+    }
+
+    .slide.dark {
+        color: #fff;
+        background: radial-gradient(circle at 78% 44%, rgba(85, 170, 255, .24) 0 17%, rgba(85, 170, 255, .08) 18% 29%, transparent 30%), linear-gradient(135deg, #0b4a81, #083766 58%, #062b50)
+    }
+
+    .slide.orange {
+        color: #fff;
+        background: radial-gradient(circle at 82% 24%, rgba(255, 255, 255, .18), transparent 22%), linear-gradient(135deg, #ffa23d, #ff7e26)
+    }
+
+    .slide:after {
+        content: "";
+        position: absolute;
+        left: -8%;
+        right: -8%;
+        bottom: -32px;
+        height: 64px;
+        background: var(--orange);
+        transform: rotate(-1.5deg);
+        opacity: .94
+    }
+
+    .dark:after {
+        background: linear-gradient(90deg, var(--yellow), var(--orange))
+    }
+
+    .orange:after {
+        background: var(--navy)
+    }
+
+    .content {
+        position: relative;
+        z-index: 2;
+        width: 100%
+    }
+
+    .chip {
+        position: absolute;
+        left: 34px;
+        top: 25px;
+        z-index: 4;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 14px;
+        border-radius: 999px;
+        background: var(--navy);
+        color: #fff;
+        font-weight: 700;
+        font-size: .94rem;
+        box-shadow: 0 6px 16px rgba(7, 59, 112, .2)
+    }
+
+    .dark .chip {
+        background: rgba(255, 255, 255, .14);
+        border: 1px solid rgba(255, 255, 255, .22)
+    }
+
+    .chip b {
+        width: 9px;
+        height: 9px;
+        background: var(--yellow);
+        border-radius: 50%;
+        box-shadow: 0 0 0 4px rgba(255, 195, 61, .16)
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+        margin: 0
+    }
+
+    .display {
+        font-size: clamp(3.2rem, 5.8vw, 6rem);
+        line-height: .96;
+        font-weight: 700;
+        text-shadow: 0 5px rgba(12, 46, 86, .18)
+    }
+
+    .display .accent {
+        color: var(--yellow)
+    }
+
+    .slide-title {
+        font-size: clamp(2rem, 3.8vw, 3.65rem);
+        line-height: 1.06;
+        text-align: center;
+        color: var(--navy);
+        font-weight: 700
+    }
+
+    .dark .slide-title,
+    .orange .slide-title {
+        color: #fff
+    }
+
+    .kicker {
+        text-align: center;
+        color: var(--orange);
+        font-size: .95rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase
+    }
+
+    .lead {
+        font-size: clamp(1.08rem, 1.58vw, 1.48rem);
+        line-height: 1.5;
+        color: var(--muted);
+        text-align: center;
+        max-width: 980px;
+        font-weight: 500;
+        margin: 0 auto
+    }
+
+    .dark .lead,
+    .orange .lead {
+        color: rgba(255, 255, 255, .9)
+    }
+
+    .highlight {
+        color: var(--orange);
+        font-weight: 700
+    }
+
+    .cyan {
+        color: #00a6bf;
+        font-weight: 700
+    }
+
+    .yellow {
+        color: var(--yellow);
+        font-weight: 700
+    }
+
+    .center {
+        text-align: center
+    }
+
+    .left {
+        text-align: left
+    }
+
+    .stack {
+        display: grid;
+        gap: 15px
+    }
+
+    .w {
+        width: 100%
+    }
+
+    .max {
+        max-width: 1080px
+    }
+
+    .two {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+        align-items: center;
+        width: 100%
+    }
+
+    .three {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 18px;
+        width: 100%
+    }
+
+    .four {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        width: 100%
+    }
+
+    .agenda {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 18px;
+        width: 100%
+    }
+
+    .card {
+        background: #fff;
+        border: 2px solid #e5eef5;
+        border-radius: 24px;
+        padding: 22px;
+        box-shadow: 0 12px 28px rgba(5, 49, 87, .11)
+    }
+
+    .dark .card {
+        color: var(--ink)
+    }
+
+    .card h3,
+    .card-title {
+        font-size: 1.22rem;
+        font-weight: 700;
+        color: var(--navy);
+        margin-bottom: 7px
+    }
+
+    .card p {
+        font-size: .98rem;
+        line-height: 1.44;
+        color: var(--muted)
+    }
+
+    .icon-card {
+        min-height: 155px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        gap: 8px;
+        transition: .2s
+    }
+
+    .icon-card:hover {
+        transform: translateY(-6px);
+        border-color: var(--cyan)
+    }
+
+    .big-icon {
+        font-size: 3rem
+    }
+
+    .instruction {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 9px 15px;
+        border-radius: 999px;
+        background: #edf9fb;
+        border: 2px solid #bdebf1;
+        color: #116c79;
+        font-weight: 600;
+        font-size: .92rem;
+        justify-self: center
+    }
+
+    .dark .instruction {
+        background: rgba(255, 255, 255, .13);
+        border-color: rgba(255, 255, 255, .27);
+        color: #fff
+    }
+
+    .note {
+        font-size: .88rem;
+        color: var(--muted);
+        line-height: 1.44
+    }
+
+    .dark .note {
+        color: rgba(255, 255, 255, .76)
+    }
+
+    .btn,
+    .btn2,
+    .option {
+        font-family: 'Fredoka', sans-serif;
+        font-weight: 700;
+        cursor: pointer;
+        transition: .2s
+    }
+
+    .btn {
+        border: 0;
+        padding: 12px 22px;
+        border-radius: 16px;
+        background: linear-gradient(135deg, var(--orange), var(--yellow));
+        color: #173a59;
+        box-shadow: 0 9px 18px rgba(255, 139, 43, .26);
+        font-size: 1rem
+    }
+
+    .btn:hover:not(:disabled) {
+        transform: translateY(-3px) scale(1.02)
+    }
+
+    .btn:disabled {
+        opacity: .45;
+        cursor: not-allowed
+    }
+
+    .btn2 {
+        border: 0;
+        padding: 11px 18px;
+        border-radius: 15px;
+        background: var(--navy);
+        color: #fff
+    }
+
+    .option {
+        width: 100%;
+        padding: 12px 15px;
+        border-radius: 14px;
+        border: 2px solid #dbe8f2;
+        background: #f7fbff;
+        color: var(--ink);
+        text-align: left;
+        font-size: .98rem
+    }
+
+    .option:hover:not(:disabled) {
+        border-color: var(--cyan);
+        transform: translateX(4px)
+    }
+
+    .option.selected {
+        outline: 4px solid rgba(67, 213, 230, .2);
+        border-color: var(--cyan)
+    }
+
+    .option.correct {
+        background: #e7f9ef;
+        border-color: var(--green);
+        color: #197247
+    }
+
+    .option.wrong {
+        background: #fff0ef;
+        border-color: var(--red);
+        color: #a93232
+    }
+
+    .option:disabled {
+        cursor: default
+    }
+
+    .nav {
+        position: fixed;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 54px;
+        height: 54px;
+        border-radius: 50%;
+        border: 3px solid rgba(255, 255, 255, .88);
+        background: var(--yellow);
+        color: var(--navy);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.45rem;
+        font-weight: 700;
+        cursor: pointer;
+        z-index: 1100;
+        box-shadow: 0 12px 28px rgba(2, 20, 40, .28);
+        transition: .2s
+    }
+
+    .nav:hover:not(:disabled) {
+        transform: translateY(-50%) scale(1.1);
+        background: var(--orange);
+        color: #fff
+    }
+
+    .nav:disabled {
+        opacity: .28;
+        cursor: not-allowed
+    }
+
+    #prev {
+        left: 18px
+    }
+
+    #next {
+        right: 18px
+    }
+
+    .footer {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 10px;
+        z-index: 10;
+        display: flex;
+        justify-content: center;
+        pointer-events: none
+    }
+
+    .counter {
+        font-size: .78rem;
+        font-weight: 700;
+        letter-spacing: .8px;
+        color: #6a8094;
+        background: rgba(255, 255, 255, .9);
+        border: 1px solid rgba(7, 59, 112, .12);
+        padding: 6px 12px;
+        border-radius: 999px
+    }
+
+    .progress {
+        position: absolute;
+        left: 22%;
+        right: 22%;
+        bottom: 5px;
+        height: 4px;
+        background: rgba(7, 59, 112, .12);
+        border-radius: 999px;
+        overflow: hidden
+    }
+
+    .bar {
+        height: 100%;
+        width: 0;
+        background: linear-gradient(90deg, var(--cyan), var(--orange));
+        transition: .3s
+    }
+
+    .cover {
+        display: grid;
+        grid-template-columns: 1.05fr .95fr;
+        gap: 28px;
+        align-items: center;
+        width: 100%
+    }
+
+    .cover-sub {
+        margin-top: 22px;
+        font-size: 1.22rem;
+        line-height: 1.5;
+        color: rgba(255, 255, 255, .86);
+        max-width: 650px
+    }
+
+    .pill {
+        display: inline-flex;
+        margin-top: 24px;
+        padding: 10px 18px;
+        border-radius: 16px;
+        background: var(--yellow);
+        color: var(--navy);
+        font-weight: 700
+    }
+
+    .cover-image {
+        width: 100%;
+        height: 430px;
+        object-fit: cover;
+        border-radius: 28px;
+        border: 7px solid rgba(255, 255, 255, .92);
+        box-shadow: 0 24px 48px rgba(0, 0, 0, .35), 0 0 60px rgba(67, 213, 230, .23)
+    }
+
+    .photo-card {
+        background: #fff;
+        border: 3px solid #dcebf4;
+        border-radius: 26px;
+        padding: 15px;
+        box-shadow: 0 14px 28px rgba(5, 49, 87, .12)
+    }
+
+    .photo-card img {
+        display: block;
+        width: 100%;
+        height: 360px;
+        object-fit: contain;
+        border-radius: 18px
+    }
+
+    .photo-card.covered img {
+        object-fit: cover
+    }
+
+    .image-caption {
+        text-align: center;
+        margin-top: 10px;
+        color: var(--muted);
+        font-size: .93rem;
+        line-height: 1.4
+    }
+
+    .image-pair {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 18px;
+        width: 100%
+    }
+
+    .image-pair img {
+        width: 100%;
+        height: 300px;
+        object-fit: cover;
+        border-radius: 22px;
+        border: 5px solid #fff;
+        box-shadow: 0 14px 28px rgba(5, 49, 87, .15)
+    }
+
+    .material-grid {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 15px;
+        width: 100%
+    }
+
+    .material {
+        background: #fff;
+        border: 2px solid #e4edf4;
+        border-radius: 22px;
+        padding: 14px;
+        text-align: center;
+        box-shadow: 0 10px 24px rgba(5, 49, 87, .1);
+        transition: .2s
+    }
+
+    .material:hover {
+        transform: translateY(-5px);
+        border-color: var(--cyan)
+    }
+
+    .material img {
+        width: 100%;
+        height: 150px;
+        object-fit: contain
+    }
+
+    .material strong {
+        display: block;
+        color: var(--navy);
+        margin-top: 8px;
+        font-size: 1rem
+    }
+
+    .material span {
+        display: block;
+        color: var(--muted);
+        font-size: .83rem;
+        margin-top: 4px
+    }
+
+    .drag-bank {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        justify-content: center;
+        padding: 14px;
+        border-radius: 20px;
+        background: #eef6fb;
+        border: 2px solid #dbe9f2;
+        width: 100%
+    }
+
+    .drag-card {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 13px;
+        border-radius: 15px;
+        background: #fff;
+        border: 2px solid #d7e5ee;
+        font-weight: 700;
+        cursor: grab;
+        box-shadow: 0 7px 14px rgba(0, 0, 0, .06);
+        user-select: none;
+        transition: .2s
+    }
+
+    .drag-card img {
+        width: 46px;
+        height: 46px;
+        object-fit: contain;
+        border-radius: 9px
+    }
+
+    .drag-card.selected {
+        border-color: var(--cyan);
+        box-shadow: 0 0 0 4px rgba(67, 213, 230, .16)
+    }
+
+    .drag-card.used {
+        opacity: .35;
+        pointer-events: none
+    }
+
+    .drop-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 14px;
+        width: 100%
+    }
+
+    .drop-zone {
+        min-height: 110px;
+        border: 3px dashed #aac7d8;
+        border-radius: 18px;
+        background: #f7fbfe;
+        color: #718797;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 12px;
+        font-weight: 700;
+        text-align: center;
+        transition: .2s
+    }
+
+    .drop-zone.over {
+        border-color: var(--cyan);
+        background: #eafcfd
+    }
+
+    .drop-zone.correct {
+        border-style: solid;
+        border-color: var(--green);
+        background: #e7f9ef;
+        color: #20734a
+    }
+
+    .drop-zone.wrong {
+        border-style: solid;
+        border-color: var(--red);
+        background: #fff1f0;
+        color: #a33636
+    }
+
+    .condition-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 14px;
+        width: 100%
+    }
+
+    .condition-card {
+        background: #fff;
+        border: 3px solid #e1edf4;
+        border-radius: 22px;
+        padding: 14px;
+        text-align: center;
+        box-shadow: 0 10px 22px rgba(5, 49, 87, .1)
+    }
+
+    .condition-card svg {
+        width: 100%;
+        height: 145px
+    }
+
+    .condition-card h3 {
+        font-size: 1rem;
+        color: var(--navy);
+        min-height: 48px
+    }
+
+    .condition-card .drop-zone {
+        min-height: 70px;
+        margin-top: 10px
+    }
+
+    .info-panel {
+        background: #fff;
+        border: 3px solid #dcebf4;
+        border-radius: 26px;
+        padding: 18px;
+        box-shadow: 0 14px 28px rgba(5, 49, 87, .12)
+    }
+
+    .info-panel img {
+        width: 100%;
+        height: 330px;
+        object-fit: contain;
+        border-radius: 18px
+    }
+
+    .mini-labels {
+        display: grid;
+        gap: 12px
+    }
+
+    .mini-label {
+        padding: 15px 17px;
+        background: #fff;
+        border-left: 8px solid var(--orange);
+        border-radius: 18px;
+        box-shadow: 0 8px 18px rgba(5, 49, 87, .09)
+    }
+
+    .mini-label.blue {
+        border-left-color: var(--cyan)
+    }
+
+    .mini-label.green {
+        border-left-color: var(--green)
+    }
+
+    .mini-label strong {
+        display: block;
+        color: var(--navy);
+        margin-bottom: 3px
+    }
+
+    .mini-label span {
+        color: var(--muted);
+        line-height: 1.42
+    }
+
+    .circuit-illustration {
+        background: linear-gradient(135deg, #eef8ff, #fff9ef);
+        border: 3px solid #d7e9f3;
+        border-radius: 26px;
+        padding: 14px
+    }
+
+    .circuit-illustration svg {
+        width: 100%;
+        height: 390px;
+        display: block
+    }
+
+    .glow {
+        animation: glowPulse .9s ease-in-out infinite alternate
+    }
+
+    @keyframes glowPulse {
+        from {
+            filter: drop-shadow(0 0 7px rgba(255, 90, 90, .45))
+        }
+
+        to {
+            filter: drop-shadow(0 0 28px rgba(255, 90, 90, .98))
+        }
+    }
+
+    .order-layout {
+        display: grid;
+        grid-template-columns: .75fr 1.25fr;
+        gap: 22px;
+        width: 100%;
+        align-items: start
+    }
+
+    .order-bank {
+        display: grid;
+        gap: 10px;
+        padding: 14px;
+        background: #eef6fb;
+        border: 2px solid #dbe9f2;
+        border-radius: 22px;
+        min-height: 390px
+    }
+
+    .order-item {
+        padding: 13px 14px;
+        background: #fff;
+        border: 2px solid #d7e5ee;
+        border-radius: 15px;
+        font-weight: 700;
+        cursor: grab;
+        box-shadow: 0 7px 14px rgba(0, 0, 0, .06)
+    }
+
+    .order-item.selected {
+        border-color: var(--cyan);
+        box-shadow: 0 0 0 4px rgba(67, 213, 230, .16)
+    }
+
+    .order-slots {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px
+    }
+
+    .order-slot {
+        min-height: 104px;
+        border: 3px dashed #aac7d8;
+        border-radius: 17px;
+        background: #f7fbfe;
+        padding: 11px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: #718797;
+        font-weight: 700
+    }
+
+    .order-slot .num {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--navy);
+        color: #fff;
+        flex: none
+    }
+
+    .order-slot.correct {
+        border-style: solid;
+        border-color: var(--green);
+        background: #e7f9ef;
+        color: #20734a
+    }
+
+    .order-slot.wrong {
+        border-color: var(--red);
+        background: #fff1f0;
+        color: #a33636
+    }
+
+    .step-photo {
+        display: grid;
+        grid-template-columns: 1.05fr .95fr;
+        gap: 28px;
+        align-items: center;
+        width: 100%
+    }
+
+    .step-photo img {
+        width: 100%;
+        height: 420px;
+        object-fit: contain;
+        border-radius: 24px;
+        background: #fff;
+        border: 5px solid #fff;
+        box-shadow: 0 16px 34px rgba(5, 49, 87, .18)
+    }
+
+    .step-number {
+        display: flex;
+        align-items: center;
+        gap: 15px
+    }
+
+    .step-number b {
+        width: 52px;
+        height: 52px;
+        border-radius: 50%;
+        background: var(--orange);
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        flex: none
+    }
+
+    .step-number span {
+        font-size: 1.22rem;
+        color: var(--navy);
+        font-weight: 700
+    }
+
+    .step-list {
+        display: grid;
+        gap: 12px
+    }
+
+    .step-list div {
+        padding: 14px 16px;
+        background: #fff;
+        border: 2px solid #e2edf4;
+        border-radius: 17px;
+        color: var(--muted);
+        line-height: 1.45
+    }
+
+    .step-list strong {
+        color: var(--navy)
+    }
+
+    .status-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 12px;
+        flex-wrap: wrap
+    }
+
+    .status-result {
+        min-height: 72px;
+        padding: 14px 18px;
+        border-radius: 18px;
+        background: #fff;
+        border: 2px solid #dcebf4;
+        color: var(--muted);
+        text-align: center;
+        line-height: 1.45
+    }
+
+    .video-wrap {
+        position: relative;
+        width: min(420px, 100%);
+        aspect-ratio: 9/16;
+        margin: auto;
+        border-radius: 24px;
+        overflow: hidden;
+        border: 7px solid #fff;
+        box-shadow: 0 18px 34px rgba(0, 0, 0, .22);
+        background: #111
+    }
+
+    .video-wrap iframe {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        border: 0
+    }
+
+    .trouble-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+        width: 100%
+    }
+
+    .trouble {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 16px;
+        background: #fff;
+        border: 2px solid #e1edf4;
+        border-radius: 18px;
+        cursor: pointer;
+        transition: .2s
+    }
+
+    .trouble:hover {
+        transform: translateY(-3px);
+        border-color: var(--cyan)
+    }
+
+    .trouble.done {
+        background: #e7f9ef;
+        border-color: var(--green)
+    }
+
+    .trouble .check {
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #eef5f9;
+        color: var(--navy);
+        font-weight: 700;
+        flex: none
+    }
+
+    .trouble.done .check {
+        background: var(--green);
+        color: #fff
+    }
+
+    .trouble strong {
+        display: block;
+        color: var(--navy);
+        margin-bottom: 4px
+    }
+
+    .trouble span {
+        color: var(--muted);
+        line-height: 1.38
+    }
+
+    .idea-box {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 10px;
+        width: min(780px, 100%);
+        margin: auto
+    }
+
+    .idea-box input {
+        font-family: 'Fredoka';
+        font-size: 1rem;
+        padding: 14px 16px;
+        border: 3px solid #dcebf4;
+        border-radius: 16px;
+        outline: none
+    }
+
+    .idea-box input:focus {
+        border-color: var(--cyan)
+    }
+
+    .idea-result {
+        min-height: 85px;
+        padding: 17px;
+        border-radius: 20px;
+        background: #fff;
+        border: 3px solid #dcebf4;
+        text-align: center;
+        color: var(--muted);
+        font-size: 1.05rem;
+        line-height: 1.45
+    }
+
+    .innovation-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        width: 100%
+    }
+
+    .innovation-card {
+        background: #fff;
+        border: 3px solid #dcebf4;
+        border-radius: 24px;
+        padding: 15px;
+        text-align: center;
+        box-shadow: 0 12px 28px rgba(5, 49, 87, .11)
+    }
+
+    .innovation-card img {
+        width: 100%;
+        height: 280px;
+        object-fit: contain;
+        border-radius: 16px
+    }
+
+    .innovation-card h3 {
+        color: var(--navy);
+        margin-top: 8px
+    }
+
+    .innovation-card p {
+        color: var(--muted);
+        line-height: 1.42;
+        margin-top: 4px
+    }
+
+    .safety-layout {
+        display: grid;
+        grid-template-columns: .9fr 1.1fr;
+        gap: 20px;
+        width: 100%;
+        align-items: start
+    }
+
+    .safety-bank {
+        display: grid;
+        gap: 9px;
+        padding: 13px;
+        background: #eef6fb;
+        border: 2px solid #dbe9f2;
+        border-radius: 20px;
+        min-height: 400px
+    }
+
+    .safety-card {
+        padding: 12px 13px;
+        background: #fff;
+        border: 2px solid #d7e5ee;
+        border-radius: 14px;
+        font-weight: 700;
+        cursor: grab;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, .05);
+        line-height: 1.35
+    }
+
+    .safety-card.selected {
+        border-color: var(--cyan);
+        box-shadow: 0 0 0 4px rgba(67, 213, 230, .16)
+    }
+
+    .safety-columns {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px
+    }
+
+    .safety-col {
+        min-height: 400px;
+        border: 3px dashed #aac7d8;
+        border-radius: 22px;
+        padding: 13px;
+        background: #f9fcfe
+    }
+
+    .safety-col h3 {
+        text-align: center;
+        margin-bottom: 12px
+    }
+
+    .safety-col.safe {
+        border-color: #84d6aa;
+        background: #f1fbf5
+    }
+
+    .safety-col.unsafe {
+        border-color: #f3aaa6;
+        background: #fff7f6
+    }
+
+    .safety-col .placed {
+        padding: 10px 11px;
+        background: #fff;
+        border-radius: 12px;
+        border: 2px solid #dce8ef;
+        margin-bottom: 9px;
+        font-size: .9rem;
+        line-height: 1.35;
+        color: var(--ink)
+    }
+
+    .quiz {
+        width: min(860px, 100%);
+        background: #fff;
+        border-radius: 28px;
+        padding: 28px;
+        border: 3px solid #dcebf4;
+        color: var(--ink);
+        margin: 0 auto
+    }
+
+    .quiz-prog {
+        font-size: .9rem;
+        font-weight: 700;
+        color: var(--orange);
+        margin-bottom: 10px
+    }
+
+    .quiz-q {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--navy);
+        line-height: 1.3;
+        margin-bottom: 16px
+    }
+
+    .quiz-options {
+        display: grid;
+        gap: 11px
+    }
+
+    .quiz-fb {
+        min-height: 70px;
+        margin-top: 12px;
+        padding: 13px 15px;
+        border-radius: 16px;
+        background: #f4f9fc;
+        color: var(--muted);
+        line-height: 1.45
+    }
+
+    .feedback {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 28px;
+        align-items: center;
+        width: 100%
+    }
+
+    .feedback-choices {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 14px
+    }
+
+    .feedback-choice {
+        padding: 22px 10px;
+        border-radius: 20px;
+        background: #fff;
+        border: 3px solid #e0ebf2;
+        text-align: center;
+        cursor: pointer;
+        transition: .2s
+    }
+
+    .feedback-choice:hover,
+    .feedback-choice.selected {
+        transform: translateY(-5px);
+        border-color: var(--cyan);
+        background: #effcfd
+    }
+
+    .face {
+        font-size: 3rem
+    }
+
+    .robot {
+        width: 540px;
+        height: 540px;
+        object-fit: contain;
+        animation: float 3.2s ease-in-out infinite
+    }
+
+    @keyframes float {
+
+        0%,
+        100% {
+            transform: translateY(0)
+        }
+
+        50% {
+            transform: translateY(-12px)
+        }
+    }
+
+    .toast {
+        position: fixed;
+        left: 50%;
+        bottom: 34px;
+        transform: translate(-50%, 28px);
+        z-index: 3000;
+        padding: 14px 20px;
+        border-radius: 16px;
+        background: #102f4c;
+        color: #fff;
+        font-weight: 700;
+        opacity: 0;
+        pointer-events: none;
+        transition: .25s;
+        max-width: min(660px, 88vw);
+        text-align: center
+    }
+
+    .toast.show {
+        opacity: 1;
+        transform: translate(-50%, 0)
+    }
+
+    .confetti {
+        position: fixed;
+        width: 10px;
+        height: 16px;
+        border-radius: 3px;
+        z-index: 3500;
+        pointer-events: none;
+        animation: fall 1.5s ease-out forwards
+    }
+
+    @keyframes fall {
+        to {
+            transform: translate(var(--x), var(--y)) rotate(680deg);
+            opacity: 0
+        }
+    }
+
+    @media(max-width:1100px) {
+        .presentation {
+            width: 94vw
+        }
+
+        .slide {
+            padding: 66px 50px 56px
+        }
+
+        .agenda,
+        .four {
+            grid-template-columns: repeat(2, 1fr)
+        }
+
+        .material-grid {
+            grid-template-columns: repeat(3, 1fr)
+        }
+
+        .drop-grid,
+        .condition-grid {
+            grid-template-columns: repeat(2, 1fr)
+        }
+    }
+
+    @media(max-width:760px) {
+        body {
+            overflow: auto
+        }
+
+        .brand {
+            left: 8px;
+            top: 8px;
+            padding: 7px 10px;
+            gap: 8px
+        }
+
+        .brand .k {
+            height: 30px
+        }
+
+        .brand .r {
+            height: 26px
+        }
+
+        .brand i {
+            height: 25px
+        }
+
+        .presentation {
+            position: absolute;
+            top: 64px;
+            transform: translateX(-50%);
+            width: 100vw;
+            height: calc(100vh - 64px);
+            max-height: none;
+            aspect-ratio: auto;
+            border-radius: 0;
+            border: 0
+        }
+
+        .slide {
+            padding: 68px 20px 62px;
+            overflow-y: auto;
+            justify-content: flex-start
+        }
+
+        .nav {
+            width: 42px;
+            height: 42px;
+            top: auto;
+            bottom: 12px
+        }
+
+        #prev {
+            left: 12px
+        }
+
+        #next {
+            right: 12px
+        }
+
+        .chip {
+            left: 16px;
+            top: 18px
+        }
+
+        .two,
+        .three,
+        .cover,
+        .feedback,
+        .step-photo,
+        .order-layout,
+        .safety-layout {
+            grid-template-columns: 1fr
+        }
+
+        .agenda,
+        .four,
+        .material-grid,
+        .drop-grid,
+        .condition-grid,
+        .trouble-grid,
+        .innovation-grid,
+        .safety-columns {
+            grid-template-columns: 1fr
+        }
+
+        .display {
+            text-align: center;
+            font-size: 3rem
+        }
+
+        .cover-image {
+            height: 300px
+        }
+
+        .slide:after {
+            display: none
+        }
+
+        .photo-card img {
+            height: 260px
+        }
+
+        .robot {
+            width: 600px;
+            height: 600px;
+            position: relative;
+            margin: auto;
+            animation: float 3.2s ease-in-out infinite;
+            object-fit: contain;
+            display: block
+        }
+
+        .order-slots {
+            grid-template-columns: 1fr
+        }
+    }
+</style>
+</head>
+<body>
+<div class="brand"><img class="k" src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/5b36ddb1-5ff5-490e-af31-9a171820e051.png" alt="Kalananti"><i></i><img class="r" src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/7e71d258-897f-42b7-9c8b-2ff76376ffc6.png" alt="Ruangguru Coding"></div>
+<button class="nav" id="prev">◀</button><button class="nav" id="next">▶</button>
+<main class="presentation" id="presentation">
+
+<!-- 1 -->
+<section class="slide dark active">
+  <div class="cover content">
+    <div>
+      <div class="kicker left" style="color:var(--cyan)">WELCOME TO DIY ROBOTIC CLASS</div>
+      <h1 class="display"><span class="accent">LED</span><br>Light Saber</h1>
+      <p class="cover-sub">Menerapkan konsep polarity untuk membuat rangkaian LED sederhana menggunakan battery koin.</p>
+      <div class="pill">SESSION 3 · POLARITY & SIMPLE LED CIRCUIT</div>
+    </div>
+    <img class="robot"
+        src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/eded3e71-16cf-401e-b1c1-3ff5f887dc38.png"
+        alt="Robot">
+  </div>
+</section>
+
+<!-- 2 -->
+<section class="slide"><span class="chip"><b></b> Today's Agenda</span>
+  <div class="content stack">
+    <div><div class="kicker">WHAT WE WILL DO TODAY</div><h2 class="slide-title">Rencana Belajar Hari Ini</h2></div>
+    <div class="agenda">
+      <div class="card icon-card"><div class="big-icon">🔁</div><h3>Review Polarity</h3><p>Mengingat kembali positive, negative, anode, dan cathode.</p></div>
+      <div class="card icon-card"><div class="big-icon">🧰</div><h3>Prepare the Kit</h3><p>Mengenal alat, bahan, dan fungsi setiap komponen.</p></div>
+      <div class="card icon-card"><div class="big-icon">⚔️</div><h3>Build the Light Saber</h3><p>Menguji LED lalu merakit mini light saber.</p></div>
+      <div class="card icon-card"><div class="big-icon">🛠️</div><h3>Test & Improve</h3><p>Melakukan troubleshooting, safety check, dan eksplorasi ide.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 3 -->
+<section class="slide"><span class="chip"><b></b> Quick Review</span>
+  <div class="content two max">
+    <div class="stack"><div class="kicker left">REMEMBER THIS?</div><h2 class="slide-title left">Masih Ingat Apa Itu Polarity?</h2><p class="lead left">Polarity menunjukkan dua kutub berbeda pada sumber energi dan komponen: <span class="highlight">positive (+)</span> dan <span class="cyan">negative (−)</span>.</p><div class="card"><h3>Coba sebutkan kembali</h3><p>Apa nama kaki positive dan negative pada LED?</p></div><button class="btn" id="revealPolarity">Reveal Answer</button></div>
+    <div class="info-panel" id="polarityAnswer"><svg viewBox="0 0 620 360">
+      <rect x="55" y="100" width="170" height="160" rx="80" fill="#d8dde0" stroke="#fff" stroke-width="8"/><text x="140" y="165" text-anchor="middle" font-size="26" font-weight="700" fill="#073b70">CR2032</text><text x="140" y="202" text-anchor="middle" font-size="32" font-weight="700" fill="#ef5350">+</text>
+      <ellipse cx="430" cy="110" rx="66" ry="78" fill="#dce5e9" stroke="#fff" stroke-width="8"/><line x1="400" y1="180" x2="400" y2="315" stroke="#aeb9c1" stroke-width="12"/><line x1="463" y1="180" x2="463" y2="275" stroke="#aeb9c1" stroke-width="12"/>
+      <text id="polarityA" x="400" y="342" text-anchor="middle" font-size="18" font-weight="700" fill="#ef5350" opacity="0">Anode (+)</text><text id="polarityC" x="480" y="302" text-anchor="middle" font-size="18" font-weight="700" fill="#222" opacity="0">Cathode (−)</text>
+    </svg></div>
+  </div>
+</section>
+
+<!-- 4 -->
+<section class="slide orange"><span class="chip"><b></b> From Theory to Practice</span>
+  <div class="content two max">
+    <div class="stack"><div class="kicker left" style="color:#fff7df">TODAY'S MISSION</div><h2 class="slide-title left">Sekarang Kita Terapkan Teorinya</h2><p class="lead left">Pada sesi sebelumnya, kita mempelajari polarity melalui simulasi. Hari ini, kita akan menggunakan konsep yang sama pada battery dan LED sungguhan.</p><div class="instruction">🧪 Observe → Connect → Test → Build</div></div>
+    <div class="card icon-card" style="min-height:350px"><div style="font-size:8rem">⚡</div><h3>Simple Circuit, Real Result</h3><p>Sambungan yang benar akan membuat LED menyala dan menjadi sumber cahaya untuk light saber.</p></div>
+  </div>
+</section>
+
+<!-- 5 -->
+<section class="slide"><span class="chip"><b></b> #1 LED Light Saber</span>
+  <div class="content two max">
+    <div class="photo-card covered"><img src="https://t3.ftcdn.net/jpg/08/51/67/18/360_F_851671860_3x7gv0oW2XElur5lkAWxKrBQfIGtPtQ0.jpg" alt="Light saber"><div class="image-caption">Light saber sebagai pedang energi dalam cerita fiksi.</div></div>
+    <div class="stack"><div class="kicker left">DO YOU KNOW A LIGHT SABER?</div><h2 class="slide-title left">Apa Itu Light Saber?</h2><p class="lead left">Light saber adalah pedang energi fiksi dari dunia Star Wars. Pedang ini dikenal karena bilahnya yang bercahaya.</p><div class="card"><h3>Project hari ini</h3><p>Kita tidak membuat pedang energi sungguhan. Kita akan membuat miniatur sederhana yang memanfaatkan cahaya LED.</p></div></div>
+  </div>
+</section>
+
+<!-- 6 -->
+<section class="slide"><span class="chip"><b></b> #1 LED Light Saber</span>
+  <div class="content stack">
+    <div><h2 class="slide-title">Kita Bisa Membuat Versi Sederhananya</h2><p class="lead">Sedotan dapat menjadi bagian bilah, sedangkan LED dan battery menjadi sumber cahaya.</p></div>
+    <div class="image-pair"><img src="https://crazylittleprojects.com/wp-content/uploads/2013/04/Kidscraftlightsabers.png" alt="DIY light saber craft"><img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/15960645-a84a-409f-9921-3955c78ca946.png" alt="DIY LED light saber"></div>
+    <div class="instruction">💡 Bedanya, versi kita akan menggunakan LED agar dapat bercahaya.</div>
+  </div>
+</section>
+
+<!-- 7 -->
+<section class="slide"><span class="chip"><b></b> #1 LED Light Saber</span>
+  <div class="content stack">
+    <div><div class="kicker">LET'S PREPARE</div><h2 class="slide-title">Alat dan Bahan</h2><p class="lead">Pastikan semua tersedia sebelum mulai. Gunakan gunting dan battery sesuai arahan MT.</p></div>
+    <div class="material-grid">
+      <div class="material"><img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/b641553c-3619-4873-8093-2f4345b264c9.png" alt="Gunting"><strong>Gunting</strong><span>Untuk memotong sedotan atau bahan dekorasi.</span></div>
+      <div class="material"><img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/96e7abbc-19c4-4983-8b2d-94531aadd887.png" alt="Selotip"><strong>Selotip</strong><span>Untuk mengikat LED dan battery.</span></div>
+      <div class="material"><img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/d1476cb7-126d-4d0c-b004-1e9c44c3e35c.png" alt="Battery koin"><strong>Battery CR2032</strong><span>Sumber energi 3V.</span></div>
+      <div class="material"><img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/5e4b66d8-1f83-4878-bf53-734111d4ebbf.png" alt="LED"><strong>1 LED</strong><span>Warna bebas sebagai sumber cahaya.</span></div>
+      <div class="material"><img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/4f1e1423-a559-444d-8904-9d4b4743ced3.png" alt="Sedotan"><strong>1 Sedotan</strong><span>Warna bebas untuk badan light saber.</span></div>
+    </div>
+    <div class="instruction">⚠️ Coin battery tidak boleh dibongkar, ditusuk, atau digabungkan dengan benda logam.</div>
+  </div>
+</section>
+
+<!-- 8 -->
+<section class="slide" id="kitSlide"><span class="chip"><b></b> Activity · What's Inside the Kit?</span>
+  <div class="content stack">
+    <div><h2 class="slide-title">Cocokkan Komponen dengan Fungsinya</h2><p class="lead">Drag setiap komponen ke fungsi yang tepat. Kamu juga bisa klik komponen lalu klik kotak tujuan.</p></div>
+    <div class="drag-bank" id="kitBank">
+      <div class="drag-card" draggable="true" data-value="battery"><img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/d1476cb7-126d-4d0c-b004-1e9c44c3e35c.png" alt="Battery">Battery CR2032</div>
+      <div class="drag-card" draggable="true" data-value="led"><img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/5e4b66d8-1f83-4878-bf53-734111d4ebbf.png" alt="LED">LED</div>
+      <div class="drag-card" draggable="true" data-value="straw"><img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/4f1e1423-a559-444d-8904-9d4b4743ced3.png" alt="Sedotan">Sedotan</div>
+      <div class="drag-card" draggable="true" data-value="tape"><img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/96e7abbc-19c4-4983-8b2d-94531aadd887.png" alt="Selotip">Selotip</div>
+    </div>
+    <div class="drop-grid">
+      <div class="drop-zone" data-answer="battery">🔋 Power Source</div>
+      <div class="drop-zone" data-answer="led">💡 Light Output</div>
+      <div class="drop-zone" data-answer="straw">⚔️ Light Saber Body</div>
+      <div class="drop-zone" data-answer="tape">🧷 Hold the Parts Together</div>
+    </div>
+  </div>
+</section>
+
+<!-- 9 -->
+<section class="slide" id="lightUpSlide"><span class="chip"><b></b> Activity · Will the LED Light Up?</span>
+  <div class="content stack">
+    <div><h2 class="slide-title">Prediksi Hasil Setiap Sambungan</h2><p class="lead">Drag hasil yang sesuai ke masing-masing kondisi pemasangan LED.</p></div>
+    <div class="condition-grid">
+      <div class="condition-card"><h3>Anode ke positive dan cathode ke negative</h3><div style="font-size:0.9rem; text-align:left; background:#f0f8ff; padding:12px; border-radius:12px; margin-bottom:12px; color:#333; line-height:1.5;">✅ <b>Anode (+)</b> terhubung ke <b>Positive (+)</b><br>✅ <b>Cathode (−)</b> terhubung ke <b>Negative (−)</b></div><div class="drop-zone" data-answer="on">Drop answer here</div></div>
+      <div class="condition-card"><h3>LED dipasang terbalik</h3><div style="font-size:0.9rem; text-align:left; background:#fff5f5; padding:12px; border-radius:12px; margin-bottom:12px; color:#333; line-height:1.5;">❌ <b>Anode (+)</b> terhubung ke <b>Negative (−)</b><br>❌ <b>Cathode (−)</b> terhubung ke <b>Positive (+)</b></div><div class="drop-zone" data-answer="off">Drop answer here</div></div>
+      <div class="condition-card"><h3>Hanya satu kaki LED menyentuh battery</h3><div style="font-size:0.9rem; text-align:left; background:#fff5f5; padding:12px; border-radius:12px; margin-bottom:12px; color:#333; line-height:1.5;">✅ <b>Anode (+)</b> terhubung ke <b>Positive (+)</b><br>❌ <b>Cathode (−)</b> <b>TIDAK</b> menyentuh battery</div><div class="drop-zone" data-answer="fix1">Drop answer here</div></div>
+      <div class="condition-card"><h3>Kedua kaki LED menyentuh sisi yang sama</h3><div style="font-size:0.9rem; text-align:left; background:#fff5f5; padding:12px; border-radius:12px; margin-bottom:12px; color:#333; line-height:1.5;">✅ <b>Anode (+)</b> terhubung ke <b>Positive (+)</b><br>❌ <b>Cathode (−)</b> juga terhubung ke <b>Positive (+)</b></div><div class="drop-zone" data-answer="fix2">Drop answer here</div></div>
+    </div>
+    <div class="drag-bank" id="lightAnswerBank"><div class="drag-card" draggable="true" data-value="on">✅ LED menyala.</div><div class="drag-card" draggable="true" data-value="off">⛔ LED tidak menyala.</div><div class="drag-card" draggable="true" data-value="fix1">🛠️ Sambungan perlu diperbaiki.</div><div class="drag-card" draggable="true" data-value="fix2">🛠️ Sambungan perlu diperbaiki.</div></div>
+  </div>
+</section>
+
+<!-- 10 -->
+<section class="slide"><span class="chip"><b></b> #1 LED Light Saber</span>
+  <div class="content two max">
+    <div class="info-panel"><img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/9d792949-fed8-409f-b28c-10ac3a5a330b.png" alt="Pemasangan LED pada battery"></div>
+    <div class="stack"><h2 class="slide-title left">Uji Battery dan LED Terlebih Dahulu</h2><div class="mini-labels"><div class="mini-label"><strong>1. Periksa polarity LED</strong><span>Kaki yang lebih panjang adalah anode (+), sedangkan kaki yang lebih pendek adalah cathode (−).</span></div><div class="mini-label blue"><strong>2. Jepit LED pada battery</strong><span>Anode (+) menyentuh sisi positive battery, dan cathode (−) menyentuh sisi negative.</span></div><div class="mini-label green"><strong>3. Lihat hasilnya</strong><span>Jika LED menyala, berarti LED dan battery dapat digunakan untuk project.</span></div></div><div class="instruction">🔎 Gunakan gambar LED dan battery sebagai panduan polarity.</div></div>
+  </div>
+</section>
+
+<!-- 11 -->
+<section class="slide"><span class="chip"><b></b> #1 LED Light Saber</span>
+  <div class="content stack">
+    <div><h2 class="slide-title">Inilah Rangkaian yang Baru Kamu Buat</h2><p class="lead">Battery koin 3V terhubung langsung ke LED. Jalur positive ditunjukkan dengan warna merah dan jalur negative dengan warna hitam.</p></div>
+    <div class="circuit-illustration"><svg viewBox="0 0 1000 390"><defs><marker id="arrowPlus" markerWidth="9" markerHeight="9" refX="8" refY="4" orient="auto"><path d="M0,0 L0,8 L9,4 z" fill="#ef5350"/></marker></defs>
+      <circle cx="200" cy="195" r="112" fill="#d6dadd" stroke="#fff" stroke-width="12"/><circle cx="200" cy="195" r="83" fill="#eef1f2"/><text x="200" y="170" text-anchor="middle" font-size="30" font-weight="700" fill="#073b70">CR2032</text><text x="200" y="217" text-anchor="middle" font-size="48" font-weight="700" fill="#ef5350">+</text><text x="200" y="252" text-anchor="middle" font-size="20" font-weight="700" fill="#5e7487">3V Battery</text>
+      <path d="M310 150 C450 70 560 70 690 130" fill="none" stroke="#ef5350" stroke-width="12" marker-end="url(#arrowPlus)"/><path d="M310 245 C470 330 600 320 760 240" fill="none" stroke="#222" stroke-width="12"/>
+      <g class="glow"><path d="M690 130 C690 66 716 38 750 38 C784 38 810 66 810 130 L795 165 H705 Z" fill="#ff6161" stroke="#fff" stroke-width="10"/></g><rect x="705" y="155" width="90" height="28" rx="8" fill="#aeb9c1"/><line x1="705" y1="180" x2="705" y2="310" stroke="#aeb9c1" stroke-width="12"/><line x1="795" y1="180" x2="795" y2="255" stroke="#aeb9c1" stroke-width="12"/>
+      <circle cx="705" cy="310" r="17" fill="#ef5350" stroke="#fff" stroke-width="5"/><circle cx="795" cy="255" r="17" fill="#222" stroke="#fff" stroke-width="5"/><text x="650" y="350" text-anchor="middle" font-size="20" font-weight="700" fill="#ef5350">Anode (+)</text><text x="850" y="285" text-anchor="middle" font-size="20" font-weight="700" fill="#222">Cathode (−)</text><text x="490" y="70" text-anchor="middle" font-size="18" font-weight="700" fill="#ef5350">Positive connection</text><text x="510" y="350" text-anchor="middle" font-size="18" font-weight="700" fill="#222">Negative connection</text>
+    </svg></div>
+  </div>
+</section>
+
+<!-- 12 -->
+<section class="slide" id="orderSlide"><span class="chip"><b></b> Activity · Build Order Challenge</span>
+  <div class="content stack">
+    <div><h2 class="slide-title">Susun Urutan Pembuatan Light Saber</h2><p class="lead">Drag setiap langkah ke nomor yang tepat. Pastikan LED sudah diuji sebelum dimasukkan ke sedotan.</p></div>
+    <div class="order-layout"><div class="order-bank" id="orderBank"></div><div class="order-slots" id="orderSlots"></div></div>
+    <div class="center"><button class="btn" id="checkOrder">Check Order</button> <button class="btn2" id="resetOrder">Acak Ulang</button></div>
+  </div>
+</section>
+
+<!-- 13 -->
+<section class="slide"><span class="chip"><b></b> #1 LED Light Saber</span>
+  <div class="content step-photo max">
+    <img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/548a866c-72ba-4ad0-9d09-3481605f8616.png" alt="Memasukkan LED dan battery ke sedotan">
+    <div class="stack"><div class="step-number"><b>1</b><span>Masukkan Rangkaian ke Sedotan</span></div><div class="step-list"><div><strong>Siapkan sedotan.</strong> Warna boleh disesuaikan.</div><div><strong>Masukkan LED dan battery</strong> melalui ujung sedotan yang sudah dipotong.</div><div><strong>Dorong perlahan</strong> sampai LED dan battery masuk ke bagian ujung sedotan.</div></div><div class="instruction">⚠️ Jangan menekan battery dengan benda tajam.</div></div>
+  </div>
+</section>
+
+<!-- 14 -->
+<section class="slide"><span class="chip"><b></b> #1 LED Light Saber</span>
+  <div class="content step-photo max">
+    <img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/b21ab328-f92d-4678-8dc8-47e3a145106b.png" alt="Membuat pegangan light saber">
+    <div class="stack"><div class="step-number"><b>2</b><span>Buat Area Pegangan</span></div><div class="step-list"><div><strong>Siapkan gunting dan selotip.</strong> Gunakan dengan hati-hati.</div><div><strong>Lilitkan selotip</strong> pada ujung sedotan tempat LED dan battery berada.</div><div><strong>Rapikan pegangan.</strong> Selotip juga dapat diganti dengan kertas origami.</div></div><div class="instruction">🧷 Pastikan LED dan battery tidak mudah bergeser.</div></div>
+  </div>
+</section>
+
+<!-- 15 -->
+<section class="slide"><span class="chip"><b></b> #1 LED Light Saber</span>
+  <div class="content two max">
+    <div class="photo-card covered"><img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/ca9fb0bf-550f-45a9-9fda-27e14d84f1f3.png" alt="Light saber selesai"></div>
+    <div class="stack"><div class="kicker left">YOUR LIGHT SABER IS READY</div><h2 class="slide-title left">Saatnya Uji Coba</h2><p class="lead left">Tekan perlahan area pegangan agar kaki LED tetap bersentuhan dengan kedua sisi battery.</p><div class="card"><h3>💡 Lihat hasil cahayanya</h3><p>Coba lihat light saber di tempat yang sedikit lebih redup agar cahayanya lebih jelas. Jangan mengayunkannya ke arah orang lain.</p></div><div class="instruction">✅ Menyala? Berarti polarity dan sambungannya sudah tepat.</div></div>
+  </div>
+</section>
+
+<!-- 16 -->
+<section class="slide"><span class="chip"><b></b> #1 LED Light Saber</span>
+  <div class="content two max">
+    <div class="photo-card" style="height:100%; display:flex; align-items:center;"><img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/41283688-ff92-49d7-8b20-3ca9a906bfaf.png" alt="Light saber menyala di ruangan gelap" style="height:380px; object-fit:contain; width:100%;"></div>
+    <div class="stack"><h2 class="slide-title left">Bagaimana Hasil Project-mu?</h2><p class="lead left">Pilih kondisi yang paling sesuai. Setelah itu, lanjutkan ke langkah troubleshooting jika diperlukan.</p><div class="status-buttons"><button class="btn" data-build-status="on">✅ Menyala</button><button class="btn2" data-build-status="dim">🌙 Terlihat redup</button><button class="btn2" data-build-status="off">🛠️ Belum menyala</button></div><div class="status-result" id="buildStatusResult">Pilih salah satu kondisi.</div></div>
+  </div>
+</section>
+
+<!-- 17 -->
+<section class="slide"><span class="chip"><b></b> #1 LED Light Saber</span>
+  <div class="content two max">
+    <div class="video-wrap" style="width: min(260px, 100%);"><iframe src="https://www.youtube.com/embed/vDR_vHOSY4Q" title="LED Light Saber step by step" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>
+    <div class="stack"><div class="kicker left">STEP-BY-STEP VIDEO</div><h2 class="slide-title left">Coba Ikuti Kembali Langkahnya</h2><p class="lead left">Perhatikan urutan pemasangan LED, battery, dan sedotan. Video ini dapat membantu menemukan langkah yang terlewat.</p></div>
+  </div>
+</section>
+
+<!-- 18 -->
+<section class="slide"><span class="chip"><b></b> #1 LED Light Saber · Troubleshoot</span>
+  <div class="content stack">
+    <div><h2 class="slide-title">Masih Belum Bekerja? Periksa Satu per Satu</h2><p class="lead">Klik setiap langkah setelah kamu mencobanya. Jangan langsung mengganti semua komponen sekaligus.</p></div>
+    <div class="trouble-grid" id="troubleGrid">
+      <div class="trouble"><div class="check">1</div><div><strong>Tekan area pegangan perlahan</strong><span>Pastikan kedua kaki LED menyentuh dua sisi battery.</span></div></div>
+      <div class="trouble"><div class="check">2</div><div><strong>Periksa polarity</strong><span>Anode (+) ke positive dan cathode (−) ke negative.</span></div></div>
+      <div class="trouble"><div class="check">3</div><div><strong>Coba di tempat lebih redup</strong><span>Beberapa warna LED terlihat kurang jelas di tempat sangat terang.</span></div></div>
+      <div class="trouble"><div class="check">4</div><div><strong>Uji LED lain</strong><span>Ganti LED jika sambungan sudah benar tetapi belum menyala.</span></div></div>
+      <div class="trouble"><div class="check">5</div><div><strong>Uji battery lain</strong><span>Ganti battery jika LED yang sama tetap tidak menyala.</span></div></div>
+      <div class="trouble"><div class="check">✓</div><div><strong>Uji kembali</strong><span>Pasang komponen dan periksa hasilnya sekali lagi.</span></div></div>
+    </div>
+    <div class="instruction">🔍 Troubleshooting yang baik dilakukan secara bertahap.</div>
+  </div>
+</section>
+
+<!-- 19 -->
+<section class="slide dark"><span class="chip"><b></b> #1 LED Light Saber</span>
+  <div class="content two max">
+    <img class="robot" src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/eded3e71-16cf-401e-b1c1-3ff5f887dc38.png" alt="Robot">
+    <div class="stack"><h2 class="slide-title left">Help Your Friends</h2><p class="lead left">Jika project-mu sudah berhasil, bantu teman yang masih kesulitan. Gunakan urutan troubleshooting</p><div class="card"><h3>🤝 Cara membantu</h3><p>Tanyakan apa yang sudah diperiksa, arahkan teman mengecek polarity, lalu bantu menguji sambungan satu per satu.</p></div><div class="instruction">💡Tujuannya agar temanmu tetap memahami cara memperbaikinya.</div></div>
+  </div>
+</section>
+
+<!-- 20 -->
+<section class="slide orange"><span class="chip"><b></b> #1 LED Light Saber · Innovation</span>
+  <div class="content stack center">
+    <div><h2 class="slide-title">Apa Lagi yang Bisa Dibuat?</h2><p class="lead">Dengan battery koin, LED, sedotan, selotip, dan bahan sederhana, project apa lagi yang bisa kamu rancang?</p></div>
+    <img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/eded3e71-16cf-401e-b1c1-3ff5f887dc38.png" alt="Robot" style="width: 280px; height: auto; margin: 0 auto; animation: float 3.2s ease-in-out infinite;">
+  </div>
+</section>
+
+<!-- 21 -->
+<section class="slide"><span class="chip"><b></b> #1 LED Light Saber · Innovation</span>
+  <div class="content stack">
+    <div><h2 class="slide-title">Contoh Pengembangan Project</h2><p class="lead">Bentuk luarnya dapat diubah, tetapi rangkaian dasarnya tetap membutuhkan polarity yang benar.</p></div>
+    <div class="innovation-grid"><div class="innovation-card"><img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/da363620-e22d-4311-90a2-58b94d25c0f8.png" alt="Customized shape laser"><h3>Customized Shape Light</h3><p>Bentuk cahaya dibuat sesuai tema atau karakter pilihan.</p></div><div class="innovation-card"><img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/6ed06c72-5d1f-4d90-a54d-aa36d7515fab.png" alt="Magic wand"><h3>Magic Wand</h3><p>LED digunakan sebagai cahaya pada ujung tongkat.</p></div></div>
+    <div class="instruction">💭 Sebutkan satu ide berbeda dari dua contoh di atas.</div>
+  </div>
+</section>
+
+<!-- 22 -->
+<section class="slide" id="safetySlide"><span class="chip"><b></b> Safety Check · Safe or Unsafe?</span>
+  <div class="content stack">
+    <div><h2 class="slide-title">Pilih Tindakan yang Aman</h2><p class="lead">Drag setiap tindakan ke kolom Safe atau Unsafe. Jika salah, card akan kembali ke tempat awal.</p></div>
+    <div class="safety-layout"><div class="safety-bank" id="safetyBank"></div><div class="safety-columns"><div class="safety-col safe" data-safety-drop="safe"><h3>✅ SAFE</h3></div><div class="safety-col unsafe" data-safety-drop="unsafe"><h3>⛔ UNSAFE</h3></div></div></div>
+  </div>
+</section>
+
+<!-- 23 -->
+<section class="slide dark" id="quickQuizSlide"><span class="chip"><b></b> Quick Quiz</span>
+  <div class="content stack"><div><div class="kicker" style="color:var(--cyan)">CHECK YOUR UNDERSTANDING</div><h2 class="slide-title">Quick Quiz</h2></div><div class="quiz"><div class="quiz-prog" id="quizProg"></div><div class="quiz-q" id="quizQ"></div><div class="quiz-options" id="quizOptions"></div><div class="quiz-fb" id="quizFb">Pilih satu jawaban.</div><button class="btn" id="quizNext" style="display:none;margin-top:12px">Next Question</button></div></div>
+</section>
+
+<!-- 24 -->
+<section class="slide"><span class="chip"><b></b> Review</span>
+  <div class="content stack"><div><div class="kicker">TODAY'S REVIEW</div><h2 class="slide-title">Apa yang Sudah Kita Lakukan Hari Ini?</h2></div><div class="agenda"><div class="card icon-card"><div class="big-icon">🔁</div><h3>Review Polarity</h3><p>Mencocokkan positive, negative, anode, dan cathode.</p></div><div class="card icon-card"><div class="big-icon">💡</div><h3>Test the LED</h3><p>Menguji LED dan battery sebelum merakit project.</p></div><div class="card icon-card"><div class="big-icon">⚔️</div><h3>Build the Light Saber</h3><p>Memasukkan rangkaian ke sedotan dan membuat pegangan.</p></div><div class="card icon-card"><div class="big-icon">🛠️</div><h3>Troubleshoot & Innovate</h3><p>Memperbaiki sambungan dan mengembangkan ide baru.</p></div></div></div>
+</section>
+
+<!-- 25 -->
+<section class="slide dark"><span class="chip"><b></b> Feedback</span>
+  <div class="content feedback max"><img class="robot" src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/eded3e71-16cf-401e-b1c1-3ff5f887dc38.png" alt="Robot"><div class="stack"><h2 class="slide-title left">Bagaimana Kelas Hari Ini?</h2><p class="lead left">Pilih satu respons yang paling sesuai.</p><div class="feedback-choices"><button class="feedback-choice"><div class="face">🙂</div><strong>Jelas</strong></button><button class="feedback-choice"><div class="face">🤔</div><strong>Masih Ada Pertanyaan</strong></button><button class="feedback-choice"><div class="face">⚡</div><strong>Siap Lanjut</strong></button></div><p class="note" id="feedbackNote">Respons ini tidak menyimpan skor atau data pribadi.</p></div></div>
+</section>
+
+<div class="footer"><span class="counter" id="counter">01 / 25</span><span class="progress"><span class="bar" id="bar"></span></span></div>
+</main>
+<div class="toast" id="toast"></div>
+<script>
+document.addEventListener('DOMContentLoaded',()=>{
+const $=id=>document.getElementById(id);
+const slides=[...document.querySelectorAll('.slide')],prev=$('prev'),next=$('next'),counter=$('counter'),bar=$('bar');let current=0;
+function nav(){prev.disabled=current===0;next.disabled=current===slides.length-1;counter.textContent=String(current+1).padStart(2,'0')+' / '+String(slides.length).padStart(2,'0');bar.style.width=((current+1)/slides.length*100)+'%'}
+function go(i){if(i<0||i>=slides.length||i===current)return;slides[current].classList.remove('active');current=i;slides[current].classList.add('active');nav()}
+prev.onclick=()=>go(current-1);next.onclick=()=>go(current+1);document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key==='PageDown')go(current+1);if(e.key==='ArrowLeft'||e.key==='PageUp')go(current-1)});nav();
+function toast(msg,t=2300){const x=$('toast');x.textContent=msg;x.classList.add('show');clearTimeout(toast.timer);toast.timer=setTimeout(()=>x.classList.remove('show'),t)}
+function confetti(){const colors=['#ffc33d','#ff8b2b','#43d5e6','#38b56f','#7367f0','#ef5350'];for(let i=0;i<42;i++){const p=document.createElement('i');p.className='confetti';p.style.left=innerWidth/2+'px';p.style.top=innerHeight/2+'px';p.style.background=colors[i%colors.length];p.style.setProperty('--x',(Math.random()*520-260)+'px');p.style.setProperty('--y',(Math.random()*360+120)+'px');document.body.appendChild(p);setTimeout(()=>p.remove(),1700)}}
+
+// Slide 3 reveal
+$('revealPolarity').onclick=()=>{$('polarityA').setAttribute('opacity','1');$('polarityC').setAttribute('opacity','1');$('revealPolarity').textContent='Anode (+) dan Cathode (−)';confetti()};
+
+// Generic drag match for slides 8 and 9
+function initDragMatch(section){let active=null;const cards=[...section.querySelectorAll('.drag-card')],drops=[...section.querySelectorAll('.drop-zone')];cards.forEach(card=>{card.ondragstart=e=>{active=card;e.dataTransfer.setData('text/plain',card.dataset.value)};card.onclick=()=>{cards.forEach(x=>x.classList.remove('selected'));active=card;card.classList.add('selected')}});drops.forEach(drop=>{drop.ondragover=e=>{e.preventDefault();drop.classList.add('over')};drop.ondragleave=()=>drop.classList.remove('over');drop.ondrop=e=>{e.preventDefault();drop.classList.remove('over');const val=e.dataTransfer.getData('text/plain');const card=cards.find(c=>c.dataset.value===val);place(drop,card)};drop.onclick=()=>{if(active)place(drop,active)}});function place(drop,card){if(!card||card.classList.contains('used'))return;const ok=card.dataset.value===drop.dataset.answer;drop.classList.remove('wrong','correct');if(ok){drop.textContent=card.textContent.trim();drop.classList.add('correct');card.classList.add('used');card.classList.remove('selected');active=null;if(drops.every(d=>d.classList.contains('correct'))){confetti();toast('Semua pasangan sudah benar.')}}else{drop.classList.add('wrong');toast('Belum tepat. Coba cocokkan fungsi atau hasilnya lagi.');setTimeout(()=>drop.classList.remove('wrong'),700)}}}
+initDragMatch($('kitSlide'));initDragMatch($('lightUpSlide'));
+
+// Slide 12 order challenge
+const orderSteps=[
+ {id:'check',text:'Periksa sisi positive dan negative battery.'},
+ {id:'attach',text:'Pasangkan kaki LED pada battery.'},
+ {id:'test',text:'Pastikan LED menyala.'},
+ {id:'tape',text:'Rekatkan LED dan battery dengan selotip.'},
+ {id:'straw',text:'Masukkan LED ke dalam sedotan.'},
+ {id:'finish',text:'Rapikan dan uji light saber.'}
+];let orderActive=null,orderValues=[];
+function shuffle(a){return [...a].sort(()=>Math.random()-.5)}
+function renderOrder(){orderValues=Array(6).fill(null);const bank=$('orderBank'),slots=$('orderSlots');bank.innerHTML='';slots.innerHTML='';shuffle(orderSteps).forEach(step=>{const item=document.createElement('div');item.className='order-item';item.draggable=true;item.dataset.id=step.id;item.textContent=step.text;item.ondragstart=e=>{orderActive=item;e.dataTransfer.setData('text/plain',step.id)};item.onclick=()=>{[...bank.children].forEach(x=>x.classList.remove('selected'));orderActive=item;item.classList.add('selected')};bank.appendChild(item)});for(let i=0;i<6;i++){const slot=document.createElement('div');slot.className='order-slot';slot.dataset.index=i;slot.innerHTML=`<span class="num">${i+1}</span><span>Drop langkah di sini</span>`;slot.ondragover=e=>e.preventDefault();slot.ondrop=e=>{e.preventDefault();const id=e.dataTransfer.getData('text/plain');placeOrder(slot,id)};slot.onclick=()=>{if(orderActive)placeOrder(slot,orderActive.dataset.id)};slots.appendChild(slot)}}
+function placeOrder(slot,id){const item=[...$('orderBank').children].find(x=>x.dataset.id===id);if(!item)return;const idx=Number(slot.dataset.index);const previous=orderValues[idx];if(previous){const prevStep=orderSteps.find(s=>s.id===previous);const returned=document.createElement('div');returned.className='order-item';returned.draggable=true;returned.dataset.id=prevStep.id;returned.textContent=prevStep.text;returned.ondragstart=e=>{orderActive=returned;e.dataTransfer.setData('text/plain',prevStep.id)};returned.onclick=()=>{[...$('orderBank').children].forEach(x=>x.classList.remove('selected'));orderActive=returned;returned.classList.add('selected')};$('orderBank').appendChild(returned)}orderValues[idx]=id;slot.querySelector('span:last-child').textContent=orderSteps.find(s=>s.id===id).text;slot.classList.remove('correct','wrong');item.remove();orderActive=null}
+$('checkOrder').onclick=()=>{let complete=true,perfect=true;[...$('orderSlots').children].forEach((slot,i)=>{slot.classList.remove('correct','wrong');if(!orderValues[i]){complete=false;return}const ok=orderValues[i]===orderSteps[i].id;slot.classList.add(ok?'correct':'wrong');if(!ok)perfect=false});if(!complete){toast('Lengkapi semua urutan terlebih dahulu.');return}if(perfect){confetti();toast('Urutannya benar. Kamu siap mulai merakit.')}else toast('Masih ada langkah yang belum sesuai. Perhatikan kapan LED perlu diuji.')};$('resetOrder').onclick=renderOrder;renderOrder();
+
+// Slide 16 status
+const statusMessages={on:'Bagus. Polarity dan sambungan sudah tepat. Lanjutkan ke pengujian dan safety check.',dim:'Coba lihat di tempat yang lebih redup dan tekan area pegangan perlahan agar sambungan lebih stabil.',off:'Lanjutkan ke slide troubleshooting. Periksa polarity dan sambungan satu per satu.'};document.querySelectorAll('[data-build-status]').forEach(b=>b.onclick=()=>{$('buildStatusResult').textContent=statusMessages[b.dataset.buildStatus];document.querySelectorAll('[data-build-status]').forEach(x=>x.classList.remove('selected'));b.classList.add('selected')});
+
+// Slide 18 troubleshooting
+const troubleCards=[...document.querySelectorAll('.trouble')];troubleCards.forEach(card=>card.onclick=()=>{card.classList.toggle('done');card.querySelector('.check').textContent=card.classList.contains('done')?'✓':String(troubleCards.indexOf(card)+1);if(troubleCards.every(x=>x.classList.contains('done'))){confetti();toast('Semua langkah sudah diperiksa. Coba uji light saber kembali.')}});
+
+// Slide 22 safety
+const safetyItems=[
+ {text:'Memegang battery dengan tangan kering.',answer:'safe'},
+ {text:'Menyimpan battery di dalam kantong celana bersama koin atau kunci.',answer:'unsafe'},
+ {text:'Menyatukan sisi positive dan negative battery menggunakan benda logam.',answer:'unsafe'},
+ {text:'Mengikuti jenis battery yang ditentukan MT.',answer:'safe'},
+ {text:'Membongkar atau menusuk battery.',answer:'unsafe'},
+ {text:'Mematikan atau melepas sambungan light saber setelah selesai digunakan.',answer:'safe'}
+];let safetyActive=null;
+function renderSafety(){const bank=$('safetyBank');bank.innerHTML='';document.querySelectorAll('.safety-col .placed').forEach(x=>x.remove());shuffle(safetyItems).forEach((item,idx)=>{const card=document.createElement('div');card.className='safety-card';card.draggable=true;card.dataset.answer=item.answer;card.dataset.id='s'+idx;card.textContent=item.text;card.ondragstart=e=>{safetyActive=card;e.dataTransfer.setData('text/plain',card.dataset.id)};card.onclick=()=>{[...bank.children].forEach(x=>x.classList.remove('selected'));safetyActive=card;card.classList.add('selected')};bank.appendChild(card)})}
+document.querySelectorAll('[data-safety-drop]').forEach(col=>{col.ondragover=e=>e.preventDefault();col.ondrop=e=>{e.preventDefault();const id=e.dataTransfer.getData('text/plain');const card=[...$('safetyBank').children].find(x=>x.dataset.id===id);placeSafety(col,card)};col.onclick=()=>{if(safetyActive)placeSafety(col,safetyActive)}});
+function placeSafety(col,card){if(!card)return;if(card.dataset.answer===col.dataset.safetyDrop){const placed=document.createElement('div');placed.className='placed';placed.textContent=card.textContent;col.appendChild(placed);card.remove();safetyActive=null;if(!$('safetyBank').children.length){confetti();toast('Safety check selesai. Semua tindakan sudah dikelompokkan dengan benar.')}}else{card.classList.remove('selected');card.animate([{transform:'translateX(0)'},{transform:'translateX(-8px)'},{transform:'translateX(8px)'},{transform:'translateX(0)'}],{duration:300});toast('Kolomnya belum tepat. Card dikembalikan ke tempat awal.')}}renderSafety();
+
+// Quiz
+const quizData=[
+ {q:'Bagaimana cara memasang LED pada battery koin agar menyala?',o:['A. Kedua kaki LED menyentuh sisi positive battery','B. Anode (+) ke positive dan cathode (−) ke negative','C. Cathode (−) ke positive dan anode (+) ke negative'],a:1,e:'LED memiliki arah pemasangan. Anode harus menyentuh sisi positive dan cathode menyentuh sisi negative.'},
+ {q:'Apa yang perlu dilakukan sebelum LED dan battery dimasukkan ke dalam sedotan?',o:['A. Menguji apakah LED sudah menyala','B. Menutup semua bagian dengan selotip','C. Memotong kaki LED sampai habis'],a:0,e:'LED perlu diuji terlebih dahulu agar masalah dapat ditemukan sebelum rangkaian berada di dalam sedotan.'},
+ {q:'Tindakan mana yang tidak aman saat menggunakan coin battery?',o:['A. Menggunakan battery sesuai arahan MT','B. Memegang battery dengan tangan kering','C. Memasukkan battery ke mulut atau menusuknya'],a:2,e:'Coin battery tidak boleh dimasukkan ke mulut, dibongkar, ditusuk, atau dihubungkan pendek dengan benda logam.'}
+];let qi=0;function renderQuiz(){const q=quizData[qi];$('quizProg').textContent=`Question ${qi+1} of ${quizData.length}`;$('quizQ').textContent=q.q;$('quizOptions').innerHTML='';$('quizFb').textContent='Pilih satu jawaban.';$('quizFb').style.background='#f4f9fc';$('quizFb').style.color='var(--muted)';$('quizNext').style.display='none';q.o.forEach((text,i)=>{const b=document.createElement('button');b.className='option';b.textContent=text;b.onclick=()=>{const all=[...$('quizOptions').children];all.forEach(x=>x.disabled=true);const ok=i===q.a;b.classList.add(ok?'correct':'wrong');all[q.a].classList.add('correct');$('quizFb').textContent=ok?`Benar. ${q.e}`:`Belum tepat. Jawaban yang benar adalah ${q.o[q.a]}. ${q.e}`;$('quizFb').style.background=ok?'#eaf9f0':'#fff1f0';$('quizFb').style.color=ok?'#20734a':'#a33636';if(qi<quizData.length-1)$('quizNext').style.display='inline-block';else confetti()};$('quizOptions').appendChild(b)})}$('quizNext').onclick=()=>{qi++;renderQuiz()};renderQuiz();
+
+// Feedback
+const feedbackButtons=[...document.querySelectorAll('.feedback-choice')];feedbackButtons.forEach(b=>b.onclick=()=>{feedbackButtons.forEach(x=>x.classList.remove('selected'));b.classList.add('selected');$('feedbackNote').textContent='Terima kasih. Sampaikan pertanyaanmu kepada MT jika masih ada bagian yang belum jelas.'});
+});
+</script>
+</body>
+</html>
