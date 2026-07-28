@@ -99,7 +99,7 @@ body {
     margin-bottom: 8px;
     font-size: 1.05rem;
 }
-.form-group input {
+.form-group input, .form-group select {
     font-family: 'Fredoka', sans-serif;
     font-size: 1.05rem;
     padding: 14px 18px;
@@ -110,7 +110,7 @@ body {
     outline: none;
     transition: 0.2s;
 }
-.form-group input:focus {
+.form-group input:focus, .form-group select:focus {
     border-color: var(--cyan);
     box-shadow: 0 0 0 4px rgba(67, 213, 230, 0.15);
 }
@@ -305,15 +305,11 @@ body {
             
             <div class="form-group">
                 <label for="studentName">Nama Lengkap</label>
-                <input type="text" id="studentName" required placeholder="Contoh: Budi Santoso">
-                <span class="note">Gunakan nama lengkap tanpa simbol khusus.</span>
-                <div class="error-msg" id="nameError">Format nama tidak valid. Hanya gunakan huruf dan spasi.</div>
-            </div>
-            
-            <div class="form-group">
-                <label for="email">Alamat Email</label>
-                <input type="email" id="email" required placeholder="Contoh: budi@email.com">
-                <div class="error-msg" id="emailError">Format email tidak valid.</div>
+                <select id="studentName" required>
+                    <option value="" disabled selected>Memuat daftar siswa...</option>
+                </select>
+                <span class="note">Pilih namamu dari daftar. (Kamu bisa mengetik huruf pertama untuk mencari)</span>
+                <div class="error-msg" id="nameError">Silakan pilih namamu dari daftar.</div>
             </div>
 
             <button type="button" class="btn" id="nextToQuestionsBtn" style="margin-top: 15px;">Mulai Mengerjakan</button>
@@ -482,7 +478,7 @@ body {
     // Configuration
     // TODO: Ganti URL di bawah ini dengan URL Web App Google Apps Script kamu.
     // Jika dibiarkan kosong, form akan mensimulasikan submit sukses untuk keperluan testing UI.
-    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzzhBGjp0I8RyyvAc896KkLHCepoSdPJTYfNEy-3up7mNpvpYEDgvjGasLZ0DcRsVW3bw/exec'; 
+    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzX2pWK1ND_SHwTqh99-FMhMR4ptMbuRVM6igIh7ivxe5P9HtdL59MTMNlgrDJ8_5ZonA/exec'; 
 
     // Correct Answers Mapping
     const correctAnswers = {
@@ -493,9 +489,7 @@ body {
     // UI Elements
     const form = document.getElementById('quizForm');
     const nameInput = document.getElementById('studentName');
-    const emailInput = document.getElementById('email');
     const nameError = document.getElementById('nameError');
-    const emailError = document.getElementById('emailError');
     const globalError = document.getElementById('formGlobalError');
     const previewSubmitBtn = document.getElementById('previewSubmitBtn');
     
@@ -510,6 +504,27 @@ body {
     const doneBtn = document.getElementById('doneBtn');
     const btnText = document.getElementById('btnText');
     const submitLoader = document.getElementById('submitLoader');
+
+    // Ambil Data Siswa dari Google Apps Script
+    if (GOOGLE_SCRIPT_URL) {
+        fetch(GOOGLE_SCRIPT_URL + '?action=getStudents')
+            .then(response => response.json())
+            .then(names => {
+                nameInput.innerHTML = '<option value="" disabled selected>Pilih Namamu...</option>'; 
+                names.forEach(name => {
+                    if (name.trim() !== '') {
+                        const option = document.createElement('option');
+                        option.value = name;
+                        option.textContent = name;
+                        nameInput.appendChild(option);
+                    }
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching student names:', error);
+                nameInput.innerHTML = '<option value="" disabled selected>Gagal memuat. Silakan muat ulang halaman.</option>';
+            });
+    }
 
     // Handle Radio Label Selection Styling
     document.querySelectorAll('.option-label input[type="radio"]').forEach(radio => {
@@ -526,14 +541,9 @@ body {
         });
     });
 
-    // Real-time Name Validation (Prevent Symbols)
-    nameInput.addEventListener('input', function() {
-        this.value = this.value.replace(/[^a-zA-Z\s]/g, '');
+    // Real-time Name Validation
+    nameInput.addEventListener('change', function() {
         if(this.value.trim().length > 0) nameError.style.display = 'none';
-    });
-
-    emailInput.addEventListener('input', function() {
-        if(this.validity.valid) emailError.style.display = 'none';
     });
 
     // Validation Check for Student Info
@@ -541,19 +551,11 @@ body {
         let isValid = true;
         
         // Name check
-        if (!nameInput.value.trim() || !/^[a-zA-Z\s]+$/.test(nameInput.value)) {
+        if (!nameInput.value.trim()) {
             nameError.style.display = 'block';
             isValid = false;
         } else {
             nameError.style.display = 'none';
-        }
-
-        // Email check
-        if (!emailInput.value.trim() || !emailInput.validity.valid) {
-            emailError.style.display = 'block';
-            isValid = false;
-        } else {
-            emailError.style.display = 'none';
         }
         
         return isValid;
@@ -562,8 +564,7 @@ body {
     // Move to questions section
     nextToQuestionsBtn.addEventListener('click', () => {
         if (validateStudentInfo()) {
-            nameInput.readOnly = true;
-            emailInput.readOnly = true;
+            nameInput.disabled = true;
             nextToQuestionsBtn.style.display = 'none';
             questionsContainer.style.display = 'block';
             
@@ -628,7 +629,7 @@ body {
         const postData = {
             timeline: now.toLocaleString('id-ID'),
             "student-name": nameInput.value.trim(),
-            email: emailInput.value.trim(),
+            email: "",
             program: document.getElementById('program').value,
             "pre-post": document.getElementById('prePost').value,
             date: now.toLocaleDateString('id-ID'),
