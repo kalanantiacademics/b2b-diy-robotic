@@ -1,0 +1,2850 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>RUANGGURU CODING — LED Paper Circuit</title>
+    <link rel="icon"
+        href="https://cdn-web-2.ruangguru.com/landing-pages/assets/e7d93748-818d-462d-be57-7db1e479cd62.png"
+        type="image/png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --navy: #073b70;
+            --navy2: #0d4f86;
+            --deep: #062b50;
+            --cyan: #43d5e6;
+            --orange: #ff8b2b;
+            --yellow: #ffc33d;
+            --ink: #153650;
+            --muted: #5e7487;
+            --green: #38b56f;
+            --red: #ef5350;
+            --white: #fff;
+            --cream: #fff9ef;
+            --shadow: 0 18px 46px rgba(2, 25, 50, .28)
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        html,
+        body {
+            height: 100%
+        }
+
+        body {
+            margin: 0;
+            overflow: hidden;
+            font-family: 'Fredoka', sans-serif;
+            color: var(--ink);
+            background: radial-gradient(circle at 80% 18%, rgba(67, 213, 230, .16) 0 12%, transparent 13%), radial-gradient(circle at 10% 82%, rgba(255, 195, 61, .14) 0 15%, transparent 16%), linear-gradient(135deg, var(--deep), var(--navy) 52%, var(--navy2))
+        }
+
+        body:before,
+        body:after {
+            content: "";
+            position: fixed;
+            width: 48vw;
+            height: 8px;
+            background: rgba(255, 255, 255, .035);
+            transform: rotate(-24deg);
+            border-radius: 20px;
+            box-shadow: 0 52px rgba(255, 255, 255, .03), 0 104px rgba(255, 255, 255, .025), 0 156px rgba(255, 255, 255, .02)
+        }
+
+        body:before {
+            left: 2vw;
+            top: 20vh
+        }
+
+        body:after {
+            right: -10vw;
+            bottom: 20vh
+        }
+
+        .brand {
+            position: fixed;
+            left: 22px;
+            top: 18px;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 9px 15px;
+            background: rgba(255, 255, 255, .97);
+            border-radius: 20px;
+            box-shadow: 0 10px 28px rgba(2, 24, 48, .3)
+        }
+
+        .brand img {
+            object-fit: contain;
+            width: auto
+        }
+
+        .brand .k {
+            height: 45px;
+            max-width: 170px
+        }
+
+        .brand .r {
+            height: 38px;
+            max-width: 145px
+        }
+
+        .brand i {
+            width: 2px;
+            height: 34px;
+            background: #dce7f0;
+            border-radius: 10px
+        }
+
+        .presentation {
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -48%);
+            width: min(88vw, 1440px);
+            aspect-ratio: 16/9;
+            max-height: 82vh;
+            border: 5px solid rgba(255, 255, 255, .9);
+            border-radius: 28px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            background: var(--cream)
+        }
+
+        .slide {
+            position: absolute;
+            inset: 0;
+            padding: 70px 74px 62px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 18px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateX(65px) scale(.985);
+            transition: .42s ease;
+            background: radial-gradient(circle at 88% 12%, rgba(67, 213, 230, .12), transparent 25%), linear-gradient(#fffefa, #fff8ed);
+            overflow: hidden
+        }
+
+        .slide.active {
+            opacity: 1;
+            visibility: visible;
+            transform: none;
+            z-index: 5
+        }
+
+        .slide.dark {
+            color: #fff;
+            background: radial-gradient(circle at 78% 44%, rgba(85, 170, 255, .24) 0 17%, rgba(85, 170, 255, .08) 18% 29%, transparent 30%), linear-gradient(135deg, #0b4a81, #083766 58%, #062b50)
+        }
+
+        .slide.orange {
+            color: #fff;
+            background: radial-gradient(circle at 82% 24%, rgba(255, 255, 255, .18), transparent 22%), linear-gradient(135deg, #ffa23d, #ff7e26)
+        }
+
+        .slide:after {
+            content: "";
+            position: absolute;
+            left: -8%;
+            right: -8%;
+            bottom: -32px;
+            height: 64px;
+            background: var(--orange);
+            transform: rotate(-1.5deg);
+            opacity: .94
+        }
+
+        .dark:after {
+            background: linear-gradient(90deg, var(--yellow), var(--orange))
+        }
+
+        .orange:after {
+            background: var(--navy)
+        }
+
+        .content {
+            position: relative;
+            z-index: 2;
+            width: 100%
+        }
+
+        .chip {
+            position: absolute;
+            left: 34px;
+            top: 25px;
+            z-index: 4;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 14px;
+            border-radius: 999px;
+            background: var(--navy);
+            color: #fff;
+            font-weight: 700;
+            font-size: .94rem;
+            box-shadow: 0 6px 16px rgba(7, 59, 112, .2)
+        }
+
+        .dark .chip {
+            background: rgba(255, 255, 255, .14);
+            border: 1px solid rgba(255, 255, 255, .22)
+        }
+
+        .chip b {
+            width: 9px;
+            height: 9px;
+            background: var(--yellow);
+            border-radius: 50%;
+            box-shadow: 0 0 0 4px rgba(255, 195, 61, .16)
+        }
+
+        h1,
+        h2,
+        h3,
+        p {
+            margin: 0
+        }
+
+        .display {
+            font-size: clamp(3.2rem, 5.8vw, 6rem);
+            line-height: .96;
+            font-weight: 700;
+            text-shadow: 0 5px rgba(12, 46, 86, .18)
+        }
+
+        .display .accent {
+            color: var(--yellow)
+        }
+
+        .slide-title {
+            font-size: clamp(2rem, 3.8vw, 3.65rem);
+            line-height: 1.06;
+            text-align: center;
+            color: var(--navy);
+            font-weight: 700
+        }
+
+        .dark .slide-title,
+        .orange .slide-title {
+            color: #fff
+        }
+
+        .kicker {
+            text-align: center;
+            color: var(--orange);
+            font-size: .95rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase
+        }
+
+        .lead {
+            font-size: clamp(1.08rem, 1.58vw, 1.48rem);
+            line-height: 1.5;
+            color: var(--muted);
+            text-align: center;
+            max-width: 980px;
+            font-weight: 500;
+            margin: 0 auto
+        }
+
+        .dark .lead,
+        .orange .lead {
+            color: rgba(255, 255, 255, .9)
+        }
+
+        .highlight {
+            color: var(--orange);
+            font-weight: 700
+        }
+
+        .cyan {
+            color: #00a6bf;
+            font-weight: 700
+        }
+
+        .yellow {
+            color: var(--yellow);
+            font-weight: 700
+        }
+
+        .center {
+            text-align: center
+        }
+
+        .left {
+            text-align: left
+        }
+
+        .stack {
+            display: grid;
+            gap: 15px
+        }
+
+        .w {
+            width: 100%
+        }
+
+        .max {
+            max-width: 1080px
+        }
+
+        .two {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            align-items: center;
+            width: 100%
+        }
+
+        .three {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+            width: 100%
+        }
+
+        .four {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            width: 100%
+        }
+
+        .agenda {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            width: 100%
+        }
+
+        .card {
+            background: #fff;
+            border: 2px solid #e5eef5;
+            border-radius: 24px;
+            padding: 22px;
+            box-shadow: 0 12px 28px rgba(5, 49, 87, .11)
+        }
+
+        .dark .card {
+            color: var(--ink)
+        }
+
+        .card h3,
+        .card-title {
+            font-size: 1.22rem;
+            font-weight: 700;
+            color: var(--navy);
+            margin-bottom: 7px
+        }
+
+        .card p {
+            font-size: .98rem;
+            line-height: 1.44;
+            color: var(--muted)
+        }
+
+        .icon-card {
+            min-height: 155px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            gap: 8px;
+            transition: .2s
+        }
+
+        .icon-card:hover {
+            transform: translateY(-6px);
+            border-color: var(--cyan)
+        }
+
+        .big-icon {
+            font-size: 3rem
+        }
+
+        .instruction {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 9px 15px;
+            border-radius: 999px;
+            background: #edf9fb;
+            border: 2px solid #bdebf1;
+            color: #116c79;
+            font-weight: 600;
+            font-size: .92rem;
+            justify-self: center
+        }
+
+        .dark .instruction {
+            background: rgba(255, 255, 255, .13);
+            border-color: rgba(255, 255, 255, .27);
+            color: #fff
+        }
+
+        .note {
+            font-size: .88rem;
+            color: var(--muted);
+            line-height: 1.44
+        }
+
+        .dark .note {
+            color: rgba(255, 255, 255, .76)
+        }
+
+        .btn,
+        .btn2,
+        .option {
+            font-family: 'Fredoka', sans-serif;
+            font-weight: 700;
+            cursor: pointer;
+            transition: .2s
+        }
+
+        .btn {
+            border: 0;
+            padding: 12px 22px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, var(--orange), var(--yellow));
+            color: #173a59;
+            box-shadow: 0 9px 18px rgba(255, 139, 43, .26);
+            font-size: 1rem
+        }
+
+        .btn:hover:not(:disabled) {
+            transform: translateY(-3px) scale(1.02)
+        }
+
+        .btn:disabled {
+            opacity: .45;
+            cursor: not-allowed
+        }
+
+        .btn2 {
+            border: 0;
+            padding: 11px 18px;
+            border-radius: 15px;
+            background: var(--navy);
+            color: #fff
+        }
+
+        .option {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 14px;
+            border: 2px solid #dbe8f2;
+            background: #f7fbff;
+            color: var(--ink);
+            text-align: left;
+            font-size: .98rem
+        }
+
+        .option:hover:not(:disabled) {
+            border-color: var(--cyan);
+            transform: translateX(4px)
+        }
+
+        .option.selected {
+            outline: 4px solid rgba(67, 213, 230, .2);
+            border-color: var(--cyan)
+        }
+
+        .option.correct {
+            background: #e7f9ef;
+            border-color: var(--green);
+            color: #197247
+        }
+
+        .option.wrong {
+            background: #fff0ef;
+            border-color: var(--red);
+            color: #a93232
+        }
+
+        .option:disabled {
+            cursor: default
+        }
+
+        .nav {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 54px;
+            height: 54px;
+            border-radius: 50%;
+            border: 3px solid rgba(255, 255, 255, .88);
+            background: var(--yellow);
+            color: var(--navy);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.45rem;
+            font-weight: 700;
+            cursor: pointer;
+            z-index: 1100;
+            box-shadow: 0 12px 28px rgba(2, 20, 40, .28);
+            transition: .2s
+        }
+
+        .nav:hover:not(:disabled) {
+            transform: translateY(-50%) scale(1.1);
+            background: var(--orange);
+            color: #fff
+        }
+
+        .nav:disabled {
+            opacity: .28;
+            cursor: not-allowed
+        }
+
+        #prev {
+            left: 18px
+        }
+
+        #next {
+            right: 18px
+        }
+
+        .footer {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 10px;
+            z-index: 10;
+            display: flex;
+            justify-content: center;
+            pointer-events: none
+        }
+
+        .counter {
+            font-size: .78rem;
+            font-weight: 700;
+            letter-spacing: .8px;
+            color: #6a8094;
+            background: rgba(255, 255, 255, .9);
+            border: 1px solid rgba(7, 59, 112, .12);
+            padding: 6px 12px;
+            border-radius: 999px
+        }
+
+        .progress {
+            position: absolute;
+            left: 22%;
+            right: 22%;
+            bottom: 5px;
+            height: 4px;
+            background: rgba(7, 59, 112, .12);
+            border-radius: 999px;
+            overflow: hidden
+        }
+
+        .bar {
+            height: 100%;
+            width: 0;
+            background: linear-gradient(90deg, var(--cyan), var(--orange));
+            transition: .3s
+        }
+
+        .cover {
+            display: grid;
+            grid-template-columns: 1.05fr .95fr;
+            gap: 28px;
+            align-items: center;
+            width: 100%
+        }
+
+        .cover-sub {
+            margin-top: 22px;
+            font-size: 1.22rem;
+            line-height: 1.5;
+            color: rgba(255, 255, 255, .86);
+            max-width: 650px
+        }
+
+        .pill {
+            display: inline-flex;
+            margin-top: 24px;
+            padding: 10px 18px;
+            border-radius: 16px;
+            background: var(--yellow);
+            color: var(--navy);
+            font-weight: 700
+        }
+
+        .cover-image {
+            width: 100%;
+            height: 430px;
+            object-fit: cover;
+            border-radius: 28px;
+            border: 7px solid rgba(255, 255, 255, .92);
+            box-shadow: 0 24px 48px rgba(0, 0, 0, .35), 0 0 60px rgba(67, 213, 230, .23)
+        }
+
+        .photo-card {
+            background: #fff;
+            border: 3px solid #dcebf4;
+            border-radius: 26px;
+            padding: 15px;
+            box-shadow: 0 14px 28px rgba(5, 49, 87, .12)
+        }
+
+        .photo-card img {
+            display: block;
+            width: 100%;
+            height: 360px;
+            object-fit: contain;
+            border-radius: 18px
+        }
+
+        .photo-card.covered img {
+            object-fit: cover
+        }
+
+        .image-caption {
+            text-align: center;
+            margin-top: 10px;
+            color: var(--muted);
+            font-size: .93rem;
+            line-height: 1.4
+        }
+
+        .image-pair {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+            width: 100%
+        }
+
+        .image-pair img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            border-radius: 22px;
+            border: 5px solid #fff;
+            box-shadow: 0 14px 28px rgba(5, 49, 87, .15)
+        }
+
+        .material-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 15px;
+            width: 100%
+        }
+
+        .material {
+            background: #fff;
+            border: 2px solid #e4edf4;
+            border-radius: 22px;
+            padding: 14px;
+            text-align: center;
+            box-shadow: 0 10px 24px rgba(5, 49, 87, .1);
+            transition: .2s
+        }
+
+        .material:hover {
+            transform: translateY(-5px);
+            border-color: var(--cyan)
+        }
+
+        .material img {
+            width: 100%;
+            height: 150px;
+            object-fit: contain
+        }
+
+        .material strong {
+            display: block;
+            color: var(--navy);
+            margin-top: 8px;
+            font-size: 1rem
+        }
+
+        .material span {
+            display: block;
+            color: var(--muted);
+            font-size: .83rem;
+            margin-top: 4px
+        }
+
+        .drag-bank {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 14px;
+            border-radius: 20px;
+            background: #eef6fb;
+            border: 2px solid #dbe9f2;
+            width: 100%
+        }
+
+        .drag-card {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 13px;
+            border-radius: 15px;
+            background: #fff;
+            border: 2px solid #d7e5ee;
+            font-weight: 700;
+            cursor: grab;
+            box-shadow: 0 7px 14px rgba(0, 0, 0, .06);
+            user-select: none;
+            transition: .2s
+        }
+
+        .drag-card img {
+            width: 46px;
+            height: 46px;
+            object-fit: contain;
+            border-radius: 9px
+        }
+
+        .drag-card.selected {
+            border-color: var(--cyan);
+            box-shadow: 0 0 0 4px rgba(67, 213, 230, .16)
+        }
+
+        .drag-card.used {
+            opacity: .35;
+            pointer-events: none
+        }
+
+        .drop-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+            width: 100%
+        }
+
+        .drop-zone {
+            min-height: 110px;
+            border: 3px dashed #aac7d8;
+            border-radius: 18px;
+            background: #f7fbfe;
+            color: #718797;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px;
+            font-weight: 700;
+            text-align: center;
+            transition: .2s
+        }
+
+        .drop-zone.over {
+            border-color: var(--cyan);
+            background: #eafcfd
+        }
+
+        .drop-zone.correct {
+            border-style: solid;
+            border-color: var(--green);
+            background: #e7f9ef;
+            color: #20734a
+        }
+
+        .drop-zone.wrong {
+            border-style: solid;
+            border-color: var(--red);
+            background: #fff1f0;
+            color: #a33636
+        }
+
+        .condition-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+            width: 100%
+        }
+
+        .condition-card {
+            background: #fff;
+            border: 3px solid #e1edf4;
+            border-radius: 22px;
+            padding: 14px;
+            text-align: center;
+            box-shadow: 0 10px 22px rgba(5, 49, 87, .1)
+        }
+
+        .condition-card svg {
+            width: 100%;
+            height: 145px
+        }
+
+        .condition-card h3 {
+            font-size: 1rem;
+            color: var(--navy);
+            min-height: 48px
+        }
+
+        .condition-card .drop-zone {
+            min-height: 70px;
+            margin-top: 10px
+        }
+
+        .info-panel {
+            background: #fff;
+            border: 3px solid #dcebf4;
+            border-radius: 26px;
+            padding: 18px;
+            box-shadow: 0 14px 28px rgba(5, 49, 87, .12)
+        }
+
+        .info-panel img {
+            width: 100%;
+            height: 330px;
+            object-fit: contain;
+            border-radius: 18px
+        }
+
+        .mini-labels {
+            display: grid;
+            gap: 12px
+        }
+
+        .mini-label {
+            padding: 15px 17px;
+            background: #fff;
+            border-left: 8px solid var(--orange);
+            border-radius: 18px;
+            box-shadow: 0 8px 18px rgba(5, 49, 87, .09)
+        }
+
+        .mini-label.blue {
+            border-left-color: var(--cyan)
+        }
+
+        .mini-label.green {
+            border-left-color: var(--green)
+        }
+
+        .mini-label strong {
+            display: block;
+            color: var(--navy);
+            margin-bottom: 3px
+        }
+
+        .mini-label span {
+            color: var(--muted);
+            line-height: 1.42
+        }
+
+        .circuit-illustration {
+            background: linear-gradient(135deg, #eef8ff, #fff9ef);
+            border: 3px solid #d7e9f3;
+            border-radius: 26px;
+            padding: 14px
+        }
+
+        .circuit-illustration svg {
+            width: 100%;
+            height: 390px;
+            display: block
+        }
+
+        .glow {
+            animation: glowPulse .9s ease-in-out infinite alternate
+        }
+
+        @keyframes glowPulse {
+            from {
+                filter: drop-shadow(0 0 7px rgba(255, 90, 90, .45))
+            }
+
+            to {
+                filter: drop-shadow(0 0 28px rgba(255, 90, 90, .98))
+            }
+        }
+
+        .order-layout {
+            display: grid;
+            grid-template-columns: .75fr 1.25fr;
+            gap: 22px;
+            width: 100%;
+            align-items: start
+        }
+
+        .order-bank {
+            display: grid;
+            gap: 10px;
+            padding: 14px;
+            background: #eef6fb;
+            border: 2px solid #dbe9f2;
+            border-radius: 22px;
+            min-height: 390px
+        }
+
+        .order-item {
+            padding: 13px 14px;
+            background: #fff;
+            border: 2px solid #d7e5ee;
+            border-radius: 15px;
+            font-weight: 700;
+            cursor: grab;
+            box-shadow: 0 7px 14px rgba(0, 0, 0, .06)
+        }
+
+        .order-item.selected {
+            border-color: var(--cyan);
+            box-shadow: 0 0 0 4px rgba(67, 213, 230, .16)
+        }
+
+        .order-slots {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px
+        }
+
+        .order-slot {
+            min-height: 104px;
+            border: 3px dashed #aac7d8;
+            border-radius: 17px;
+            background: #f7fbfe;
+            padding: 11px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #718797;
+            font-weight: 700
+        }
+
+        .order-slot .num {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--navy);
+            color: #fff;
+            flex: none
+        }
+
+        .order-slot.correct {
+            border-style: solid;
+            border-color: var(--green);
+            background: #e7f9ef;
+            color: #20734a
+        }
+
+        .order-slot.wrong {
+            border-color: var(--red);
+            background: #fff1f0;
+            color: #a33636
+        }
+
+        .step-photo {
+            display: grid;
+            grid-template-columns: 1.05fr .95fr;
+            gap: 28px;
+            align-items: center;
+            width: 100%
+        }
+
+        .step-photo img {
+            width: 100%;
+            height: 420px;
+            object-fit: contain;
+            border-radius: 24px;
+            background: #fff;
+            border: 5px solid #fff;
+            box-shadow: 0 16px 34px rgba(5, 49, 87, .18)
+        }
+
+        .step-number {
+            display: flex;
+            align-items: center;
+            gap: 15px
+        }
+
+        .step-number b {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: var(--orange);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex: none
+        }
+
+        .step-number span {
+            font-size: 1.22rem;
+            color: var(--navy);
+            font-weight: 700
+        }
+
+        .step-list {
+            display: grid;
+            gap: 12px
+        }
+
+        .step-list div {
+            padding: 14px 16px;
+            background: #fff;
+            border: 2px solid #e2edf4;
+            border-radius: 17px;
+            color: var(--muted);
+            line-height: 1.45
+        }
+
+        .step-list strong {
+            color: var(--navy)
+        }
+
+        .status-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap
+        }
+
+        .status-result {
+            min-height: 72px;
+            padding: 14px 18px;
+            border-radius: 18px;
+            background: #fff;
+            border: 2px solid #dcebf4;
+            color: var(--muted);
+            text-align: center;
+            line-height: 1.45
+        }
+
+        .video-wrap {
+            position: relative;
+            width: min(420px, 100%);
+            aspect-ratio: 9/16;
+            margin: auto;
+            border-radius: 24px;
+            overflow: hidden;
+            border: 7px solid #fff;
+            box-shadow: 0 18px 34px rgba(0, 0, 0, .22);
+            background: #111
+        }
+
+        .video-wrap iframe {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            border: 0
+        }
+
+        .trouble-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            width: 100%
+        }
+
+        .trouble {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 16px;
+            background: #fff;
+            border: 2px solid #e1edf4;
+            border-radius: 18px;
+            cursor: pointer;
+            transition: .2s
+        }
+
+        .trouble:hover {
+            transform: translateY(-3px);
+            border-color: var(--cyan)
+        }
+
+        .trouble.done {
+            background: #e7f9ef;
+            border-color: var(--green)
+        }
+
+        .trouble .check {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #eef5f9;
+            color: var(--navy);
+            font-weight: 700;
+            flex: none
+        }
+
+        .trouble.done .check {
+            background: var(--green);
+            color: #fff
+        }
+
+        .trouble strong {
+            display: block;
+            color: var(--navy);
+            margin-bottom: 4px
+        }
+
+        .trouble span {
+            color: var(--muted);
+            line-height: 1.38
+        }
+
+        .idea-box {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 10px;
+            width: min(780px, 100%);
+            margin: auto
+        }
+
+        .idea-box input {
+            font-family: 'Fredoka';
+            font-size: 1rem;
+            padding: 14px 16px;
+            border: 3px solid #dcebf4;
+            border-radius: 16px;
+            outline: none
+        }
+
+        .idea-box input:focus {
+            border-color: var(--cyan)
+        }
+
+        .idea-result {
+            min-height: 85px;
+            padding: 17px;
+            border-radius: 20px;
+            background: #fff;
+            border: 3px solid #dcebf4;
+            text-align: center;
+            color: var(--muted);
+            font-size: 1.05rem;
+            line-height: 1.45
+        }
+
+        .innovation-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            width: 100%
+        }
+
+        .innovation-card {
+            background: #fff;
+            border: 3px solid #dcebf4;
+            border-radius: 24px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 12px 28px rgba(5, 49, 87, .11)
+        }
+
+        .innovation-card img {
+            width: 100%;
+            height: 280px;
+            object-fit: contain;
+            border-radius: 16px
+        }
+
+        .innovation-card h3 {
+            color: var(--navy);
+            margin-top: 8px
+        }
+
+        .innovation-card p {
+            color: var(--muted);
+            line-height: 1.42;
+            margin-top: 4px
+        }
+
+        .safety-layout {
+            display: grid;
+            grid-template-columns: .9fr 1.1fr;
+            gap: 20px;
+            width: 100%;
+            align-items: start
+        }
+
+        .safety-bank {
+            display: grid;
+            gap: 9px;
+            padding: 13px;
+            background: #eef6fb;
+            border: 2px solid #dbe9f2;
+            border-radius: 20px;
+            min-height: 400px
+        }
+
+        .safety-card {
+            padding: 12px 13px;
+            background: #fff;
+            border: 2px solid #d7e5ee;
+            border-radius: 14px;
+            font-weight: 700;
+            cursor: grab;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, .05);
+            line-height: 1.35
+        }
+
+        .safety-card.selected {
+            border-color: var(--cyan);
+            box-shadow: 0 0 0 4px rgba(67, 213, 230, .16)
+        }
+
+        .safety-columns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px
+        }
+
+        .safety-col {
+            min-height: 400px;
+            border: 3px dashed #aac7d8;
+            border-radius: 22px;
+            padding: 13px;
+            background: #f9fcfe
+        }
+
+        .safety-col h3 {
+            text-align: center;
+            margin-bottom: 12px
+        }
+
+        .safety-col.safe {
+            border-color: #84d6aa;
+            background: #f1fbf5
+        }
+
+        .safety-col.unsafe {
+            border-color: #f3aaa6;
+            background: #fff7f6
+        }
+
+        .safety-col .placed {
+            padding: 10px 11px;
+            background: #fff;
+            border-radius: 12px;
+            border: 2px solid #dce8ef;
+            margin-bottom: 9px;
+            font-size: .9rem;
+            line-height: 1.35;
+            color: var(--ink)
+        }
+
+        .quiz {
+            width: min(860px, 100%);
+            background: #fff;
+            border-radius: 28px;
+            padding: 28px;
+            border: 3px solid #dcebf4;
+            color: var(--ink);
+            margin: 0 auto
+        }
+
+        .quiz-prog {
+            font-size: .9rem;
+            font-weight: 700;
+            color: var(--orange);
+            margin-bottom: 10px
+        }
+
+        .quiz-q {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--navy);
+            line-height: 1.3;
+            margin-bottom: 16px
+        }
+
+        .quiz-options {
+            display: grid;
+            gap: 11px
+        }
+
+        .quiz-fb {
+            min-height: 70px;
+            margin-top: 12px;
+            padding: 13px 15px;
+            border-radius: 16px;
+            background: #f4f9fc;
+            color: var(--muted);
+            line-height: 1.45
+        }
+
+        .feedback {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 28px;
+            align-items: center;
+            width: 100%
+        }
+
+        .feedback-choices {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px
+        }
+
+        .feedback-choice {
+            padding: 22px 10px;
+            border-radius: 20px;
+            background: #fff;
+            border: 3px solid #e0ebf2;
+            text-align: center;
+            cursor: pointer;
+            transition: .2s
+        }
+
+        .feedback-choice:hover,
+        .feedback-choice.selected {
+            transform: translateY(-5px);
+            border-color: var(--cyan);
+            background: #effcfd
+        }
+
+        .face {
+            font-size: 3rem
+        }
+
+        .robot {
+            width: 540px;
+            height: 540px;
+            object-fit: contain;
+            animation: float 3.2s ease-in-out infinite
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0)
+            }
+
+            50% {
+                transform: translateY(-12px)
+            }
+        }
+
+        .toast {
+            position: fixed;
+            left: 50%;
+            bottom: 34px;
+            transform: translate(-50%, 28px);
+            z-index: 3000;
+            padding: 14px 20px;
+            border-radius: 16px;
+            background: #102f4c;
+            color: #fff;
+            font-weight: 700;
+            opacity: 0;
+            pointer-events: none;
+            transition: .25s;
+            max-width: min(660px, 88vw);
+            text-align: center
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translate(-50%, 0)
+        }
+
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 16px;
+            border-radius: 3px;
+            z-index: 3500;
+            pointer-events: none;
+            animation: fall 1.5s ease-out forwards
+        }
+
+        @keyframes fall {
+            to {
+                transform: translate(var(--x), var(--y)) rotate(680deg);
+                opacity: 0
+            }
+        }
+
+        @media(max-width:1100px) {
+            .presentation {
+                width: 94vw
+            }
+
+            .slide {
+                padding: 66px 50px 56px
+            }
+
+            .agenda,
+            .four {
+                grid-template-columns: repeat(2, 1fr)
+            }
+
+            .material-grid {
+                grid-template-columns: repeat(3, 1fr)
+            }
+
+            .drop-grid,
+            .condition-grid {
+                grid-template-columns: repeat(2, 1fr)
+            }
+        }
+
+        @media(max-width:760px) {
+            body {
+                overflow: auto
+            }
+
+            .brand {
+                left: 8px;
+                top: 8px;
+                padding: 7px 10px;
+                gap: 8px
+            }
+
+            .brand .k {
+                height: 30px
+            }
+
+            .brand .r {
+                height: 26px
+            }
+
+            .brand i {
+                height: 25px
+            }
+
+            .presentation {
+                position: absolute;
+                top: 64px;
+                transform: translateX(-50%);
+                width: 100vw;
+                height: calc(100vh - 64px);
+                max-height: none;
+                aspect-ratio: auto;
+                border-radius: 0;
+                border: 0
+            }
+
+            .slide {
+                padding: 68px 20px 62px;
+                overflow-y: auto;
+                justify-content: flex-start
+            }
+
+            .nav {
+                width: 42px;
+                height: 42px;
+                top: auto;
+                bottom: 12px
+            }
+
+            #prev {
+                left: 12px
+            }
+
+            #next {
+                right: 12px
+            }
+
+            .chip {
+                left: 16px;
+                top: 18px
+            }
+
+            .two,
+            .three,
+            .cover,
+            .feedback,
+            .step-photo,
+            .order-layout,
+            .safety-layout {
+                grid-template-columns: 1fr
+            }
+
+            .agenda,
+            .four,
+            .material-grid,
+            .drop-grid,
+            .condition-grid,
+            .trouble-grid,
+            .innovation-grid,
+            .safety-columns {
+                grid-template-columns: 1fr
+            }
+
+            .display {
+                text-align: center;
+                font-size: 3rem
+            }
+
+            .cover-image {
+                height: 300px
+            }
+
+            .slide:after {
+                display: none
+            }
+
+            .photo-card img {
+                height: 260px
+            }
+
+            .robot {
+                width: 600px;
+                height: 600px;
+                position: relative;
+                margin: auto;
+                animation: float 3.2s ease-in-out infinite;
+                object-fit: contain;
+                display: block
+            }
+
+            .order-slots {
+                grid-template-columns: 1fr
+            }
+        }
+    </style>
+
+    <style>
+        .compare-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            width: 100%
+        }
+
+        .circuit-card {
+            background: #fff;
+            border: 3px solid #dcebf4;
+            border-radius: 24px;
+            padding: 18px;
+            box-shadow: 0 12px 28px rgba(5, 49, 87, .11);
+            text-align: center;
+            position: relative;
+            overflow: hidden
+        }
+
+        .circuit-card h3 {
+            color: var(--navy);
+            font-size: 1.25rem;
+            margin-bottom: 6px
+        }
+
+        .circuit-card p {
+            color: var(--muted);
+            line-height: 1.42
+        }
+
+        .circuit-card svg {
+            width: 100%;
+            height: 220px;
+            display: block;
+            margin: 8px 0
+        }
+
+        .state-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 14px;
+            border-radius: 999px;
+            font-weight: 700;
+            background: #edf5fa;
+            color: var(--navy);
+            border: 2px solid #d8e8f1
+        }
+
+        .state-pill.on {
+            background: #e7f9ef;
+            color: #20734a;
+            border-color: #90d7ae
+        }
+
+        .state-pill.off {
+            background: #fff1f0;
+            color: #a33636;
+            border-color: #efb4b0
+        }
+
+        .reveal-box {
+            opacity: 0;
+            transform: translateY(8px);
+            transition: .25s
+        }
+
+        .reveal-box.show {
+            opacity: 1;
+            transform: none
+        }
+
+        .copper-hero {
+            display: grid;
+            grid-template-columns: .9fr 1.1fr;
+            gap: 28px;
+            align-items: center;
+            width: 100%
+        }
+
+        .copper-hero img {
+            width: 100%;
+            height: 360px;
+            object-fit: contain;
+            background: #fff;
+            border: 5px solid #fff;
+            border-radius: 24px;
+            box-shadow: 0 16px 34px rgba(5, 49, 87, .16)
+        }
+
+        .reason-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            width: 100%
+        }
+
+        .reason {
+            padding: 18px;
+            background: #fff;
+            border: 2px solid #e1edf4;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 10px 22px rgba(5, 49, 87, .09)
+        }
+
+        .reason b {
+            display: block;
+            color: var(--navy);
+            margin: 7px 0
+        }
+
+        .reason span {
+            color: var(--muted);
+            font-size: .92rem;
+            line-height: 1.4
+        }
+
+        .reason .big-icon {
+            font-size: 2.6rem
+        }
+
+        .project-preview {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+            width: 100%
+        }
+
+        .project-preview .photo-card img {
+            height: 310px;
+            object-fit: cover
+        }
+
+        .material-grid.six {
+            grid-template-columns: repeat(6, 1fr)
+        }
+
+        .fold-sim {
+            display: grid;
+            grid-template-columns: 1fr .8fr;
+            gap: 22px;
+            align-items: center;
+            width: 100%
+        }
+
+        .paper-window {
+            position: relative;
+            width: 100%;
+            height: 410px;
+            border-radius: 26px;
+            background: #eaf1f5;
+            border: 3px solid #cfe0ea;
+            overflow: hidden;
+            box-shadow: inset 0 0 35px rgba(7, 59, 112, .08)
+        }
+
+        .paper-face {
+            position: absolute;
+            inset: 24px;
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 12px 26px rgba(5, 49, 87, .12);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: .45s ease;
+            overflow: hidden
+        }
+
+        .paper-face img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain
+        }
+
+        .paper-face.inside {
+            opacity: 0;
+            transform: translateX(22px) scale(.97)
+        }
+
+        .paper-window.open .paper-face.front {
+            opacity: 0;
+            transform: translateX(-22px) scale(.97)
+        }
+
+        .paper-window.open .paper-face.inside {
+            opacity: 1;
+            transform: none
+        }
+
+        .sim-controls {
+            display: grid;
+            gap: 12px
+        }
+
+        .sim-result {
+            padding: 16px;
+            background: #fff;
+            border: 2px solid #dcebf4;
+            border-radius: 18px;
+            color: var(--muted);
+            line-height: 1.45
+        }
+
+        .sim-result strong {
+            color: var(--navy)
+        }
+
+        .path-activity {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            width: 100%
+        }
+
+        .path-option {
+            border: 3px solid #dcebf4;
+            border-radius: 22px;
+            background: #fff;
+            padding: 16px;
+            cursor: pointer;
+            transition: .2s;
+            text-align: center
+        }
+
+        .path-option:hover {
+            transform: translateY(-4px);
+            border-color: var(--cyan)
+        }
+
+        .path-option.correct {
+            border-color: var(--green);
+            background: #e7f9ef
+        }
+
+        .path-option.wrong {
+            border-color: var(--red);
+            background: #fff1f0
+        }
+
+        .path-option svg {
+            width: 100%;
+            height: 190px
+        }
+
+        .loop-demo {
+            display: grid;
+            grid-template-columns: 1.1fr .9fr;
+            gap: 24px;
+            align-items: center;
+            width: 100%
+        }
+
+        .loop-board {
+            background: #fff;
+            border: 3px solid #dcebf4;
+            border-radius: 26px;
+            padding: 16px;
+            box-shadow: 0 14px 28px rgba(5, 49, 87, .11)
+        }
+
+        .loop-board svg {
+            width: 100%;
+            height: 340px
+        }
+
+        .led-glow {
+            filter: drop-shadow(0 0 14px rgba(67, 213, 230, .9))
+        }
+
+        .loop-gap {
+            transition: .25s
+        }
+
+        .loop-board.closed .loop-gap {
+            opacity: 0
+        }
+
+        .loop-board .closed-bridge {
+            opacity: 0;
+            transition: .25s
+        }
+
+        .loop-board.closed .closed-bridge {
+            opacity: 1
+        }
+
+        .loop-board .demo-led {
+            fill: #8aa3b5
+        }
+
+        .loop-board.closed .demo-led {
+            fill: #46cfea;
+            filter: drop-shadow(0 0 24px rgba(67, 213, 230, 1))
+        }
+
+        .build-check {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+            width: 100%
+        }
+
+        .check-card {
+            background: #fff;
+            border: 2px solid #e1edf4;
+            border-radius: 18px;
+            padding: 15px;
+            text-align: center
+        }
+
+        .check-card b {
+            display: block;
+            color: var(--navy);
+            margin: 6px 0
+        }
+
+        .check-card span {
+            color: var(--muted);
+            font-size: .9rem
+        }
+
+        .trouble.done .check {
+            background: var(--green);
+            color: #fff
+        }
+
+        .video-note {
+            padding: 14px 16px;
+            border-radius: 18px;
+            background: #fff8e8;
+            border: 2px solid #ffe1a0;
+            color: #7b5a16;
+            line-height: 1.42
+        }
+
+        .quiz {
+            max-height: 520px;
+            overflow: auto
+        }
+
+        @media(max-width:1100px) {
+            .material-grid.six {
+                grid-template-columns: repeat(3, 1fr)
+            }
+
+            .reason-grid {
+                grid-template-columns: 1fr 1fr
+            }
+
+            .build-check {
+                grid-template-columns: 1fr 1fr
+            }
+        }
+
+        @media(max-width:760px) {
+
+            .compare-grid,
+            .copper-hero,
+            .project-preview,
+            .fold-sim,
+            .path-activity,
+            .loop-demo,
+            .reason-grid,
+            .material-grid.six,
+            .build-check {
+                grid-template-columns: 1fr
+            }
+
+            .paper-window {
+                height: 330px
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="brand"><img class="k"
+            src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/5b36ddb1-5ff5-490e-af31-9a171820e051.png"
+            alt="Kalananti"><i></i><img class="r"
+            src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/7e71d258-897f-42b7-9c8b-2ff76376ffc6.png"
+            alt="Ruangguru Coding"></div>
+    <button class="nav" id="prev">◀</button><button class="nav" id="next">▶</button>
+    <main class="presentation" id="presentation">
+
+        <!-- 1 -->
+        <section class="slide dark active">
+            <div class="cover content">
+                <div>
+                    <div class="kicker left" style="color:var(--cyan)">WELCOME TO DIY ROBOTIC CLASS</div>
+                    <h1 class="display"><span class="accent">LED Paper</span><br>Circuit</h1>
+                    <p class="cover-sub">Menerapkan konsep open loop dan closed loop menggunakan copper tape, LED, dan
+                        battery koin.</p>
+                    <div class="pill">SESSION 4 · OPEN & CLOSED LOOP</div>
+                </div>
+                <img class="robot"
+                    src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/eded3e71-16cf-401e-b1c1-3ff5f887dc38.png"
+                    alt="Robot">
+            </div>
+        </section>
+
+        <!-- 2 -->
+        <section class="slide"><span class="chip"><b></b> Today's Agenda</span>
+            <div class="content stack">
+                <div>
+                    <div class="kicker">WHAT WE WILL DO TODAY</div>
+                    <h2 class="slide-title">Rencana Belajar Hari Ini</h2>
+                </div>
+                <div class="agenda">
+                    <div class="card icon-card">
+                        <div class="big-icon">⚔️</div>
+                        <h3>Review Light Saber</h3>
+                        <p>Mengingat kembali polarity dan sambungan LED pada battery.</p>
+                    </div>
+                    <div class="card icon-card">
+                        <div class="big-icon">🔁</div>
+                        <h3>Open vs Closed Loop</h3>
+                        <p>Membandingkan jalur circuit yang terputus dan tersambung.</p>
+                    </div>
+                    <div class="card icon-card">
+                        <div class="big-icon">🟠</div>
+                        <h3>Meet Copper Tape</h3>
+                        <p>Mengenal copper tape sebagai jalur konduktif pada paper circuit.</p>
+                    </div>
+                    <div class="card icon-card">
+                        <div class="big-icon">🤖</div>
+                        <h3>Build the Paper Circuit</h3>
+                        <p>Membuat dua mata robot yang menyala saat kertas ditutup.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3 -->
+        <section class="slide"><span class="chip"><b></b> Quick Review</span>
+            <div class="content two max">
+                <div class="photo-card"><img
+                        src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/ca9fb0bf-550f-45a9-9fda-27e14d84f1f3.png"
+                        alt="LED Light Saber"></div>
+                <div class="stack">
+                    <div class="kicker left">LAST SESSION</div>
+                    <h2 class="slide-title left">Masih Ingat Light Saber?</h2>
+                    <p class="lead left">Kemarin kita membuat LED menyala dengan menghubungkan <span
+                            class="highlight">anode (+)</span> ke positive battery dan <span class="cyan">cathode
+                            (−)</span> ke negative battery.</p>
+                    <div class="card">
+                        <h3>💡 Pertanyaan cepat</h3>
+                        <p>Kalau polarity sudah benar, apakah LED pasti menyala?</p>
+                    </div>
+                    <button class="btn" id="reviewReveal">Reveal Answer</button>
+                    <div class="status-result" id="reviewResult">Pikirkan dulu sebelum melihat jawabannya.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4 -->
+        <section class="slide"><span class="chip"><b></b> Quick Review</span>
+            <div class="content two max">
+                <div class="info-panel"><img
+                        src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/9d792949-fed8-409f-b28c-10ac3a5a330b.png"
+                        alt="LED dan battery"></div>
+                <div class="stack">
+                    <div class="kicker left">ONE MORE THING</div>
+                    <h2 class="slide-title left">Polarity Benar, Jalurnya Juga Harus Lengkap</h2>
+                    <p class="lead left">Saat hanya <strong>satu kaki LED</strong> yang menyentuh battery, jalur listrik
+                        belum kembali ke battery.</p>
+                    <div class="mini-labels">
+                        <div class="mini-label"><strong>Hanya satu sisi tersambung</strong><span>Current tidak punya
+                                jalur lengkap untuk kembali ke sumber energi.</span></div>
+                        <div class="mini-label blue"><strong>Hasilnya</strong><span>LED tidak menyala karena circuit
+                                masih terbuka.</span></div>
+                    </div>
+                    <div class="instruction">🔁 Inilah yang akan kita pelajari lebih jelas hari ini.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5 -->
+        <section class="slide" id="loopReview"><span class="chip"><b></b> Remember This?</span>
+            <div class="content stack">
+                <div>
+                    <div class="kicker">OPEN OR CLOSED?</div>
+                    <h2 class="slide-title">Do You Still Remember?</h2>
+                    <p class="lead">Perhatikan dua circuit berikut. Mana yang memiliki jalur lengkap?</p>
+                </div>
+                <div class="compare-grid">
+                    <div class="circuit-card">
+                        <svg viewBox="0 0 480 220">
+                            <circle cx="82" cy="110" r="48" fill="#dce2e6" /><text x="82" y="103" text-anchor="middle"
+                                font-size="18" font-weight="700" fill="#073b70">3V</text><text x="82" y="130"
+                                text-anchor="middle" font-size="26" font-weight="700" fill="#ef5350">+</text>
+                            <path d="M130 85 H210" stroke="#ef5350" stroke-width="9" fill="none" />
+                            <path d="M210 85 H290" stroke="#ef5350" stroke-width="9" fill="none" />
+                            <path d="M290 85 L318 85" stroke="#ef5350" stroke-width="9" />
+                            <circle cx="355" cy="85" r="28" fill="#89a3b5" />
+                            <path d="M355 113 V155 H130" stroke="#222" stroke-width="9" fill="none" />
+                            <text x="355" y="91" text-anchor="middle" fill="#fff" font-size="18">LED</text>
+                        </svg>
+                        <h3>Circuit A</h3>
+                        <p>Jalurnya tersambung dari battery → LED → kembali ke battery.</p>
+                        <div class="reveal-box" id="closedLabel"><span class="state-pill on">✅ CLOSED LOOP · LED
+                                ON</span></div>
+                    </div>
+                    <div class="circuit-card">
+                        <svg viewBox="0 0 480 220">
+                            <circle cx="82" cy="110" r="48" fill="#dce2e6" /><text x="82" y="103" text-anchor="middle"
+                                font-size="18" font-weight="700" fill="#073b70">3V</text><text x="82" y="130"
+                                text-anchor="middle" font-size="26" font-weight="700" fill="#ef5350">+</text>
+                            <path d="M130 85 H210" stroke="#ef5350" stroke-width="9" fill="none" />
+                            <path d="M210 85 H290" stroke="#ef5350" stroke-width="9" fill="none" />
+                            <circle cx="355" cy="85" r="28" fill="#89a3b5" />
+                            <path d="M355 113 V155 H260" stroke="#222" stroke-width="9" fill="none" />
+                            <path d="M210 155 H130" stroke="#222" stroke-width="9" fill="none" />
+                            <line x1="260" y1="155" x2="234" y2="134" stroke="#ef5350" stroke-width="5" />
+                            <line x1="210" y1="155" x2="184" y2="176" stroke="#ef5350" stroke-width="5" />
+                            <text x="355" y="91" text-anchor="middle" fill="#fff" font-size="18">LED</text>
+                        </svg>
+                        <h3>Circuit B</h3>
+                        <p>Ada bagian jalur yang terputus sehingga current tidak dapat kembali ke battery.</p>
+                        <div class="reveal-box" id="openLabel"><span class="state-pill off">⛔ OPEN LOOP · LED OFF</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="center"><button class="btn" id="revealLoops">Reveal the Answer</button></div>
+            </div>
+        </section>
+
+        <!-- 6 -->
+        <section class="slide" id="loopActivity"><span class="chip"><b></b> Activity · Open or Closed?</span>
+            <div class="content stack">
+                <div>
+                    <h2 class="slide-title">What Will Happen?</h2>
+                    <p class="lead">Klik kondisi yang menurutmu menghasilkan closed loop.</p>
+                </div>
+                <div class="path-activity">
+                    <div class="path-option" data-correct="false">
+                        <div class="big-icon">🔋 ➜ 💡 &nbsp;&nbsp; ✂️ &nbsp;&nbsp; 🔋</div>
+                        <h3>Path 1</h3>
+                        <p>Battery terhubung ke LED, tetapi return path terputus.</p>
+                    </div>
+                    <div class="path-option" data-correct="true">
+                        <div class="big-icon">🔋 ➜ 💡 ➜ 🔋</div>
+                        <h3>Path 2</h3>
+                        <p>Battery terhubung ke LED dan jalurnya kembali ke battery.</p>
+                    </div>
+                </div>
+                <div class="status-result" id="loopActivityResult">Pilih satu path.</div>
+            </div>
+        </section>
+
+        <!-- 7 -->
+        <section class="slide orange"><span class="chip"><b></b> New Medium</span>
+            <div class="content two max">
+                <div class="stack">
+                    <div class="kicker left" style="color:#fff7df">SAME IDEA, DIFFERENT MATERIAL</div>
+                    <h2 class="slide-title left">Sekarang Kita Ganti Medianya</h2>
+                    <p class="lead left">Selama ini kita menghubungkan komponen menggunakan wire atau langsung ke
+                        battery. Sekarang jalurnya akan dibuat di atas kertas.</p>
+                    <div class="instruction">⚡ Battery → Conductive Path → LED → Return Path</div>
+                </div>
+                <div class="card icon-card" style="min-height:350px">
+                    <div style="font-size:7rem">📄⚡</div>
+                    <h3>Paper Circuit</h3>
+                    <p>Circuit yang jalur listriknya dibuat di atas atau di dalam kertas menggunakan material konduktif.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 8 -->
+        <section class="slide"><span class="chip"><b></b> Meet Copper Tape</span>
+            <div class="content copper-hero max">
+                <div class="photo-card"><img
+                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQl8v3e2LFFDEwHkpNZWVrw9DADww2ny9Uypx_cp-HTR-aSJykGCeKbV_ZC&s=10"
+                        alt="Copper tape"></div>
+                <div class="stack">
+                    <div class="kicker left">NEW MATERIAL</div>
+                    <h2 class="slide-title left">What is Copper Tape?</h2>
+                    <p class="lead left"><strong>Copper tape</strong> adalah pita tipis berbahan tembaga. Tembaga
+                        merupakan conductor, sehingga bagian tembaganya dapat digunakan sebagai jalur untuk
+                        menghantarkan current.</p>
+                    <div class="card">
+                        <h3>🟠 Bayangkan seperti wire yang pipih</h3>
+                        <p>Bedanya, copper tape dapat ditempel langsung pada kertas sehingga jalur circuit dapat dibuat
+                            mengikuti bentuk project.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 9 -->
+        <section class="slide"><span class="chip"><b></b> Meet Copper Tape</span>
+            <div class="content two max">
+                <div class="photo-card"><img
+                        src="https://image.made-in-china.com/202f0j00BSMWjdmqpvpY/Hot-Sale-Factory-Electrical-Use-Conductive-Insulation-Copper-Foil-Tape.webp"
+                        alt="Bagian copper tape"></div>
+                <div class="stack">
+                    <h2 class="slide-title left">Copper Tape</h2>
+                    <div class="mini-labels">
+                        <div class="mini-label"><strong>Release Paper</strong><span>Lapisan pelindung yang dilepas
+                                sebelum tape ditempel.</span></div>
+                        <div class="mini-label blue"><strong>Copper Surface</strong><span>Lapisan tembaga yang menjadi
+                                jalur konduktif.</span></div>
+                        <div class="mini-label green"><strong>Sticky Surface</strong><span>Sisi perekat yang membuat
+                                tape menempel pada cardstock.</span></div>
+                    </div>
+                    <div class="instruction">🔎 Yang membuat current mengalir adalah jalur tembaganya.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 10 -->
+        <section class="slide"><span class="chip"><b></b> Why Copper Tape?</span>
+            <div class="content stack">
+                <div>
+                    <h2 class="slide-title">Why We Use Copper Tape</h2>
+                    <p class="lead">Karena kita ingin melihat bahwa bentuk connector bisa berbeda, selama materialnya
+                        dapat menghantarkan listrik dan jalurnya lengkap.</p>
+                </div>
+                <div class="reason-grid">
+                    <div class="reason">
+                        <div class="big-icon">📏</div><b>Flat Circuit Path</b><span>Jalur dapat dibuat tipis dan
+                            mengikuti permukaan kertas.</span>
+                    </div>
+                    <div class="reason">
+                        <div class="big-icon">🧩</div><b>Easy to Prototype</b><span>Posisi LED, battery, dan jalur lebih
+                            mudah dilihat serta diperiksa.</span>
+                    </div>
+                    <div class="reason">
+                        <div class="big-icon">🔁</div><b>See the Loop Clearly</b><span>Open dan closed loop terlihat
+                            langsung dari jalur copper tape.</span>
+                    </div>
+                </div>
+                <div class="instruction">💡 Media berubah, tetapi aturan circuit tetap sama.</div>
+            </div>
+        </section>
+
+        <!-- 11 -->
+        <section class="slide"><span class="chip"><b></b> Today's Project</span>
+            <div class="content stack">
+                <div>
+                    <div class="kicker">PROJECT PREVIEW</div>
+                    <h2 class="slide-title">LED Paper Circuit</h2>
+                    <p class="lead">Dari luar terlihat seperti gambar biasa. Saat circuit di dalamnya tertutup, cahaya
+                        LED terlihat dari bagian mata.</p>
+                </div>
+                <div class="project-preview">
+                    <div class="photo-card covered"><img
+                            src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/5ea9452f-9296-4bd1-8ca2-9cdd56d9941f.jpg"
+                            alt="Robot tanpa lampu">
+                        <div class="image-caption">Circuit belum aktif — mata robot belum menyala.</div>
+                    </div>
+                    <div class="photo-card covered"><img
+                            src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/f656ef42-fefb-4844-9286-e62aceb8e36e.jpg"
+                            alt="Robot dengan LED menyala">
+                        <div class="image-caption">Circuit aktif — cahaya LED terlihat sebagai mata robot.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 12 -->
+        <section class="slide"><span class="chip"><b></b> What's Inside?</span>
+            <div class="content two max">
+                <div class="photo-card"><img
+                        src="https://cdn.jumpshare.com/preview/Dm8sGJx5EGdOXvDij1Ui7CG_qspzfEOoIL1Iaxf7FeGm04QXrb12JKHJvYMh25qtMpEioQulIC77chFFaEG8t6U_v0ia3gAKTohsvEGRm4A"
+                        alt="Rangkaian paper circuit"></div>
+                <div class="stack">
+                    <h2 class="slide-title left">A Circuit Behind the Scene</h2>
+                    <p class="lead left">Kertas A4 dilipat menjadi dua. Gambar robot berada di bagian depan, sedangkan
+                        rangkaian berada di bagian dalam.</p>
+                    <div class="mini-labels">
+                        <div class="mini-label"><strong>💡 2 LED</strong><span>Satu LED untuk masing-masing mata
+                                robot.</span></div>
+                        <div class="mini-label blue"><strong>🔋 2 Coin Battery 3V</strong><span>Pada project ini setiap
+                                LED dibuat sebagai satu simple circuit sendiri agar mudah diuji.</span></div>
+                        <div class="mini-label green"><strong>🟠 Copper Tape</strong><span>Menggantikan fungsi wire
+                                sebagai jalur conductive di atas kertas.</span></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 13 -->
+        <section class="slide"><span class="chip"><b></b> Let's Prepare</span>
+            <div class="content stack">
+                <div>
+                    <div class="kicker">TOOLS & MATERIALS</div>
+                    <h2 class="slide-title">Alat dan Bahan</h2>
+                    <p class="lead">Pastikan semua tersedia sebelum mulai merakit.</p>
+                </div>
+                <div class="material-grid six">
+                    <div class="material"><img
+                            src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/b641553c-3619-4873-8093-2f4345b264c9.png"
+                            alt="Gunting"><strong>Gunting</strong><span>Untuk memotong kertas atau copper tape.</span>
+                    </div>
+                    <div class="material"><img src="https://res.cloudinary.com/rsc/image/upload/w_1024/F8855170-01"
+                            alt="Copper Tape"><strong>Copper Tape</strong><span>Jalur conductive untuk circuit.</span>
+                    </div>
+                    <div class="material"><img src="https://m.media-amazon.com/images/I/51unAsXKvhL._AC_SL1114_.jpg"
+                            alt="White cardstock"><strong>White Cardstock A4</strong><span>Kertas tebal untuk badan
+                            project.</span></div>
+                    <div class="material"><img
+                            src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/5e4b66d8-1f83-4878-bf53-734111d4ebbf.png"
+                            alt="LED"><strong>2 LED</strong><span>Warna bebas.</span></div>
+                    <div class="material"><img
+                            src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/d1476cb7-126d-4d0c-b004-1e9c44c3e35c.png"
+                            alt="Coin battery"><strong>2 Coin Battery</strong><span>CR2032 · 3V.</span></div>
+                    <div class="material"><img
+                            src="https://image.made-in-china.com/2f0j00MkHcuDvUCpqy/High-Quality-Multi-Colored-Wholesale-Round-Tip-Dry-Erase-Whiteboard-Markers.webp"
+                            alt="Marker"><strong>Spidol</strong><span>Untuk menggambar robot.</span></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 14 -->
+        <section class="slide"><span class="chip"><b></b> Component Check</span>
+            <div class="content two max">
+                <div class="info-panel"><img
+                        src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/9d792949-fed8-409f-b28c-10ac3a5a330b.png"
+                        alt="Test LED dan battery"></div>
+                <div class="stack">
+                    <h2 class="slide-title left">Test Before You Build</h2>
+                    <p class="lead left">Sebelum ditempel pada kertas, pastikan kedua LED dan kedua battery bekerja.</p>
+                    <div class="step-list">
+                        <div><strong>1. Ambil LED pertama dan battery pertama.</strong> Jepit LED langsung pada dua sisi
+                            battery.</div>
+                        <div><strong>2. Periksa polarity.</strong> Anode (+) ke positive battery, cathode (−) ke
+                            negative.</div>
+                        <div><strong>3. Ulangi untuk pasangan kedua.</strong> Pastikan kedua LED dapat menyala.</div>
+                    </div>
+                    <div class="instruction">✅ Build hanya dengan komponen yang sudah lolos test.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 15 -->
+        <section class="slide" id="foldConcept"><span class="chip"><b></b> How the Project Works</span>
+            <div class="content stack">
+                <div>
+                    <h2 class="slide-title">Buka dan Tutup Kertasnya</h2>
+                    <p class="lead">Klik tombol untuk melihat bagian depan dan bagian dalam project.</p>
+                </div>
+                <div class="fold-sim max">
+                    <div class="paper-window" id="paperWindow">
+                        <div class="paper-face front"><img
+                                src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/5ea9452f-9296-4bd1-8ca2-9cdd56d9941f.jpg"
+                                alt="Front robot"></div>
+                        <div class="paper-face inside"><img
+                                src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/888deeec-82ef-4071-b79d-7fd2f10a24a8.png"
+                                alt="Inside circuit"></div>
+                    </div>
+                    <div class="sim-controls"><button class="btn" id="openPaper">📖 Buka Kertas</button><button
+                            class="btn2" id="closePaper">📄 Tutup Kertas</button>
+                        <div class="sim-result" id="foldResult"><strong>Closed:</strong> bagian depan robot terlihat.
+                            Saat contact di dalam bertemu, circuit dapat menjadi closed loop.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 16 -->
+        <section class="slide"><span class="chip"><b></b> Build · Step 1</span>
+            <div class="content step-photo max">
+                <img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/619eb715-aad5-4fad-9237-9ce843976155.jpg"
+                    alt="Gambar robot pada kertas">
+                <div class="stack">
+                    <div class="step-number"><b>1</b><span>Lipat dan Gambar Robot</span></div>
+                    <div class="step-list">
+                        <div><strong>Lipat cardstock A4 menjadi dua.</strong> Rapikan garis lipatnya.</div>
+                        <div><strong>Gunakan bagian depan sebagai cover.</strong> Gambarkan robot dengan spidol.</div>
+                        <div><strong>Tentukan posisi mata.</strong> Kedua titik mata akan menjadi tempat cahaya LED
+                            terlihat.</div>
+                    </div>
+                    <div class="instruction">✏️ Pastikan posisi mata tidak terlalu dekat dengan garis lipatan.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 17 -->
+        <section class="slide"><span class="chip"><b></b> Build · Step 2</span>
+            <div class="content step-photo max">
+                <img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/87c26e0d-6405-478b-abd0-b8bb65e49484.jpg"
+                    alt="Pasang LED dan copper tape">
+                <div class="stack">
+                    <div class="step-number"><b>2</b><span>Pasang LED dan Copper Tape</span></div>
+                    <div class="step-list">
+                        <div><strong>Buka lipatan.</strong> Cocokkan posisi LED dengan titik mata robot di bagian depan.
+                        </div>
+                        <div><strong>Tekuk kaki LED secara perlahan.</strong> Anode (+) dan cathode (−) mengarah ke
+                            jalur yang berbeda.</div>
+                        <div><strong>Tempel satu copper tape pada setiap kaki LED.</strong> Biarkan jalurnya memanjang
+                            dan belum tersambung seluruhnya.</div>
+                    </div>
+                    <div class="instruction">🔎 Lakukan hal yang sama untuk LED kedua.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 18 -->
+        <section class="slide" id="polarityPath"><span class="chip"><b></b> Activity · Check the Path</span>
+            <div class="content stack">
+                <div>
+                    <h2 class="slide-title">Sebelum Lanjut, Cek Polarity</h2>
+                    <p class="lead">Klik susunan yang benar untuk satu LED.</p>
+                </div>
+                <div class="path-activity">
+                    <div class="path-option" data-path-answer="wrong">
+                        <div class="big-icon">🔋 + ➜ Cathode (−)<br>🔋 − ➜ Anode (+)</div>
+                        <h3>Option A</h3>
+                    </div>
+                    <div class="path-option" data-path-answer="correct">
+                        <div class="big-icon">🔋 + ➜ Anode (+)<br>🔋 − ➜ Cathode (−)</div>
+                        <h3>Option B</h3>
+                    </div>
+                </div>
+                <div class="status-result" id="pathAnswerResult">Pilih satu susunan.</div>
+            </div>
+        </section>
+
+        <!-- 19 -->
+        <section class="slide"><span class="chip"><b></b> Build · Step 3</span>
+            <div class="content step-photo max">
+                <img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/3801ae93-c023-468c-8b98-c38656094bdc.jpg"
+                    alt="Pasang battery pada copper tape">
+                <div class="stack">
+                    <div class="step-number"><b>3</b><span>Pasang Battery</span></div>
+                    <div class="step-list">
+                        <div><strong>Siapkan coin battery pertama.</strong> Cari sisi positive (+).</div>
+                        <div><strong>Hubungkan sisi positive battery</strong> ke copper tape yang terhubung dengan anode
+                            (+) LED.</div>
+                        <div><strong>Biarkan jalur cathode tetap terbuka.</strong> Kita belum membuat return path ke
+                            sisi negative battery.</div>
+                        <div><strong>Ulangi untuk LED kedua.</strong></div>
+                    </div>
+                    <div class="instruction">⛔ Pada tahap ini circuit masih OPEN LOOP.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 20 -->
+        <section class="slide" id="loopSimulator"><span class="chip"><b></b> Experiment · Open Loop</span>
+            <div class="content loop-demo max">
+                <div class="loop-board" id="loopBoard">
+                    <svg viewBox="0 0 760 340">
+                        <circle cx="105" cy="170" r="65" fill="#dce2e6" /><text x="105" y="160" text-anchor="middle"
+                            font-size="22" font-weight="700" fill="#073b70">CR2032</text><text x="105" y="198"
+                            text-anchor="middle" font-size="34" font-weight="700" fill="#ef5350">+</text>
+                        <path d="M170 125 H360" stroke="#c77830" stroke-width="18" />
+                        <circle class="demo-led" cx="420" cy="125" r="40" /><text x="420" y="132" text-anchor="middle"
+                            font-size="20" fill="#fff" font-weight="700">LED</text>
+                        <path d="M460 125 H620 V230" stroke="#c77830" stroke-width="18" />
+                        <path d="M170 220 H280" stroke="#c77830" stroke-width="18" />
+                        <path class="loop-gap" d="M280 220 H360" stroke="#ef5350" stroke-width="5"
+                            stroke-dasharray="10 10" /><text class="loop-gap" x="320" y="260" text-anchor="middle"
+                            fill="#ef5350" font-size="18" font-weight="700">OPEN GAP</text>
+                        <path class="closed-bridge" d="M280 220 H620 V230" stroke="#c77830" stroke-width="18"
+                            fill="none" />
+                    </svg>
+                </div>
+                <div class="stack">
+                    <h2 class="slide-title left">Sekarang Circuit-nya Belum Lengkap</h2>
+                    <p class="lead left">Jalur cathode belum menyentuh sisi negative battery. Coba tutup gap pada
+                        simulasi.</p><button class="btn" id="closeLoopBtn">Connect the Return Path</button><button
+                        class="btn2" id="openLoopBtn">Open the Path Again</button>
+                    <div class="sim-result" id="loopSimResult"><strong>OPEN LOOP:</strong> jalur terputus → LED OFF.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 21 -->
+        <section class="slide"><span class="chip"><b></b> Build · Step 4</span>
+            <div class="content step-photo max">
+                <img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/4ba6f4b2-68d4-455b-bc13-7cfabb09e529.jpg"
+                    alt="Copper tape contact pada lipatan">
+                <div class="stack">
+                    <div class="step-number"><b>4</b><span>Buat Contact untuk Menutup Loop</span></div>
+                    <div class="step-list">
+                        <div><strong>Coba secara manual terlebih dahulu.</strong> Sentuhkan copper tape dari cathode ke
+                            sisi negative battery. LED seharusnya menyala.</div>
+                        <div><strong>Buat jalur contact pada sisi kertas yang berlawanan.</strong> Posisi contact harus
+                            tepat bertemu saat kertas ditutup.</div>
+                        <div><strong>Saat kertas terbuka:</strong> contact terpisah → open loop.</div>
+                        <div><strong>Saat kertas ditutup:</strong> contact bertemu → closed loop.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 22 -->
+        <section class="slide dark" id="paperSwitchSlide"><span class="chip"><b></b> Open → Closed</span>
+            <div class="content fold-sim max">
+                <div class="paper-window" id="paperSwitchVisual">
+                    <div class="paper-face front"><img
+                            src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/f656ef42-fefb-4844-9286-e62aceb8e36e.jpg"
+                            alt="Robot lights on"></div>
+                </div>
+                <div class="stack">
+                    <div class="kicker left" style="color:var(--cyan)">THE PAPER BECOMES THE SWITCH</div>
+                    <h2 class="slide-title left">Apa yang Berubah Saat Kertas Ditutup?</h2>
+                    <p class="lead left">Lipatan kertas menggerakkan contact copper tape. Saat kedua contact bertemu,
+                        return path menjadi lengkap.</p>
+                    <!-- <div class="status-buttons">
+                        <button type="button" class="btn2" id="paperOpenBtn">📖 Open the Paper</button>
+                        <button type="button" class="btn" id="paperClosedBtn">📄 Close the Paper</button>
+                    </div> -->
+                    <div class="status-result" id="paperSwitchResult">Pilih kondisi kertas untuk melihat perubahan open loop dan closed loop.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 23 -->
+        <section class="slide"><span class="chip"><b></b> Final Test</span>
+            <div class="content two max">
+                <div class="info-panel" style="padding:0;overflow:hidden"><iframe
+                        src="https://jumpshare.com/embed/PgD6UrheZUHxySuUKWXg" title="Paper circuit demo"
+                        style="width:100%;height:390px;border:0" allowfullscreen></iframe></div>
+                <div class="stack">
+                    <div class="kicker left">DOES IT WORK?</div>
+                    <h2 class="slide-title left">Coba Tutup dan Tekan Perlahan</h2>
+                    <p class="lead left">Saat kertas ditutup, tekan perlahan area tempat battery dan contact bertemu.
+                        Kedua mata robot seharusnya menyala.</p>
+                    <div class="build-check">
+                        <div class="check-card">
+                            <div class="big-icon">📖</div><b>Paper Open</b><span>LED OFF</span>
+                        </div>
+                        <div class="check-card">
+                            <div class="big-icon">📄</div><b>Paper Closed</b><span>LED ON</span>
+                        </div>
+                        <div class="check-card">
+                            <div class="big-icon">💡</div><b>Eye 1</b><span>Working</span>
+                        </div>
+                        <div class="check-card">
+                            <div class="big-icon">💡</div><b>Eye 2</b><span>Working</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 24 -->
+        <section class="slide"><span class="chip"><b></b> Troubleshoot</span>
+            <div class="content stack">
+                <div>
+                    <h2 class="slide-title">Belum Menyala? Check One by One</h2>
+                    <p class="lead">Klik setiap langkah setelah kamu memeriksanya.</p>
+                </div>
+                <div class="trouble-grid" id="troubleGrid">
+                    <div class="trouble">
+                        <div class="check">1</div>
+                        <div><strong>Check battery</strong><span>Pastikan battery masih bekerja dan sisi (+)/(−) tidak
+                                tertukar.</span></div>
+                    </div>
+                    <div class="trouble">
+                        <div class="check">2</div>
+                        <div><strong>Check LED polarity</strong><span>Anode (+) menuju positive dan cathode (−) menuju
+                                negative.</span></div>
+                    </div>
+                    <div class="trouble">
+                        <div class="check">3</div>
+                        <div><strong>Check copper tape contact</strong><span>Kaki LED dan battery harus benar-benar
+                                menyentuh bagian conductive.</span></div>
+                    </div>
+                    <div class="trouble">
+                        <div class="check">4</div>
+                        <div><strong>Check the loop</strong><span>Cari gap atau jalur yang tidak kembali ke
+                                battery.</span></div>
+                    </div>
+                    <div class="trouble">
+                        <div class="check">5</div>
+                        <div><strong>Check the fold position</strong><span>Saat kertas ditutup, kedua contact harus
+                                bertemu tepat.</span></div>
+                    </div>
+                    <div class="trouble">
+                        <div class="check">✓</div>
+                        <div><strong>Test again</strong><span>Tutup kertas, tekan perlahan, lalu lihat kedua LED.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 25 -->
+        <section class="slide dark"><span class="chip"><b></b> Help Your Friends</span>
+            <div class="content two max">
+                <img class="robot"
+                    src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/eded3e71-16cf-401e-b1c1-3ff5f887dc38.png"
+                    alt="Robot">
+                <div class="stack">
+                    <h2 class="slide-title left">Ada yang Masih Butuh Bantuan?</h2>
+                    <p class="lead left">Boleh bertanya ke MT. Kalau project-mu sudah bekerja, bantu teman melakukan
+                        pengecekan tanpa langsung mengerjakan project mereka.</p>
+                    <div class="card">
+                        <h3>🤝 Mulai dari pertanyaan ini</h3>
+                        <p>“LED-nya sudah dites? Polarity benar? Jalurnya open atau closed? Contact copper tape-nya
+                            sudah bertemu?”</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 26 -->
+        <section class="slide"><span class="chip"><b></b> Step-by-Step Video</span>
+            <div class="content two max">
+                <div class="video-wrap" style="width:min(260px,100%)"><iframe
+                        src="https://www.youtube.com/embed/91skfkH7pEQ" title="Step by step placeholder video"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowfullscreen></iframe></div>
+                <div class="stack">
+                    <div class="kicker left">NEED ANOTHER LOOK?</div>
+                    <h2 class="slide-title left">Ikuti Step-nya Sekali Lagi</h2>
+                    <p class="lead left">Perhatikan urutan pemasangan LED, battery, copper tape, dan posisi contact pada
+                        lipatan kertas.</p>
+                    <div class="video-note">📌 Video ini masih menggunakan link placeholder dari Meet 3. Ganti URL
+                        embed-nya ketika video Meet 4 sudah tersedia.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 27 -->
+        <section class="slide dark" id="quickQuizSlide"><span class="chip"><b></b> Quick Quiz</span>
+            <div class="content stack">
+                <div>
+                    <div class="kicker" style="color:var(--cyan)">CHECK YOUR UNDERSTANDING</div>
+                    <h2 class="slide-title">Quick Quiz</h2>
+                </div>
+                <div class="quiz">
+                    <div class="quiz-prog" id="quizProg"></div>
+                    <div class="quiz-q" id="quizQ"></div>
+                    <div class="quiz-options" id="quizOptions"></div>
+                    <div class="quiz-fb" id="quizFb">Pilih satu jawaban.</div><button type="button" class="btn" id="quizNext"
+                        style="display:none;margin-top:12px">Next Question</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 28 -->
+        <section class="slide"><span class="chip"><b></b> Review</span>
+            <div class="content stack">
+                <div>
+                    <div class="kicker">TODAY'S REVIEW</div>
+                    <h2 class="slide-title">Apa yang Sudah Kita Pelajari?</h2>
+                </div>
+                <div class="agenda">
+                    <div class="card icon-card">
+                        <div class="big-icon">🔁</div>
+                        <h3>Open & Closed Loop</h3>
+                        <p>Open loop memiliki jalur terputus; closed loop memiliki jalur lengkap.</p>
+                    </div>
+                    <div class="card icon-card">
+                        <div class="big-icon">🟠</div>
+                        <h3>Copper Tape</h3>
+                        <p>Menggunakan copper tape sebagai conductive path di atas kertas.</p>
+                    </div>
+                    <div class="card icon-card">
+                        <div class="big-icon">🤖</div>
+                        <h3>Paper Circuit</h3>
+                        <p>Membuat dua simple circuit untuk dua mata robot.</p>
+                    </div>
+                    <div class="card icon-card">
+                        <div class="big-icon">🛠️</div>
+                        <h3>Test & Troubleshoot</h3>
+                        <p>Memeriksa polarity, contact, battery, dan kelengkapan loop.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 29 -->
+        <section class="slide dark"><span class="chip"><b></b> Feedback</span>
+            <div class="content feedback max"><img class="robot"
+                    src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/eded3e71-16cf-401e-b1c1-3ff5f887dc38.png"
+                    alt="Robot">
+                <div class="stack">
+                    <h2 class="slide-title left">Bagaimana Kelas Hari Ini?</h2>
+                    <p class="lead left">Pilih satu respons yang paling sesuai.</p>
+                    <div class="feedback-choices"><button class="feedback-choice">
+                            <div class="face">🙂</div><strong>Jelas</strong>
+                        </button><button class="feedback-choice">
+                            <div class="face">🤔</div><strong>Masih Ada Pertanyaan</strong>
+                        </button><button class="feedback-choice">
+                            <div class="face">⚡</div><strong>Siap Lanjut</strong>
+                        </button></div>
+                    <p class="note" id="feedbackNote">Respons ini tidak menyimpan skor atau data pribadi.</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="footer"><span class="counter" id="counter">01 / 29</span><span class="progress"><span class="bar"
+                    id="bar"></span></span></div>
+    </main>
+    <div class="toast" id="toast"></div>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const $ = id => document.getElementById(id);
+        const slides = [...document.querySelectorAll('.slide')];
+        const prev = $('prev');
+        const next = $('next');
+        const counter = $('counter');
+        const bar = $('bar');
+        let current = 0;
+        function nav() {
+            prev.disabled = current === 0;
+            next.disabled = current === slides.length - 1;
+            counter.textContent = String(current + 1).padStart(2, '0') + ' / ' + String(slides.length).padStart(2, '0');
+            bar.style.width = ((current + 1) / slides.length * 100) + '%';
+        }
+        function go(i) {
+            if (i < 0 || i >= slides.length || i === current) return;
+            slides[current].classList.remove('active');
+            current = i;
+            slides[current].classList.add('active');
+            nav();
+        }
+        prev.onclick = () => go(current - 1);
+        next.onclick = () => go(current + 1);
+        document.addEventListener('keydown', e => {
+            if (e.key === 'ArrowRight' || e.key === 'PageDown') go(current + 1);
+            if (e.key === 'ArrowLeft' || e.key === 'PageUp') go(current - 1);
+        });
+        nav();
+
+        function toast(msg, t = 2300) {
+            const x = $('toast');
+            x.textContent = msg;
+            x.classList.add('show');
+            clearTimeout(toast.timer);
+            toast.timer = setTimeout(() => x.classList.remove('show'), t);
+        }
+        function confetti() {
+            const colors = ['#ffc33d', '#ff8b2b', '#43d5e6', '#38b56f', '#7367f0', '#ef5350'];
+            for (let i = 0; i < 36; i++) {
+                const p = document.createElement('i');
+                p.className = 'confetti';
+                p.style.left = innerWidth / 2 + 'px';
+                p.style.top = innerHeight / 2 + 'px';
+                p.style.background = colors[i % colors.length];
+                p.style.setProperty('--x', (Math.random() * 520 - 260) + 'px');
+                p.style.setProperty('--y', (Math.random() * 360 + 120) + 'px');
+                document.body.appendChild(p);
+                setTimeout(() => p.remove(), 1700);
+            }
+        }
+        // Slide 3 review (guarded)
+        const reviewReveal = $('reviewReveal');
+        if (reviewReveal) {
+            reviewReveal.onclick = () => {
+                $('reviewResult').innerHTML = '<strong>Tidak selalu.</strong> Polarity harus benar, tetapi circuit juga harus memiliki jalur lengkap atau closed loop.';
+                $('reviewResult').style.background = '#e7f9ef';
+                confetti();
+            };
+        }
+        // Slide 5 loop reveal (guarded)
+        const revealLoops = $('revealLoops');
+        if (revealLoops) {
+            revealLoops.onclick = () => {
+                $('closedLabel').classList.add('show');
+                $('openLabel').classList.add('show');
+                toast('Closed loop = jalur lengkap. Open loop = ada jalur yang terputus.');
+            };
+        }
+        // Slide 6 activity (guarded)
+        const loopActivityOpts = document.querySelectorAll('#loopActivity .path-option');
+        if (loopActivityOpts.length) {
+            loopActivityOpts.forEach(el => {
+                el.onclick = () => {
+                    [...document.querySelectorAll('#loopActivity .path-option')].forEach(x => x.classList.remove('correct', 'wrong'));
+                    const ok = el.dataset.correct === 'true';
+                    el.classList.add(ok ? 'correct' : 'wrong');
+                    $('loopActivityResult').textContent = ok ? 'Benar. Jalur kembali ke battery, jadi circuit membentuk closed loop.' : 'Belum tepat. Jalurnya masih terputus sehingga circuit tetap open loop.';
+                    if (ok) confetti();
+                };
+            });
+        }
+        // Slide 15 paper view (guarded)
+        const openPaper = $('openPaper');
+        if (openPaper) {
+            openPaper.onclick = () => {
+                $('paperWindow').classList.add('open');
+                $('foldResult').innerHTML = '<strong>OPEN:</strong> bagian dalam circuit terlihat. Pada desain kita, contact lipatan belum bertemu.';
+            };
+        }
+        const closePaper = $('closePaper');
+        if (closePaper) {
+            closePaper.onclick = () => {
+                $('paperWindow').classList.remove('open');
+                $('foldResult').innerHTML = '<strong>CLOSED:</strong> bagian depan robot terlihat. Contact yang tepat dapat membuat return path tersambung.';
+            };
+        }
+        // Slide 18 polarity activity (guarded)
+        const polarityOpts = document.querySelectorAll('#polarityPath .path-option');
+        if (polarityOpts.length) {
+            polarityOpts.forEach(el => {
+                el.onclick = () => {
+                    [...document.querySelectorAll('#polarityPath .path-option')].forEach(x => x.classList.remove('correct', 'wrong'));
+                    const ok = el.dataset.pathAnswer === 'correct';
+                    el.classList.add(ok ? 'correct' : 'wrong');
+                    $('pathAnswerResult').textContent = ok ? 'Benar. Positive battery menuju anode (+), dan negative menuju cathode (−).' : 'Belum tepat. LED perlu dipasang sesuai polarity.';
+                    if (ok) confetti();
+                };
+            });
+        }
+        // Slide 20 loop simulator (guarded)
+        const closeLoopBtn = $('closeLoopBtn');
+        if (closeLoopBtn) {
+            closeLoopBtn.onclick = () => {
+                $('loopBoard').classList.add('closed');
+                $('loopSimResult').innerHTML = '<strong>CLOSED LOOP:</strong> return path sudah tersambung → LED ON.';
+                confetti();
+            };
+        }
+        const openLoopBtn = $('openLoopBtn');
+        if (openLoopBtn) {
+            openLoopBtn.onclick = () => {
+                $('loopBoard').classList.remove('closed');
+                $('loopSimResult').innerHTML = '<strong>OPEN LOOP:</strong> jalur terputus → LED OFF.';
+            };
+        }
+        // Slide 22 paper switch simulator (guarded)
+        const paperOpenBtn = $('paperOpenBtn');
+        if (paperOpenBtn) {
+            paperOpenBtn.onclick = () => {
+                $('paperSwitchVisual').classList.add('open');
+                $('paperSwitchResult').textContent = 'OPEN LOOP: contact terpisah. LED seharusnya OFF.';
+            };
+        }
+        const paperClosedBtn = $('paperClosedBtn');
+        if (paperClosedBtn) {
+            paperClosedBtn.onclick = () => {
+                $('paperSwitchVisual').classList.remove('open');
+                $('paperSwitchResult').textContent = 'CLOSED LOOP: contact bertemu. Tekan perlahan di area battery agar LED menyala.';
+                confetti();
+            };
+        }
+        // Troubleshooting (guarded)
+        const troubleCards = [...document.querySelectorAll('#troubleGrid .trouble')];
+        if (troubleCards.length) {
+            troubleCards.forEach((card, i) => {
+                card.onclick = () => {
+                    card.classList.toggle('done');
+                    card.querySelector('.check').textContent = card.classList.contains('done') ? '✓' : (i === troubleCards.length - 1 ? '✓' : String(i + 1));
+                    if (troubleCards.every(x => x.classList.contains('done'))) {
+                        confetti();
+                        toast('Semua langkah sudah diperiksa. Uji project sekali lagi.');
+                    }
+                };
+            });
+        }
+        // Quiz (guarded)
+        const quizData = [
+            {
+                q: 'Apa yang terjadi saat circuit berubah dari open loop menjadi closed loop?',
+                o: [
+                    'A. LED tetap mati karena jalurnya terputus',
+                    'B. LED menyala karena jalurnya sudah lengkap',
+                    'C. Battery berubah dari 3V menjadi 6V'
+                ],
+                a: 1,
+                e: 'Closed loop memiliki jalur yang lengkap, sehingga current dapat mengalir dan LED dapat menyala.'
+            },
+            {
+                q: 'Mengapa kita menggunakan 2 battery 3V untuk 2 LED pada project ini?',
+                o: [
+                    'A. Karena satu battery 3V pada rangkaian sederhana ini tidak cukup untuk menyalakan dua LED sekaligus',
+                    'B. Karena copper tape hanya bekerja jika memakai dua battery',
+                    'C. Agar voltage berubah menjadi 6V'
+                ],
+                a: 0,
+                e: 'Pada project ini, setiap LED menggunakan satu battery 3V agar masing-masing LED mendapat sumber energi sendiri dan rangkaiannya lebih mudah dibuat.'
+            },
+            {
+                q: 'Mengapa kita tidak menggunakan resistor pada project ini?',
+                o: [
+                    'A. Karena copper tape sudah menggantikan resistor',
+                    'B. Karena LED tidak pernah membutuhkan resistor',
+                    'C. Karena battery 3V masih aman digunakan langsung untuk LED pada percobaan ini'
+                ],
+                a: 2,
+                e: 'Pada percobaan ini kita menggunakan coin battery 3V, sehingga LED dapat digunakan langsung tanpa resistor tambahan. Untuk sumber voltage yang lebih tinggi, resistor tetap diperlukan untuk membatasi current.'
+            }
+        ];
+        let qi = 0;
+        function renderQuiz() {
+            const q = quizData[qi];
+            $('quizProg').textContent = `Question ${qi + 1} of ${quizData.length}`;
+            $('quizQ').textContent = q.q;
+            $('quizOptions').innerHTML = '';
+            $('quizFb').textContent = 'Pilih satu jawaban.';
+            $('quizFb').style.background = '#f4f9fc';
+            $('quizFb').style.color = 'var(--muted)';
+            $('quizNext').style.display = 'none';
+            q.o.forEach((text, i) => {
+                const b = document.createElement('button');
+                b.type = 'button';
+                b.className = 'option';
+                b.textContent = text;
+                b.onclick = () => {
+                    const all = [...$('quizOptions').children];
+                    all.forEach(x => x.disabled = true);
+                    const ok = i === q.a;
+                    b.classList.add(ok ? 'correct' : 'wrong');
+                    all[q.a].classList.add('correct');
+                    $('quizFb').textContent = ok ? `Benar. ${q.e}` : `Belum tepat. Jawaban yang benar adalah ${q.o[q.a]}. ${q.e}`;
+                    $('quizFb').style.background = ok ? '#eaf9f0' : '#fff1f0';
+                    $('quizFb').style.color = ok ? '#20734a' : '#a33636';
+                    if (qi < quizData.length - 1) $('quizNext').style.display = 'inline-block'; else confetti();
+                };
+                $('quizOptions').appendChild(b);
+            });
+        }
+        $('quizNext').onclick = () => { qi++; renderQuiz(); };
+        renderQuiz();
+        // Feedback (guarded)
+        const feedbackButtons = [...document.querySelectorAll('.feedback-choice')];
+        if (feedbackButtons.length) {
+            feedbackButtons.forEach(b => {
+                b.onclick = () => {
+                    feedbackButtons.forEach(x => x.classList.remove('selected'));
+                    b.classList.add('selected');
+                    $('feedbackNote').textContent = 'Terima kasih. Sampaikan pertanyaanmu kepada MT jika masih ada bagian yang belum jelas.';
+                };
+            });
+        }
+    });
+</script>
+</body>
+</html>
