@@ -1,0 +1,3560 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>RUANGGURU CODING — Introduction to Breadboard</title>
+    <link rel="icon"
+        href="https://cdn-web-2.ruangguru.com/landing-pages/assets/e7d93748-818d-462d-be57-7db1e479cd62.png"
+        type="image/png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --navy: #073b70;
+            --navy2: #0d4f86;
+            --deep: #062b50;
+            --cyan: #43d5e6;
+            --orange: #ff8b2b;
+            --yellow: #ffc33d;
+            --ink: #153650;
+            --muted: #5e7487;
+            --green: #38b56f;
+            --red: #ef5350;
+            --white: #fff;
+            --cream: #fff9ef;
+            --shadow: 0 18px 46px rgba(2, 25, 50, .28)
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        html,
+        body {
+            height: 100%
+        }
+
+        body {
+            margin: 0;
+            overflow: hidden;
+            font-family: 'Fredoka', sans-serif;
+            color: var(--ink);
+            background: radial-gradient(circle at 80% 18%, rgba(67, 213, 230, .16) 0 12%, transparent 13%), radial-gradient(circle at 10% 82%, rgba(255, 195, 61, .14) 0 15%, transparent 16%), linear-gradient(135deg, var(--deep), var(--navy) 52%, var(--navy2))
+        }
+
+        body:before,
+        body:after {
+            content: "";
+            position: fixed;
+            width: 48vw;
+            height: 8px;
+            background: rgba(255, 255, 255, .035);
+            transform: rotate(-24deg);
+            border-radius: 20px;
+            box-shadow: 0 52px rgba(255, 255, 255, .03), 0 104px rgba(255, 255, 255, .025), 0 156px rgba(255, 255, 255, .02)
+        }
+
+        body:before {
+            left: 2vw;
+            top: 20vh
+        }
+
+        body:after {
+            right: -10vw;
+            bottom: 20vh
+        }
+
+        .brand {
+            position: fixed;
+            left: 22px;
+            top: 18px;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 9px 15px;
+            background: rgba(255, 255, 255, .97);
+            border-radius: 20px;
+            box-shadow: 0 10px 28px rgba(2, 24, 48, .3)
+        }
+
+        .brand img {
+            object-fit: contain;
+            width: auto
+        }
+
+        .brand .k {
+            height: 45px;
+            max-width: 170px
+        }
+
+        .brand .r {
+            height: 38px;
+            max-width: 145px
+        }
+
+        .brand i {
+            width: 2px;
+            height: 34px;
+            background: #dce7f0;
+            border-radius: 10px
+        }
+
+        .presentation {
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -48%);
+            width: min(88vw, 1440px);
+            aspect-ratio: 16/9;
+            max-height: 82vh;
+            border: 5px solid rgba(255, 255, 255, .9);
+            border-radius: 28px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            background: var(--cream)
+        }
+
+        .slide {
+            position: absolute;
+            inset: 0;
+            padding: 70px 74px 62px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 18px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateX(65px) scale(.985);
+            transition: .42s ease;
+            background: radial-gradient(circle at 88% 12%, rgba(67, 213, 230, .12), transparent 25%), linear-gradient(#fffefa, #fff8ed);
+            overflow: hidden
+        }
+
+        .slide.active {
+            opacity: 1;
+            visibility: visible;
+            transform: none;
+            z-index: 5
+        }
+
+        .slide.dark {
+            color: #fff;
+            background: radial-gradient(circle at 78% 44%, rgba(85, 170, 255, .24) 0 17%, rgba(85, 170, 255, .08) 18% 29%, transparent 30%), linear-gradient(135deg, #0b4a81, #083766 58%, #062b50)
+        }
+
+        .slide.orange {
+            color: #fff;
+            background: radial-gradient(circle at 82% 24%, rgba(255, 255, 255, .18), transparent 22%), linear-gradient(135deg, #ffa23d, #ff7e26)
+        }
+
+        .slide:after {
+            content: "";
+            position: absolute;
+            left: -8%;
+            right: -8%;
+            bottom: -32px;
+            height: 64px;
+            background: var(--orange);
+            transform: rotate(-1.5deg);
+            opacity: .94
+        }
+
+        .dark:after {
+            background: linear-gradient(90deg, var(--yellow), var(--orange))
+        }
+
+        .orange:after {
+            background: var(--navy)
+        }
+
+        .content {
+            position: relative;
+            z-index: 2;
+            width: 100%
+        }
+
+        .chip {
+            position: absolute;
+            left: 34px;
+            top: 25px;
+            z-index: 4;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 14px;
+            border-radius: 999px;
+            background: var(--navy);
+            color: #fff;
+            font-weight: 700;
+            font-size: .94rem;
+            box-shadow: 0 6px 16px rgba(7, 59, 112, .2)
+        }
+
+        .dark .chip {
+            background: rgba(255, 255, 255, .14);
+            border: 1px solid rgba(255, 255, 255, .22)
+        }
+
+        .chip b {
+            width: 9px;
+            height: 9px;
+            background: var(--yellow);
+            border-radius: 50%;
+            box-shadow: 0 0 0 4px rgba(255, 195, 61, .16)
+        }
+
+        h1,
+        h2,
+        h3,
+        p {
+            margin: 0
+        }
+
+        .display {
+            font-size: clamp(3.2rem, 5.8vw, 6rem);
+            line-height: .96;
+            font-weight: 700;
+            text-shadow: 0 5px rgba(12, 46, 86, .18)
+        }
+
+        .display .accent {
+            color: var(--yellow)
+        }
+
+        .slide-title {
+            font-size: clamp(2rem, 3.8vw, 3.65rem);
+            line-height: 1.06;
+            text-align: center;
+            color: var(--navy);
+            font-weight: 700
+        }
+
+        .dark .slide-title,
+        .orange .slide-title {
+            color: #fff
+        }
+
+        .kicker {
+            text-align: center;
+            color: var(--orange);
+            font-size: .95rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase
+        }
+
+        .lead {
+            font-size: clamp(1.08rem, 1.58vw, 1.48rem);
+            line-height: 1.5;
+            color: var(--muted);
+            text-align: center;
+            max-width: 980px;
+            font-weight: 500;
+            margin: 0 auto
+        }
+
+        .dark .lead,
+        .orange .lead {
+            color: rgba(255, 255, 255, .9)
+        }
+
+        .highlight {
+            color: var(--orange);
+            font-weight: 700
+        }
+
+        .cyan {
+            color: #00a6bf;
+            font-weight: 700
+        }
+
+        .yellow {
+            color: var(--yellow);
+            font-weight: 700
+        }
+
+        .center {
+            text-align: center
+        }
+
+        .left {
+            text-align: left
+        }
+
+        .stack {
+            display: grid;
+            gap: 15px
+        }
+
+        .w {
+            width: 100%
+        }
+
+        .max {
+            max-width: 1080px
+        }
+
+        .two {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            align-items: center;
+            width: 100%
+        }
+
+        .three {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+            width: 100%
+        }
+
+        .four {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            width: 100%
+        }
+
+        .agenda {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            width: 100%
+        }
+
+        .card {
+            background: #fff;
+            border: 2px solid #e5eef5;
+            border-radius: 24px;
+            padding: 22px;
+            box-shadow: 0 12px 28px rgba(5, 49, 87, .11)
+        }
+
+        .dark .card {
+            color: var(--ink)
+        }
+
+        .card h3,
+        .card-title {
+            font-size: 1.22rem;
+            font-weight: 700;
+            color: var(--navy);
+            margin-bottom: 7px
+        }
+
+        .card p {
+            font-size: .98rem;
+            line-height: 1.44;
+            color: var(--muted)
+        }
+
+        .icon-card {
+            min-height: 155px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            gap: 8px;
+            transition: .2s
+        }
+
+        .icon-card:hover {
+            transform: translateY(-6px);
+            border-color: var(--cyan)
+        }
+
+        .big-icon {
+            font-size: 3rem
+        }
+
+        .instruction {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 9px 15px;
+            border-radius: 999px;
+            background: #edf9fb;
+            border: 2px solid #bdebf1;
+            color: #116c79;
+            font-weight: 600;
+            font-size: .92rem;
+            justify-self: center
+        }
+
+        .dark .instruction {
+            background: rgba(255, 255, 255, .13);
+            border-color: rgba(255, 255, 255, .27);
+            color: #fff
+        }
+
+        .note {
+            font-size: .88rem;
+            color: var(--muted);
+            line-height: 1.44
+        }
+
+        .dark .note {
+            color: rgba(255, 255, 255, .76)
+        }
+
+        .btn,
+        .btn2,
+        .option {
+            font-family: 'Fredoka', sans-serif;
+            font-weight: 700;
+            cursor: pointer;
+            transition: .2s
+        }
+
+        .btn {
+            border: 0;
+            padding: 12px 22px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, var(--orange), var(--yellow));
+            color: #173a59;
+            box-shadow: 0 9px 18px rgba(255, 139, 43, .26);
+            font-size: 1rem
+        }
+
+        .btn:hover:not(:disabled) {
+            transform: translateY(-3px) scale(1.02)
+        }
+
+        .btn:disabled {
+            opacity: .45;
+            cursor: not-allowed
+        }
+
+        .btn2 {
+            border: 0;
+            padding: 11px 18px;
+            border-radius: 15px;
+            background: var(--navy);
+            color: #fff
+        }
+
+        .option {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 14px;
+            border: 2px solid #dbe8f2;
+            background: #f7fbff;
+            color: var(--ink);
+            text-align: left;
+            font-size: .98rem
+        }
+
+        .option:hover:not(:disabled) {
+            border-color: var(--cyan);
+            transform: translateX(4px)
+        }
+
+        .option.selected {
+            outline: 4px solid rgba(67, 213, 230, .2);
+            border-color: var(--cyan)
+        }
+
+        .option.correct {
+            background: #e7f9ef;
+            border-color: var(--green);
+            color: #197247
+        }
+
+        .option.wrong {
+            background: #fff0ef;
+            border-color: var(--red);
+            color: #a93232
+        }
+
+        .option:disabled {
+            cursor: default
+        }
+
+        .nav {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 54px;
+            height: 54px;
+            border-radius: 50%;
+            border: 3px solid rgba(255, 255, 255, .88);
+            background: var(--yellow);
+            color: var(--navy);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.45rem;
+            font-weight: 700;
+            cursor: pointer;
+            z-index: 1100;
+            box-shadow: 0 12px 28px rgba(2, 20, 40, .28);
+            transition: .2s
+        }
+
+        .nav:hover:not(:disabled) {
+            transform: translateY(-50%) scale(1.1);
+            background: var(--orange);
+            color: #fff
+        }
+
+        .nav:disabled {
+            opacity: .28;
+            cursor: not-allowed
+        }
+
+        #prev {
+            left: 18px
+        }
+
+        #next {
+            right: 18px
+        }
+
+        .footer {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 10px;
+            z-index: 10;
+            display: flex;
+            justify-content: center;
+            pointer-events: none
+        }
+
+        .counter {
+            font-size: .78rem;
+            font-weight: 700;
+            letter-spacing: .8px;
+            color: #6a8094;
+            background: rgba(255, 255, 255, .9);
+            border: 1px solid rgba(7, 59, 112, .12);
+            padding: 6px 12px;
+            border-radius: 999px
+        }
+
+        .progress {
+            position: absolute;
+            left: 22%;
+            right: 22%;
+            bottom: 5px;
+            height: 4px;
+            background: rgba(7, 59, 112, .12);
+            border-radius: 999px;
+            overflow: hidden
+        }
+
+        .bar {
+            height: 100%;
+            width: 0;
+            background: linear-gradient(90deg, var(--cyan), var(--orange));
+            transition: .3s
+        }
+
+        .cover {
+            display: grid;
+            grid-template-columns: 1.05fr .95fr;
+            gap: 28px;
+            align-items: center;
+            width: 100%
+        }
+
+        .cover-sub {
+            margin-top: 22px;
+            font-size: 1.22rem;
+            line-height: 1.5;
+            color: rgba(255, 255, 255, .86);
+            max-width: 650px
+        }
+
+        .pill {
+            display: inline-flex;
+            margin-top: 24px;
+            padding: 10px 18px;
+            border-radius: 16px;
+            background: var(--yellow);
+            color: var(--navy);
+            font-weight: 700
+        }
+
+        .cover-image {
+            width: 100%;
+            height: 430px;
+            object-fit: cover;
+            border-radius: 28px;
+            border: 7px solid rgba(255, 255, 255, .92);
+            box-shadow: 0 24px 48px rgba(0, 0, 0, .35), 0 0 60px rgba(67, 213, 230, .23)
+        }
+
+        .photo-card {
+            background: #fff;
+            border: 3px solid #dcebf4;
+            border-radius: 26px;
+            padding: 15px;
+            box-shadow: 0 14px 28px rgba(5, 49, 87, .12)
+        }
+
+        .photo-card img {
+            display: block;
+            width: 100%;
+            height: 360px;
+            object-fit: contain;
+            border-radius: 18px
+        }
+
+        .photo-card.covered img {
+            object-fit: cover
+        }
+
+        .image-caption {
+            text-align: center;
+            margin-top: 10px;
+            color: var(--muted);
+            font-size: .93rem;
+            line-height: 1.4
+        }
+
+        .image-pair {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+            width: 100%
+        }
+
+        .image-pair img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            border-radius: 22px;
+            border: 5px solid #fff;
+            box-shadow: 0 14px 28px rgba(5, 49, 87, .15)
+        }
+
+        .material-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 15px;
+            width: 100%
+        }
+
+        .material {
+            background: #fff;
+            border: 2px solid #e4edf4;
+            border-radius: 22px;
+            padding: 14px;
+            text-align: center;
+            box-shadow: 0 10px 24px rgba(5, 49, 87, .1);
+            transition: .2s
+        }
+
+        .material:hover {
+            transform: translateY(-5px);
+            border-color: var(--cyan)
+        }
+
+        .material img {
+            width: 100%;
+            height: 150px;
+            object-fit: contain
+        }
+
+        .material strong {
+            display: block;
+            color: var(--navy);
+            margin-top: 8px;
+            font-size: 1rem
+        }
+
+        .material span {
+            display: block;
+            color: var(--muted);
+            font-size: .83rem;
+            margin-top: 4px
+        }
+
+        .drag-bank {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 14px;
+            border-radius: 20px;
+            background: #eef6fb;
+            border: 2px solid #dbe9f2;
+            width: 100%
+        }
+
+        .drag-card {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 13px;
+            border-radius: 15px;
+            background: #fff;
+            border: 2px solid #d7e5ee;
+            font-weight: 700;
+            cursor: grab;
+            box-shadow: 0 7px 14px rgba(0, 0, 0, .06);
+            user-select: none;
+            transition: .2s
+        }
+
+        .drag-card img {
+            width: 46px;
+            height: 46px;
+            object-fit: contain;
+            border-radius: 9px
+        }
+
+        .drag-card.selected {
+            border-color: var(--cyan);
+            box-shadow: 0 0 0 4px rgba(67, 213, 230, .16)
+        }
+
+        .drag-card.used {
+            opacity: .35;
+            pointer-events: none
+        }
+
+        .drop-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+            width: 100%
+        }
+
+        .drop-zone {
+            min-height: 110px;
+            border: 3px dashed #aac7d8;
+            border-radius: 18px;
+            background: #f7fbfe;
+            color: #718797;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px;
+            font-weight: 700;
+            text-align: center;
+            transition: .2s
+        }
+
+        .drop-zone.over {
+            border-color: var(--cyan);
+            background: #eafcfd
+        }
+
+        .drop-zone.correct {
+            border-style: solid;
+            border-color: var(--green);
+            background: #e7f9ef;
+            color: #20734a
+        }
+
+        .drop-zone.wrong {
+            border-style: solid;
+            border-color: var(--red);
+            background: #fff1f0;
+            color: #a33636
+        }
+
+        .condition-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+            width: 100%
+        }
+
+        .condition-card {
+            background: #fff;
+            border: 3px solid #e1edf4;
+            border-radius: 22px;
+            padding: 14px;
+            text-align: center;
+            box-shadow: 0 10px 22px rgba(5, 49, 87, .1)
+        }
+
+        .condition-card svg {
+            width: 100%;
+            height: 145px
+        }
+
+        .condition-card h3 {
+            font-size: 1rem;
+            color: var(--navy);
+            min-height: 48px
+        }
+
+        .condition-card .drop-zone {
+            min-height: 70px;
+            margin-top: 10px
+        }
+
+        .info-panel {
+            background: #fff;
+            border: 3px solid #dcebf4;
+            border-radius: 26px;
+            padding: 18px;
+            box-shadow: 0 14px 28px rgba(5, 49, 87, .12)
+        }
+
+        .info-panel img {
+            width: 100%;
+            height: 330px;
+            object-fit: contain;
+            border-radius: 18px
+        }
+
+        .mini-labels {
+            display: grid;
+            gap: 12px
+        }
+
+        .mini-label {
+            padding: 15px 17px;
+            background: #fff;
+            border-left: 8px solid var(--orange);
+            border-radius: 18px;
+            box-shadow: 0 8px 18px rgba(5, 49, 87, .09)
+        }
+
+        .mini-label.blue {
+            border-left-color: var(--cyan)
+        }
+
+        .mini-label.green {
+            border-left-color: var(--green)
+        }
+
+        .mini-label strong {
+            display: block;
+            color: var(--navy);
+            margin-bottom: 3px
+        }
+
+        .mini-label span {
+            color: var(--muted);
+            line-height: 1.42
+        }
+
+        .circuit-illustration {
+            background: linear-gradient(135deg, #eef8ff, #fff9ef);
+            border: 3px solid #d7e9f3;
+            border-radius: 26px;
+            padding: 14px
+        }
+
+        .circuit-illustration svg {
+            width: 100%;
+            height: 390px;
+            display: block
+        }
+
+        .glow {
+            animation: glowPulse .9s ease-in-out infinite alternate
+        }
+
+        @keyframes glowPulse {
+            from {
+                filter: drop-shadow(0 0 7px rgba(255, 90, 90, .45))
+            }
+
+            to {
+                filter: drop-shadow(0 0 28px rgba(255, 90, 90, .98))
+            }
+        }
+
+        .order-layout {
+            display: grid;
+            grid-template-columns: .75fr 1.25fr;
+            gap: 22px;
+            width: 100%;
+            align-items: start
+        }
+
+        .order-bank {
+            display: grid;
+            gap: 10px;
+            padding: 14px;
+            background: #eef6fb;
+            border: 2px solid #dbe9f2;
+            border-radius: 22px;
+            min-height: 390px
+        }
+
+        .order-item {
+            padding: 13px 14px;
+            background: #fff;
+            border: 2px solid #d7e5ee;
+            border-radius: 15px;
+            font-weight: 700;
+            cursor: grab;
+            box-shadow: 0 7px 14px rgba(0, 0, 0, .06)
+        }
+
+        .order-item.selected {
+            border-color: var(--cyan);
+            box-shadow: 0 0 0 4px rgba(67, 213, 230, .16)
+        }
+
+        .order-slots {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px
+        }
+
+        .order-slot {
+            min-height: 104px;
+            border: 3px dashed #aac7d8;
+            border-radius: 17px;
+            background: #f7fbfe;
+            padding: 11px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #718797;
+            font-weight: 700
+        }
+
+        .order-slot .num {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--navy);
+            color: #fff;
+            flex: none
+        }
+
+        .order-slot.correct {
+            border-style: solid;
+            border-color: var(--green);
+            background: #e7f9ef;
+            color: #20734a
+        }
+
+        .order-slot.wrong {
+            border-color: var(--red);
+            background: #fff1f0;
+            color: #a33636
+        }
+
+        .step-photo {
+            display: grid;
+            grid-template-columns: 1.05fr .95fr;
+            gap: 28px;
+            align-items: center;
+            width: 100%
+        }
+
+        .step-photo img {
+            width: 100%;
+            height: 420px;
+            object-fit: contain;
+            border-radius: 24px;
+            background: #fff;
+            border: 5px solid #fff;
+            box-shadow: 0 16px 34px rgba(5, 49, 87, .18)
+        }
+
+        .step-number {
+            display: flex;
+            align-items: center;
+            gap: 15px
+        }
+
+        .step-number b {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: var(--orange);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex: none
+        }
+
+        .step-number span {
+            font-size: 1.22rem;
+            color: var(--navy);
+            font-weight: 700
+        }
+
+        .step-list {
+            display: grid;
+            gap: 12px
+        }
+
+        .step-list div {
+            padding: 14px 16px;
+            background: #fff;
+            border: 2px solid #e2edf4;
+            border-radius: 17px;
+            color: var(--muted);
+            line-height: 1.45
+        }
+
+        .step-list strong {
+            color: var(--navy)
+        }
+
+        .status-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap
+        }
+
+        .status-result {
+            min-height: 72px;
+            padding: 14px 18px;
+            border-radius: 18px;
+            background: #fff;
+            border: 2px solid #dcebf4;
+            color: var(--muted);
+            text-align: center;
+            line-height: 1.45
+        }
+
+        .video-wrap {
+            position: relative;
+            width: min(420px, 100%);
+            aspect-ratio: 9/16;
+            margin: auto;
+            border-radius: 24px;
+            overflow: hidden;
+            border: 7px solid #fff;
+            box-shadow: 0 18px 34px rgba(0, 0, 0, .22);
+            background: #111
+        }
+
+        .video-wrap iframe {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            border: 0
+        }
+
+        .trouble-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            width: 100%
+        }
+
+        .trouble {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 16px;
+            background: #fff;
+            border: 2px solid #e1edf4;
+            border-radius: 18px;
+            cursor: pointer;
+            transition: .2s
+        }
+
+        .trouble:hover {
+            transform: translateY(-3px);
+            border-color: var(--cyan)
+        }
+
+        .trouble.done {
+            background: #e7f9ef;
+            border-color: var(--green)
+        }
+
+        .trouble .check {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #eef5f9;
+            color: var(--navy);
+            font-weight: 700;
+            flex: none
+        }
+
+        .trouble.done .check {
+            background: var(--green);
+            color: #fff
+        }
+
+        .trouble strong {
+            display: block;
+            color: var(--navy);
+            margin-bottom: 4px
+        }
+
+        .trouble span {
+            color: var(--muted);
+            line-height: 1.38
+        }
+
+        .idea-box {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 10px;
+            width: min(780px, 100%);
+            margin: auto
+        }
+
+        .idea-box input {
+            font-family: 'Fredoka';
+            font-size: 1rem;
+            padding: 14px 16px;
+            border: 3px solid #dcebf4;
+            border-radius: 16px;
+            outline: none
+        }
+
+        .idea-box input:focus {
+            border-color: var(--cyan)
+        }
+
+        .idea-result {
+            min-height: 85px;
+            padding: 17px;
+            border-radius: 20px;
+            background: #fff;
+            border: 3px solid #dcebf4;
+            text-align: center;
+            color: var(--muted);
+            font-size: 1.05rem;
+            line-height: 1.45
+        }
+
+        .innovation-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            width: 100%
+        }
+
+        .innovation-card {
+            background: #fff;
+            border: 3px solid #dcebf4;
+            border-radius: 24px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 12px 28px rgba(5, 49, 87, .11)
+        }
+
+        .innovation-card img {
+            width: 100%;
+            height: 280px;
+            object-fit: contain;
+            border-radius: 16px
+        }
+
+        .innovation-card h3 {
+            color: var(--navy);
+            margin-top: 8px
+        }
+
+        .innovation-card p {
+            color: var(--muted);
+            line-height: 1.42;
+            margin-top: 4px
+        }
+
+        .safety-layout {
+            display: grid;
+            grid-template-columns: .9fr 1.1fr;
+            gap: 20px;
+            width: 100%;
+            align-items: start
+        }
+
+        .safety-bank {
+            display: grid;
+            gap: 9px;
+            padding: 13px;
+            background: #eef6fb;
+            border: 2px solid #dbe9f2;
+            border-radius: 20px;
+            min-height: 400px
+        }
+
+        .safety-card {
+            padding: 12px 13px;
+            background: #fff;
+            border: 2px solid #d7e5ee;
+            border-radius: 14px;
+            font-weight: 700;
+            cursor: grab;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, .05);
+            line-height: 1.35
+        }
+
+        .safety-card.selected {
+            border-color: var(--cyan);
+            box-shadow: 0 0 0 4px rgba(67, 213, 230, .16)
+        }
+
+        .safety-columns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px
+        }
+
+        .safety-col {
+            min-height: 400px;
+            border: 3px dashed #aac7d8;
+            border-radius: 22px;
+            padding: 13px;
+            background: #f9fcfe
+        }
+
+        .safety-col h3 {
+            text-align: center;
+            margin-bottom: 12px
+        }
+
+        .safety-col.safe {
+            border-color: #84d6aa;
+            background: #f1fbf5
+        }
+
+        .safety-col.unsafe {
+            border-color: #f3aaa6;
+            background: #fff7f6
+        }
+
+        .safety-col .placed {
+            padding: 10px 11px;
+            background: #fff;
+            border-radius: 12px;
+            border: 2px solid #dce8ef;
+            margin-bottom: 9px;
+            font-size: .9rem;
+            line-height: 1.35;
+            color: var(--ink)
+        }
+
+        .quiz {
+            width: min(860px, 100%);
+            background: #fff;
+            border-radius: 28px;
+            padding: 28px;
+            border: 3px solid #dcebf4;
+            color: var(--ink);
+            margin: 0 auto
+        }
+
+        .quiz-prog {
+            font-size: .9rem;
+            font-weight: 700;
+            color: var(--orange);
+            margin-bottom: 10px
+        }
+
+        .quiz-q {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--navy);
+            line-height: 1.3;
+            margin-bottom: 16px
+        }
+
+        .quiz-options {
+            display: grid;
+            gap: 11px
+        }
+
+        .quiz-fb {
+            min-height: 70px;
+            margin-top: 12px;
+            padding: 13px 15px;
+            border-radius: 16px;
+            background: #f4f9fc;
+            color: var(--muted);
+            line-height: 1.45
+        }
+
+        .feedback {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 28px;
+            align-items: center;
+            width: 100%
+        }
+
+        .feedback-choices {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px
+        }
+
+        .feedback-choice {
+            padding: 22px 10px;
+            border-radius: 20px;
+            background: #fff;
+            border: 3px solid #e0ebf2;
+            text-align: center;
+            cursor: pointer;
+            transition: .2s
+        }
+
+        .feedback-choice:hover,
+        .feedback-choice.selected {
+            transform: translateY(-5px);
+            border-color: var(--cyan);
+            background: #effcfd
+        }
+
+        .face {
+            font-size: 3rem
+        }
+
+        .robot {
+            width: 540px;
+            height: 540px;
+            object-fit: contain;
+            animation: float 3.2s ease-in-out infinite
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0)
+            }
+
+            50% {
+                transform: translateY(-12px)
+            }
+        }
+
+        .toast {
+            position: fixed;
+            left: 50%;
+            bottom: 34px;
+            transform: translate(-50%, 28px);
+            z-index: 3000;
+            padding: 14px 20px;
+            border-radius: 16px;
+            background: #102f4c;
+            color: #fff;
+            font-weight: 700;
+            opacity: 0;
+            pointer-events: none;
+            transition: .25s;
+            max-width: min(660px, 88vw);
+            text-align: center
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translate(-50%, 0)
+        }
+
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 16px;
+            border-radius: 3px;
+            z-index: 3500;
+            pointer-events: none;
+            animation: fall 1.5s ease-out forwards
+        }
+
+        @keyframes fall {
+            to {
+                transform: translate(var(--x), var(--y)) rotate(680deg);
+                opacity: 0
+            }
+        }
+
+        @media(max-width:1100px) {
+            .presentation {
+                width: 94vw
+            }
+
+            .slide {
+                padding: 66px 50px 56px
+            }
+
+            .agenda,
+            .four {
+                grid-template-columns: repeat(2, 1fr)
+            }
+
+            .material-grid {
+                grid-template-columns: repeat(3, 1fr)
+            }
+
+            .drop-grid,
+            .condition-grid {
+                grid-template-columns: repeat(2, 1fr)
+            }
+        }
+
+        @media(max-width:760px) {
+            body {
+                overflow: auto
+            }
+
+            .brand {
+                left: 8px;
+                top: 8px;
+                padding: 7px 10px;
+                gap: 8px
+            }
+
+            .brand .k {
+                height: 30px
+            }
+
+            .brand .r {
+                height: 26px
+            }
+
+            .brand i {
+                height: 25px
+            }
+
+            .presentation {
+                position: absolute;
+                top: 64px;
+                transform: translateX(-50%);
+                width: 100vw;
+                height: calc(100vh - 64px);
+                max-height: none;
+                aspect-ratio: auto;
+                border-radius: 0;
+                border: 0
+            }
+
+            .slide {
+                padding: 68px 20px 62px;
+                overflow-y: auto;
+                justify-content: flex-start
+            }
+
+            .nav {
+                width: 42px;
+                height: 42px;
+                top: auto;
+                bottom: 12px
+            }
+
+            #prev {
+                left: 12px
+            }
+
+            #next {
+                right: 12px
+            }
+
+            .chip {
+                left: 16px;
+                top: 18px
+            }
+
+            .two,
+            .three,
+            .cover,
+            .feedback,
+            .step-photo,
+            .order-layout,
+            .safety-layout {
+                grid-template-columns: 1fr
+            }
+
+            .agenda,
+            .four,
+            .material-grid,
+            .drop-grid,
+            .condition-grid,
+            .trouble-grid,
+            .innovation-grid,
+            .safety-columns {
+                grid-template-columns: 1fr
+            }
+
+            .display {
+                text-align: center;
+                font-size: 3rem
+            }
+
+            .cover-image {
+                height: 300px
+            }
+
+            .slide:after {
+                display: none
+            }
+
+            .photo-card img {
+                height: 260px
+            }
+
+            .robot {
+                width: 600px;
+                height: 600px;
+                position: relative;
+                margin: auto;
+                animation: float 3.2s ease-in-out infinite;
+                object-fit: contain;
+                display: block
+            }
+
+            .order-slots {
+                grid-template-columns: 1fr
+            }
+        }
+    </style>
+
+    <style>
+        .compare-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            width: 100%
+        }
+
+        .circuit-card {
+            background: #fff;
+            border: 3px solid #dcebf4;
+            border-radius: 24px;
+            padding: 18px;
+            box-shadow: 0 12px 28px rgba(5, 49, 87, .11);
+            text-align: center;
+            position: relative;
+            overflow: hidden
+        }
+
+        .circuit-card h3 {
+            color: var(--navy);
+            font-size: 1.25rem;
+            margin-bottom: 6px
+        }
+
+        .circuit-card p {
+            color: var(--muted);
+            line-height: 1.42
+        }
+
+        .circuit-card svg {
+            width: 100%;
+            height: 220px;
+            display: block;
+            margin: 8px 0
+        }
+
+        .state-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 14px;
+            border-radius: 999px;
+            font-weight: 700;
+            background: #edf5fa;
+            color: var(--navy);
+            border: 2px solid #d8e8f1
+        }
+
+        .state-pill.on {
+            background: #e7f9ef;
+            color: #20734a;
+            border-color: #90d7ae
+        }
+
+        .state-pill.off {
+            background: #fff1f0;
+            color: #a33636;
+            border-color: #efb4b0
+        }
+
+        .reveal-box {
+            opacity: 0;
+            transform: translateY(8px);
+            transition: .25s
+        }
+
+        .reveal-box.show {
+            opacity: 1;
+            transform: none
+        }
+
+        .copper-hero {
+            display: grid;
+            grid-template-columns: .9fr 1.1fr;
+            gap: 28px;
+            align-items: center;
+            width: 100%
+        }
+
+        .copper-hero img {
+            width: 100%;
+            height: 360px;
+            object-fit: contain;
+            background: #fff;
+            border: 5px solid #fff;
+            border-radius: 24px;
+            box-shadow: 0 16px 34px rgba(5, 49, 87, .16)
+        }
+
+        .reason-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            width: 100%
+        }
+
+        .reason {
+            padding: 18px;
+            background: #fff;
+            border: 2px solid #e1edf4;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 10px 22px rgba(5, 49, 87, .09)
+        }
+
+        .reason b {
+            display: block;
+            color: var(--navy);
+            margin: 7px 0
+        }
+
+        .reason span {
+            color: var(--muted);
+            font-size: .92rem;
+            line-height: 1.4
+        }
+
+        .reason .big-icon {
+            font-size: 2.6rem
+        }
+
+        .project-preview {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+            width: 100%
+        }
+
+        .project-preview .photo-card img {
+            height: 310px;
+            object-fit: cover
+        }
+
+        .material-grid.six {
+            grid-template-columns: repeat(6, 1fr)
+        }
+
+        .fold-sim {
+            display: grid;
+            grid-template-columns: 1fr .8fr;
+            gap: 22px;
+            align-items: center;
+            width: 100%
+        }
+
+        .paper-window {
+            position: relative;
+            width: 100%;
+            height: 410px;
+            border-radius: 26px;
+            background: #eaf1f5;
+            border: 3px solid #cfe0ea;
+            overflow: hidden;
+            box-shadow: inset 0 0 35px rgba(7, 59, 112, .08)
+        }
+
+        .paper-face {
+            position: absolute;
+            inset: 24px;
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 12px 26px rgba(5, 49, 87, .12);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: .45s ease;
+            overflow: hidden
+        }
+
+        .paper-face img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain
+        }
+
+        .paper-face.inside {
+            opacity: 0;
+            transform: translateX(22px) scale(.97)
+        }
+
+        .paper-window.open .paper-face.front {
+            opacity: 0;
+            transform: translateX(-22px) scale(.97)
+        }
+
+        .paper-window.open .paper-face.inside {
+            opacity: 1;
+            transform: none
+        }
+
+        .sim-controls {
+            display: grid;
+            gap: 12px
+        }
+
+        .sim-result {
+            padding: 16px;
+            background: #fff;
+            border: 2px solid #dcebf4;
+            border-radius: 18px;
+            color: var(--muted);
+            line-height: 1.45
+        }
+
+        .sim-result strong {
+            color: var(--navy)
+        }
+
+        .path-activity {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            width: 100%
+        }
+
+        .path-option {
+            border: 3px solid #dcebf4;
+            border-radius: 22px;
+            background: #fff;
+            padding: 16px;
+            cursor: pointer;
+            transition: .2s;
+            text-align: center
+        }
+
+        .path-option:hover {
+            transform: translateY(-4px);
+            border-color: var(--cyan)
+        }
+
+        .path-option.correct {
+            border-color: var(--green);
+            background: #e7f9ef
+        }
+
+        .path-option.wrong {
+            border-color: var(--red);
+            background: #fff1f0
+        }
+
+        .path-option svg {
+            width: 100%;
+            height: 190px
+        }
+
+        .loop-demo {
+            display: grid;
+            grid-template-columns: 1.1fr .9fr;
+            gap: 24px;
+            align-items: center;
+            width: 100%
+        }
+
+        .loop-board {
+            background: #fff;
+            border: 3px solid #dcebf4;
+            border-radius: 26px;
+            padding: 16px;
+            box-shadow: 0 14px 28px rgba(5, 49, 87, .11)
+        }
+
+        .loop-board svg {
+            width: 100%;
+            height: 340px
+        }
+
+        .led-glow {
+            filter: drop-shadow(0 0 14px rgba(67, 213, 230, .9))
+        }
+
+        .loop-gap {
+            transition: .25s
+        }
+
+        .loop-board.closed .loop-gap {
+            opacity: 0
+        }
+
+        .loop-board .closed-bridge {
+            opacity: 0;
+            transition: .25s
+        }
+
+        .loop-board.closed .closed-bridge {
+            opacity: 1
+        }
+
+        .loop-board .demo-led {
+            fill: #8aa3b5
+        }
+
+        .loop-board.closed .demo-led {
+            fill: #46cfea;
+            filter: drop-shadow(0 0 24px rgba(67, 213, 230, 1))
+        }
+
+        .build-check {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+            width: 100%
+        }
+
+        .check-card {
+            background: #fff;
+            border: 2px solid #e1edf4;
+            border-radius: 18px;
+            padding: 15px;
+            text-align: center
+        }
+
+        .check-card b {
+            display: block;
+            color: var(--navy);
+            margin: 6px 0
+        }
+
+        .check-card span {
+            color: var(--muted);
+            font-size: .9rem
+        }
+
+        .trouble.done .check {
+            background: var(--green);
+            color: #fff
+        }
+
+        .video-note {
+            padding: 14px 16px;
+            border-radius: 18px;
+            background: #fff8e8;
+            border: 2px solid #ffe1a0;
+            color: #7b5a16;
+            line-height: 1.42
+        }
+
+        .quiz {
+            max-height: 520px;
+            overflow: auto
+        }
+
+        @media(max-width:1100px) {
+            .material-grid.six {
+                grid-template-columns: repeat(3, 1fr)
+            }
+
+            .reason-grid {
+                grid-template-columns: 1fr 1fr
+            }
+
+            .build-check {
+                grid-template-columns: 1fr 1fr
+            }
+        }
+
+        @media(max-width:760px) {
+
+            .compare-grid,
+            .copper-hero,
+            .project-preview,
+            .fold-sim,
+            .path-activity,
+            .loop-demo,
+            .reason-grid,
+            .material-grid.six,
+            .build-check {
+                grid-template-columns: 1fr
+            }
+
+            .paper-window {
+                height: 330px
+            }
+        }
+    </style>
+
+    <style>
+        /* ===== SESSION 5 · BREADBOARD ===== */
+        .breadboard-hero {
+            display: grid;
+            grid-template-columns: 1.05fr .95fr;
+            gap: 26px;
+            align-items: center;
+            width: 100%
+        }
+
+        .translate-flow {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+            width: 100%
+        }
+
+        .translate-card {
+            background: #fff;
+            border: 3px solid #dcebf4;
+            border-radius: 22px;
+            padding: 18px;
+            text-align: center;
+            box-shadow: 0 10px 24px rgba(5, 49, 87, .09);
+            transition: .2s
+        }
+
+        .translate-card.active {
+            border-color: var(--orange);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 28px rgba(255, 139, 43, .18)
+        }
+
+        .translate-card .arrow {
+            font-size: 2rem;
+            color: var(--orange);
+            font-weight: 700;
+            margin: 8px 0
+        }
+
+        .simple-path {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            padding: 14px 18px;
+            border-radius: 20px;
+            background: #f4f9fc;
+            border: 2px solid #dcebf4;
+            color: var(--navy);
+            font-weight: 700;
+            font-size: 1.05rem
+        }
+
+        .path-node {
+            padding: 9px 12px;
+            border-radius: 12px;
+            background: #fff;
+            border: 2px solid #d8e8f1;
+            box-shadow: 0 5px 12px rgba(5, 49, 87, .06)
+        }
+
+        .path-arrow {
+            color: var(--orange);
+            font-size: 1.3rem
+        }
+
+        .breadboard-shell {
+            background: #f7fafc;
+            border: 4px solid #cddce5;
+            border-radius: 28px;
+            padding: 16px;
+            box-shadow: 0 14px 30px rgba(5, 49, 87, .14);
+            width: 100%;
+            overflow: hidden
+        }
+
+        .bb-rail {
+            display: grid;
+            grid-template-columns: 36px repeat(16, 1fr);
+            gap: 5px;
+            align-items: center;
+            margin: 5px 0
+        }
+
+        .bb-rail-label {
+            font-weight: 700;
+            text-align: center;
+            font-size: .9rem
+        }
+
+        .bb-row {
+            display: grid;
+            grid-template-columns: 36px repeat(5, 1fr) 26px repeat(5, 1fr);
+            gap: 6px;
+            align-items: center;
+            margin: 6px 0
+        }
+
+        .bb-label {
+            font-weight: 700;
+            color: var(--navy);
+            text-align: center;
+            font-size: .86rem
+        }
+
+        .bb-gap {
+            height: 100%;
+            background: linear-gradient(90deg, transparent 0 35%, #dce7ee 35% 65%, transparent 65%);
+            border-radius: 8px
+        }
+
+        .hole {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #dbe4ea;
+            border: 3px solid #aebcc6;
+            margin: auto;
+            cursor: pointer;
+            transition: .16s;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, .12)
+        }
+
+        .hole:hover {
+            transform: scale(1.15);
+            border-color: var(--cyan)
+        }
+
+        .hole.connected {
+            background: var(--yellow);
+            border-color: var(--orange);
+            box-shadow: 0 0 0 5px rgba(255, 195, 61, .18)
+        }
+
+        .hole.power-plus {
+            background: #ffd9d7;
+            border-color: #ef8f8b
+        }
+
+        .hole.power-minus {
+            background: #d7edff;
+            border-color: #83b9df
+        }
+
+        .hole.rail-active {
+            background: var(--yellow);
+            border-color: var(--orange);
+            box-shadow: 0 0 0 4px rgba(255, 195, 61, .16)
+        }
+
+        .bb-key {
+            display: flex;
+            justify-content: center;
+            gap: 18px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+            color: var(--muted);
+            font-size: .9rem
+        }
+
+        .bb-key span {
+            display: flex;
+            align-items: center;
+            gap: 7px
+        }
+
+        .dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            display: inline-block;
+            border: 2px solid #aaa
+        }
+
+        .dot.plus {
+            background: #ffd9d7;
+            border-color: #ef8f8b
+        }
+
+        .dot.minus {
+            background: #d7edff;
+            border-color: #83b9df
+        }
+
+        .dot.conn {
+            background: var(--yellow);
+            border-color: var(--orange)
+        }
+
+        .connection-stepper {
+            display: grid;
+            grid-template-columns: 1fr .95fr;
+            gap: 24px;
+            align-items: center;
+            width: 100%
+        }
+
+        .connection-list {
+            display: grid;
+            gap: 10px
+        }
+
+        .connection-item {
+            padding: 14px 16px;
+            border-radius: 17px;
+            background: #fff;
+            border: 2px solid #e2edf4;
+            color: var(--muted);
+            transition: .2s
+        }
+
+        .connection-item.active {
+            border-color: var(--orange);
+            background: #fff7ea;
+            color: var(--ink);
+            transform: translateX(5px)
+        }
+
+        .connection-item strong {
+            color: var(--navy)
+        }
+
+        .placeholder-wrap {
+            background: #fff;
+            border: 3px solid #dcebf4;
+            border-radius: 26px;
+            padding: 14px;
+            box-shadow: 0 14px 28px rgba(5, 49, 87, .12)
+        }
+
+        .image-placeholder {
+            height: 365px;
+            border: 4px dashed #aac7d8;
+            border-radius: 18px;
+            background: linear-gradient(135deg, #f7fbfe, #fffaf0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 30px;
+            color: #718797;
+            font-weight: 700;
+            line-height: 1.5;
+            position: relative
+        }
+
+        .image-placeholder:before {
+            content: '🖼️';
+            display: block;
+            position: absolute;
+            top: 72px;
+            font-size: 3.2rem;
+            opacity: .7
+        }
+
+        .image-placeholder code {
+            display: block;
+            margin-top: 14px;
+            padding: 6px 9px;
+            border-radius: 8px;
+            background: #edf5fa;
+            color: var(--navy);
+            font-size: .78rem
+        }
+
+        .build-stage {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 22px;
+            align-items: center;
+            width: 100%
+        }
+
+        .stage-card {
+            background: #fff;
+            border: 3px solid #dcebf4;
+            border-radius: 22px;
+            padding: 18px;
+            box-shadow: 0 12px 24px rgba(5, 49, 87, .09)
+        }
+
+        .stage-card h3 {
+            color: var(--navy);
+            margin-bottom: 10px
+        }
+
+        .stage-card ol {
+            margin: 0;
+            padding-left: 22px;
+            color: var(--muted);
+            line-height: 1.55
+        }
+
+        .stage-card li {
+            margin: 7px 0
+        }
+
+        .stage-card strong {
+            color: var(--navy)
+        }
+
+        .challenge-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            width: 100%
+        }
+
+        .challenge-card {
+            background: #fff;
+            border: 3px solid #e1edf4;
+            border-radius: 22px;
+            padding: 18px;
+            text-align: center;
+            cursor: pointer;
+            transition: .2s;
+            box-shadow: 0 10px 22px rgba(5, 49, 87, .08)
+        }
+
+        .challenge-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--cyan)
+        }
+
+        .challenge-card.correct {
+            background: #e7f9ef;
+            border-color: var(--green)
+        }
+
+        .challenge-card.wrong {
+            background: #fff1f0;
+            border-color: var(--red)
+        }
+
+        .challenge-card h3 {
+            color: var(--navy);
+            margin: 8px 0
+        }
+
+        .challenge-card p {
+            color: var(--muted);
+            line-height: 1.4
+        }
+
+        .challenge-icon {
+            font-size: 3rem
+        }
+
+        .component-line {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 9px;
+            flex-wrap: wrap
+        }
+
+        .comp {
+            padding: 10px 13px;
+            border: 2px solid #dcebf4;
+            border-radius: 13px;
+            background: #fff;
+            font-weight: 700;
+            color: var(--navy)
+        }
+
+        .circuit-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap
+        }
+
+        .circuit-tab {
+            border: 2px solid #dcebf4;
+            background: #fff;
+            padding: 10px 16px;
+            border-radius: 999px;
+            font-family: 'Fredoka';
+            font-weight: 700;
+            color: var(--navy);
+            cursor: pointer
+        }
+
+        .circuit-tab.active {
+            background: var(--navy);
+            color: #fff;
+            border-color: var(--navy)
+        }
+
+        .lab-table {
+            display: grid;
+            grid-template-columns: 140px 1fr 1fr;
+            gap: 2px;
+            background: #dcebf4;
+            border: 2px solid #dcebf4;
+            border-radius: 18px;
+            overflow: hidden;
+            width: 100%
+        }
+
+        .lab-cell {
+            background: #fff;
+            padding: 13px 14px;
+            color: var(--muted);
+            line-height: 1.35
+        }
+
+        .lab-cell.head {
+            background: #edf5fa;
+            color: var(--navy);
+            font-weight: 700
+        }
+
+        .lab-cell.bold {
+            color: var(--navy);
+            font-weight: 700
+        }
+
+        .question-strip {
+            padding: 16px 18px;
+            border-radius: 18px;
+            background: #fff;
+            border: 3px solid #dcebf4;
+            font-size: 1.12rem;
+            font-weight: 700;
+            color: var(--navy);
+            text-align: center
+        }
+
+        .safety-note {
+            padding: 13px 15px;
+            border-radius: 16px;
+            background: #fff5df;
+            border: 2px solid #ffd57d;
+            color: #74520a;
+            line-height: 1.4;
+            font-size: .92rem
+        }
+
+        .quiz {
+            max-height: none;
+            overflow: visible
+        }
+
+        @media(max-width:1100px) {
+            .challenge-grid {
+                grid-template-columns: 1fr 1fr
+            }
+
+            .image-placeholder {
+                height: 300px
+            }
+        }
+
+        @media(max-width:760px) {
+
+            .breadboard-hero,
+            .translate-flow,
+            .connection-stepper,
+            .build-stage,
+            .challenge-grid {
+                grid-template-columns: 1fr
+            }
+
+            .bb-row {
+                grid-template-columns: 28px repeat(5, 1fr) 18px repeat(5, 1fr);
+                gap: 3px
+            }
+
+            .hole {
+                width: 18px;
+                height: 18px;
+                border-width: 2px
+            }
+
+            .bb-rail {
+                grid-template-columns: 28px repeat(16, 1fr);
+                gap: 2px
+            }
+
+            .image-placeholder {
+                height: 260px
+            }
+
+            .lab-table {
+                grid-template-columns: 1fr
+            }
+
+            .lab-cell.head {
+                display: none
+            }
+        }
+
+        /* more realistic breadboard visual */
+        .bbv-board {
+            background: #ececec;
+            border: 3px solid #cfd8de;
+            border-radius: 10px;
+            padding: 14px;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, .7);
+            width: 100%;
+            overflow: hidden
+        }
+
+        .bbv-rail {
+            display: grid;
+            grid-template-columns: 24px repeat(16, 1fr) 24px;
+            gap: 6px;
+            align-items: center;
+            margin: 4px 0
+        }
+
+        .bbv-rail .rail-mark {
+            font-weight: 700;
+            text-align: center;
+            font-size: 1rem;
+            color: #3a5870
+        }
+
+        .bbv-rail .bbv-pin {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #e0e3e6;
+            border: 3px solid #a1a8ae;
+            cursor: pointer;
+            justify-self: center;
+            transition: .16s;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, .15)
+        }
+
+        .bbv-rail .bbv-pin:hover,
+        .bbv-main .bbv-pin:hover {
+            transform: scale(1.12);
+            border-color: var(--cyan)
+        }
+
+        .bbv-rail .bbv-pin.rail-active {
+            background: var(--yellow);
+            border-color: var(--orange);
+            box-shadow: 0 0 0 4px rgba(255, 195, 61, .18)
+        }
+
+        .bbv-rail.plus-line {
+            border-bottom: 2px solid #e35f5f;
+            padding-bottom: 4px
+        }
+
+        .bbv-rail.minus-line {
+            border-top: 2px solid #555;
+            padding-top: 4px
+        }
+
+        .bbv-gap-space {
+            height: 18px
+        }
+
+        .bbv-main {
+            margin: 10px 0
+        }
+
+        .bbv-num-row {
+            display: grid;
+            grid-template-columns: 26px repeat(16, 1fr) 26px;
+            gap: 6px;
+            align-items: center;
+            margin: 4px 0
+        }
+
+        .bbv-num {
+            font-size: .78rem;
+            color: #596f81;
+            text-align: center;
+            font-weight: 700
+        }
+
+        .bbv-half {
+            display: grid;
+            grid-template-columns: 26px repeat(16, 1fr) 26px;
+            gap: 6px;
+            align-items: center;
+            margin: 6px 0
+        }
+
+        .bbv-row-label {
+            font-size: .88rem;
+            color: #4a6378;
+            text-align: center;
+            font-weight: 700
+        }
+
+        .bbv-main .bbv-pin {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #dbe4ea;
+            border: 3px solid #aebcc6;
+            justify-self: center;
+            cursor: pointer;
+            transition: .16s;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, .14)
+        }
+
+        .bbv-main .bbv-pin.connected {
+            background: var(--yellow);
+            border-color: var(--orange);
+            box-shadow: 0 0 0 4px rgba(255, 195, 61, .18)
+        }
+
+        .bbv-center-gap {
+            height: 34px;
+            background: linear-gradient(180deg, transparent 0 20%, #d4d4d4 20% 80%, transparent 80%);
+            border-radius: 8px;
+            margin: 10px 0 6px
+        }
+
+        .bbv-key {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+            color: var(--muted);
+            font-size: .9rem
+        }
+
+        .bbv-key span {
+            display: flex;
+            align-items: center;
+            gap: 7px
+        }
+
+        @media(max-width:760px) {
+
+            .bbv-rail,
+            .bbv-num-row,
+            .bbv-half {
+                grid-template-columns: 18px repeat(12, 1fr) 18px;
+                gap: 3px
+            }
+
+            .bbv-rail .bbv-pin,
+            .bbv-main .bbv-pin {
+                width: 14px;
+                height: 14px;
+                border-width: 2px
+            }
+
+            .bbv-center-gap {
+                height: 24px
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="brand"><img class="k"
+            src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/5b36ddb1-5ff5-490e-af31-9a171820e051.png"
+            alt="Kalananti"><i></i><img class="r"
+            src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/7e71d258-897f-42b7-9c8b-2ff76376ffc6.png"
+            alt="Ruangguru Coding"></div>
+    <button class="nav" id="prev">◀</button><button class="nav" id="next">▶</button>
+    <main class="presentation" id="presentation">
+
+        <!-- 1 -->
+        <section class="slide dark active">
+            <div class="cover content">
+                <div>
+                    <div class="kicker left" style="color:var(--cyan)">WELCOME TO DIY ROBOTIC CLASS</div>
+                    <h1 class="display"><span class="accent">Introduction</span><br>to Breadboard</h1>
+                    <p class="cover-sub">Memindahkan rangkaian yang sudah kita kenal ke breadboard dan memahami
+                        bagaimana setiap pin saling terhubung.</p>
+                    <div class="pill">SESSION 5 · BUILDING BASIC CIRCUITS</div>
+                </div>
+                <img class="robot"
+                    src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/eded3e71-16cf-401e-b1c1-3ff5f887dc38.png"
+                    alt="Robot">
+            </div>
+        </section>
+
+        <!-- 2 -->
+        <section class="slide"><span class="chip"><b></b> Today's Agenda</span>
+            <div class="content stack">
+                <div>
+                    <div class="kicker">WHAT WE WILL DO TODAY</div>
+                    <h2 class="slide-title">Rencana Belajar Hari Ini</h2>
+                </div>
+                <div class="agenda">
+                    <div class="card icon-card">
+                        <div class="big-icon">🔁</div>
+                        <h3>Translate the Circuit</h3>
+                        <p>Melihat bahwa circuit yang sama dapat dirangkai dengan media berbeda.</p>
+                    </div>
+                    <div class="card icon-card">
+                        <div class="big-icon">🧱</div>
+                        <h3>Understand Breadboard</h3>
+                        <p>Mengenal power rail, terminal strip, center gap, dan connected pins.</p>
+                    </div>
+                    <div class="card icon-card">
+                        <div class="big-icon">💡</div>
+                        <h3>Build 3 Circuits</h3>
+                        <p>Mencoba single LED, three LEDs, lalu button dengan LED dan buzzer.</p>
+                    </div>
+                    <div class="card icon-card">
+                        <div class="big-icon">🛠️</div>
+                        <h3>Test & Troubleshoot</h3>
+                        <p>Mencari connection yang salah dan memperbaiki circuit.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3 -->
+        <section class="slide"><span class="chip"><b></b> Quick Review</span>
+            <div class="content two max">
+                <div class="stack">
+                    <div class="kicker left">LAST SESSION</div>
+                    <h2 class="slide-title left">Apa yang Membuat LED Menyala?</h2>
+                    <p class="lead left">Pada paper circuit, kita menggunakan <span class="highlight">copper tape</span>
+                        untuk membuat jalur listrik dari battery menuju LED lalu kembali lagi ke battery.</p>
+                    <div class="card">
+                        <h3>Closed circuit</h3>
+                        <p>Jalur lengkap → current dapat mengalir → LED menyala.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Open circuit</h3>
+                        <p>Ada jalur terputus → current tidak dapat menyelesaikan circuit → LED mati.</p>
+                    </div>
+                </div>
+                <div class="circuit-illustration"><svg viewBox="0 0 680 390">
+                        <rect x="40" y="50" width="600" height="290" rx="30" fill="#fff" stroke="#d7e9f3"
+                            stroke-width="5" />
+                        <circle cx="145" cy="195" r="58" fill="#dce2e6" /><text x="145" y="186" text-anchor="middle"
+                            font-size="20" font-weight="700" fill="#073b70">BATTERY</text><text x="145" y="220"
+                            text-anchor="middle" font-size="30" font-weight="700" fill="#ef5350">+</text>
+                        <path d="M205 150 H310" stroke="#c77830" stroke-width="16" />
+                        <rect x="310" y="128" width="100" height="44" rx="14" fill="#f2c98b" stroke="#b4772d"
+                            stroke-width="4" /><text x="360" y="156" text-anchor="middle" font-size="16"
+                            font-weight="700" fill="#67431c">PATH</text>
+                        <path d="M410 150 H485" stroke="#c77830" stroke-width="16" />
+                        <circle cx="525" cy="150" r="35" fill="#43d5e6" class="glow" /><text x="525" y="156"
+                            text-anchor="middle" font-size="16" font-weight="700" fill="#fff">LED</text>
+                        <path d="M525 185 V250 H205" stroke="#222" stroke-width="12" fill="none" /><text x="340" y="305"
+                            text-anchor="middle" font-size="22" font-weight="700" fill="#073b70">Closed path = LED
+                            ON</text>
+                    </svg></div>
+            </div>
+        </section>
+
+        <!-- 4 -->
+        <section class="slide orange"><span class="chip"><b></b> Same Circuit, New Medium</span>
+            <div class="content stack center">
+                <div>
+                    <div class="kicker" style="color:#fff7df">THE IMPORTANT IDEA</div>
+                    <h2 class="slide-title">Circuit-nya Tidak Berubah</h2>
+                    <p class="lead">Yang berubah hanya cara kita menghubungkan komponennya.</p>
+                </div>
+                <div class="translate-flow">
+                    <div class="translate-card">
+                        <div class="big-icon">🔋〰️💡</div>
+                        <h3>Wire</h3>
+                        <p>Komponen terhubung langsung menggunakan kabel.</p>
+                    </div>
+                    <div class="translate-card">
+                        <div class="big-icon">📄🟠💡</div>
+                        <h3>Copper Tape</h3>
+                        <p>Jalur listrik ditempel pada permukaan kertas.</p>
+                    </div>
+                    <div class="translate-card active">
+                        <div class="big-icon">🧱⚡💡</div>
+                        <h3>Breadboard</h3>
+                        <p>Jalur connection sudah tersedia di dalam papan.</p>
+                    </div>
+                </div>
+                <div class="instruction">💡 Battery → component → output → kembali ke battery. Prinsipnya tetap sama.
+                </div>
+            </div>
+        </section>
+
+        <!-- 5 -->
+        <section class="slide" id="translationSlide"><span class="chip"><b></b> Translate the Circuit</span>
+            <div class="content stack">
+                <div>
+                    <h2 class="slide-title">Dari Circuit Biasa ke Breadboard</h2>
+                    <p class="lead">Klik tombol untuk mengikuti connection satu per satu. Jangan hafalkan posisi
+                        pin—ikuti jalurnya.</p>
+                </div>
+                <div class="connection-stepper max">
+                    <div class="connection-list" id="connectionList">
+                        <div class="connection-item active"><strong>1. Power source</strong><br>Battery (+) dan battery
+                            (−) masuk ke breadboard.</div>
+                        <div class="connection-item"><strong>2. Resistor</strong><br>Resistor menjadi bagian dari jalur
+                            menuju LED.</div>
+                        <div class="connection-item"><strong>3. LED</strong><br>Resistor terhubung ke anode LED pada
+                            connected pin group.</div>
+                        <div class="connection-item"><strong>4. Return path</strong><br>Cathode LED kembali ke negative
+                            battery.</div>
+                    </div>
+                    <div class="stack">
+                        <div class="simple-path" id="translationPath"><span class="path-node">Battery +</span><span
+                                class="path-arrow">→</span><span class="path-node"
+                                style="opacity:.25">Resistor</span><span class="path-arrow"
+                                style="opacity:.25">→</span><span class="path-node" style="opacity:.25">LED</span><span
+                                class="path-arrow" style="opacity:.25">→</span><span class="path-node"
+                                style="opacity:.25">Battery −</span></div>
+                        <div class="status-result" id="translationText">Mulai dari sumber energi. Kita belum perlu
+                            memikirkan semua komponen sekaligus.</div><button class="btn" id="nextConnection">Next
+                            Connection</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6 -->
+        <section class="slide"><span class="chip"><b></b> Meet the Breadboard</span>
+            <div class="content two max">
+                <div class="stack">
+                    <div class="kicker left">WHAT IS IT?</div>
+                    <h2 class="slide-title left">Breadboard = Connection Board</h2>
+                    <p class="lead left">Breadboard memungkinkan kita merangkai dan mengubah circuit tanpa solder.
+                        Pin-pin tertentu sudah saling terhubung di bagian dalam.</p>
+                    <div class="card">
+                        <h3>Bayangkan seperti wire yang tersembunyi</h3>
+                        <p>Saat dua kaki komponen dimasukkan ke kelompok pin yang connected, keduanya sudah terhubung
+                            walaupun kita tidak melihat kabel di antara mereka.</p>
+                    </div>
+                </div>
+                <div class="card icon-card" style="min-height:390px">
+                    <img src="https://www.losant.com/hs-fs/hubfs/Blog/how-to-use-breadboard/rail-animation-3.gif?noresize=true&amp;width=666&amp;name=rail-animation-3.gif" alt="Breadboard" style="width: 100%; border-radius: 14px; margin-bottom: 12px;">
+                    <h3>Prototype First</h3>
+                    <p>Pasang → test → pindahkan → perbaiki. Inilah alasan breadboard sering digunakan saat mencoba
+                        circuit.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 7 -->
+        <section class="slide" id="breadboardExplore"><span class="chip"><b></b> Activity · Connected Pins</span>
+            <div class="content stack">
+                <div>
+                    <h2 class="slide-title">Klik Satu Pin</h2>
+                    <p class="lead">Pin yang connected dengannya akan ikut menyala. Pada bagian tengah breadboard,
+                        connection berjalan <strong>atas ke bawah</strong> dalam satu nomor yang sama.</p>
+                </div>
+                <div class="bbv-board max">
+                    <div class="bbv-num-row">
+                        <div></div>
+                        <div class="bbv-num">1</div>
+                        <div class="bbv-num">2</div>
+                        <div class="bbv-num">3</div>
+                        <div class="bbv-num">4</div>
+                        <div class="bbv-num">5</div>
+                        <div class="bbv-num">6</div>
+                        <div class="bbv-num">7</div>
+                        <div class="bbv-num">8</div>
+                        <div class="bbv-num">9</div>
+                        <div class="bbv-num">10</div>
+                        <div class="bbv-num">11</div>
+                        <div class="bbv-num">12</div>
+                        <div class="bbv-num">13</div>
+                        <div class="bbv-num">14</div>
+                        <div class="bbv-num">15</div>
+                        <div class="bbv-num">16</div>
+                        <div></div>
+                    </div>
+                    <div class="bbv-main" id="bbMainTop"></div>
+                    <div class="bbv-center-gap"></div>
+                    <div class="bbv-main" id="bbMainBottom"></div>
+                    <div class="bbv-key"><span><i class="dot conn"></i> Connected group</span><span><i class="dot"></i>
+                            Pin biasa</span></div>
+                </div>
+                <div class="status-result" id="breadboardResult">Klik satu pin untuk melihat kelompok connection di
+                    dalam breadboard.</div>
+            </div>
+        </section>
+
+        <!-- 8 -->
+        <section class="slide"><span class="chip"><b></b> Center Gap</span>
+            <div class="content two max">
+                <div class="circuit-illustration"><svg viewBox="0 0 760 410">
+                        <rect x="70" y="40" width="620" height="320" rx="26" fill="#f8fafb" stroke="#cadbe5"
+                            stroke-width="5" />
+                        <text x="380" y="78" text-anchor="middle" font-size="20" font-weight="700" fill="#596f81">TOP
+                            HALF · j i h g f</text>
+                        <text x="380" y="338" text-anchor="middle" font-size="20" font-weight="700"
+                            fill="#596f81">BOTTOM HALF · e d c b a</text>
+                        <g fill="#dbe4ea" stroke="#aebcc6" stroke-width="4">
+                            <circle cx="180" cy="120" r="12" />
+                            <circle cx="180" cy="150" r="12" />
+                            <circle cx="180" cy="180" r="12" />
+                            <circle cx="180" cy="210" r="12" />
+                            <circle cx="180" cy="240" r="12" />
+                            <circle cx="300" cy="120" r="12" />
+                            <circle cx="300" cy="150" r="12" />
+                            <circle cx="300" cy="180" r="12" />
+                            <circle cx="300" cy="210" r="12" />
+                            <circle cx="300" cy="240" r="12" />
+                            <circle cx="460" cy="160" r="12" />
+                            <circle cx="460" cy="190" r="12" />
+                            <circle cx="460" cy="220" r="12" />
+                            <circle cx="460" cy="250" r="12" />
+                            <circle cx="460" cy="280" r="12" />
+                            <circle cx="580" cy="160" r="12" />
+                            <circle cx="580" cy="190" r="12" />
+                            <circle cx="580" cy="220" r="12" />
+                            <circle cx="580" cy="250" r="12" />
+                            <circle cx="580" cy="280" r="12" />
+                        </g>
+                        <rect x="110" y="245" width="540" height="26" rx="13" fill="#d7e3ea" />
+                        <path d="M180 117 V237" stroke="#ff8b2b" stroke-width="10" stroke-linecap="round" /><text
+                            x="180" y="104" text-anchor="middle" font-size="16" font-weight="700"
+                            fill="#ff8b2b">Connected</text>
+                        <path d="M460 163 V283" stroke="#43d5e6" stroke-width="10" stroke-linecap="round" /><text
+                            x="460" y="150" text-anchor="middle" font-size="16" font-weight="700"
+                            fill="#00a6bf">Connected</text>
+                        <text x="380" y="240" text-anchor="middle" font-size="18" font-weight="700"
+                            fill="#073b70">CENTER GAP</text>
+                    </svg></div>
+                <div class="stack">
+                    <h2 class="slide-title left">Pin di Tengah Tidak Semua Tersambung</h2>
+                    <p class="lead left">Pada breadboard seperti di kit kita, pin di bagian tengah tersambung
+                        <strong>vertikal</strong> dalam satu nomor yang sama.
+                    </p>
+                    <div class="mini-labels">
+                        <div class="mini-label"><strong>j–f</strong><span>Pin pada nomor yang sama saling
+                                terhubung.</span></div>
+                        <div class="mini-label blue"><strong>e–a</strong><span>Pin pada nomor yang sama saling
+                                terhubung.</span></div>
+                    </div>
+                    <div class="instruction">🔎 Pin di bagian atas tidak langsung terhubung ke pin di bagian bawah
+                        karena ada <strong>center gap</strong>.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 9 -->
+        <section class="slide" id="railSlide"><span class="chip"><b></b> Power Rails</span>
+            <div class="content stack">
+                <div>
+                    <h2 class="slide-title">Rail Atas dan Rail Bawah</h2>
+                    <p class="lead">Dua baris paling atas dan dua baris paling bawah terhubung <strong>mendatar kiri ke
+                            kanan</strong>. Inilah jalur power rail.</p>
+                </div>
+                <div class="bbv-board max">
+                    <div class="bbv-rail minus-line">
+                        <div class="rail-mark">−</div>
+                        <div class="bbv-pin rail-hole" data-rail="topMinus"></div>
+                        <div class="bbv-pin rail-hole" data-rail="topMinus"></div>
+                        <div class="bbv-pin rail-hole" data-rail="topMinus"></div>
+                        <div class="bbv-pin rail-hole" data-rail="topMinus"></div>
+                        <div class="bbv-pin rail-hole" data-rail="topMinus"></div>
+                        <div class="bbv-pin rail-hole" data-rail="topMinus"></div>
+                        <div class="bbv-pin rail-hole" data-rail="topMinus"></div>
+                        <div class="bbv-pin rail-hole" data-rail="topMinus"></div>
+                        <div class="bbv-pin rail-hole" data-rail="topMinus"></div>
+                        <div class="bbv-pin rail-hole" data-rail="topMinus"></div>
+                        <div class="bbv-pin rail-hole" data-rail="topMinus"></div>
+                        <div class="bbv-pin rail-hole" data-rail="topMinus"></div>
+                        <div class="bbv-pin rail-hole" data-rail="topMinus"></div>
+                        <div class="bbv-pin rail-hole" data-rail="topMinus"></div>
+                        <div class="bbv-pin rail-hole" data-rail="topMinus"></div>
+                        <div class="bbv-pin rail-hole" data-rail="topMinus"></div>
+                        <div class="rail-mark">−</div>
+                    </div>
+                    <div class="bbv-rail plus-line">
+                        <div class="rail-mark" style="color:#ef5350">+</div>
+                        <div class="bbv-pin rail-hole" data-rail="topPlus"></div>
+                        <div class="bbv-pin rail-hole" data-rail="topPlus"></div>
+                        <div class="bbv-pin rail-hole" data-rail="topPlus"></div>
+                        <div class="bbv-pin rail-hole" data-rail="topPlus"></div>
+                        <div class="bbv-pin rail-hole" data-rail="topPlus"></div>
+                        <div class="bbv-pin rail-hole" data-rail="topPlus"></div>
+                        <div class="bbv-pin rail-hole" data-rail="topPlus"></div>
+                        <div class="bbv-pin rail-hole" data-rail="topPlus"></div>
+                        <div class="bbv-pin rail-hole" data-rail="topPlus"></div>
+                        <div class="bbv-pin rail-hole" data-rail="topPlus"></div>
+                        <div class="bbv-pin rail-hole" data-rail="topPlus"></div>
+                        <div class="bbv-pin rail-hole" data-rail="topPlus"></div>
+                        <div class="bbv-pin rail-hole" data-rail="topPlus"></div>
+                        <div class="bbv-pin rail-hole" data-rail="topPlus"></div>
+                        <div class="bbv-pin rail-hole" data-rail="topPlus"></div>
+                        <div class="bbv-pin rail-hole" data-rail="topPlus"></div>
+                        <div class="rail-mark" style="color:#ef5350">+</div>
+                    </div>
+                    <div class="bbv-gap-space"></div>
+                    <div class="bbv-num-row">
+                        <div></div>
+                        <div class="bbv-num">1</div>
+                        <div class="bbv-num">2</div>
+                        <div class="bbv-num">3</div>
+                        <div class="bbv-num">4</div>
+                        <div class="bbv-num">5</div>
+                        <div class="bbv-num">6</div>
+                        <div class="bbv-num">7</div>
+                        <div class="bbv-num">8</div>
+                        <div class="bbv-num">9</div>
+                        <div class="bbv-num">10</div>
+                        <div class="bbv-num">11</div>
+                        <div class="bbv-num">12</div>
+                        <div class="bbv-num">13</div>
+                        <div class="bbv-num">14</div>
+                        <div class="bbv-num">15</div>
+                        <div class="bbv-num">16</div>
+                        <div></div>
+                    </div>
+                    <div class="bbv-main" id="railMainPreviewTop"></div>
+                    <div class="bbv-center-gap"></div>
+                    <div class="bbv-main" id="railMainPreviewBottom"></div>
+                    <div class="bbv-gap-space"></div>
+                    <div class="bbv-rail minus-line">
+                        <div class="rail-mark">−</div>
+                        <div class="bbv-pin rail-hole" data-rail="bottomMinus"></div>
+                        <div class="bbv-pin rail-hole" data-rail="bottomMinus"></div>
+                        <div class="bbv-pin rail-hole" data-rail="bottomMinus"></div>
+                        <div class="bbv-pin rail-hole" data-rail="bottomMinus"></div>
+                        <div class="bbv-pin rail-hole" data-rail="bottomMinus"></div>
+                        <div class="bbv-pin rail-hole" data-rail="bottomMinus"></div>
+                        <div class="bbv-pin rail-hole" data-rail="bottomMinus"></div>
+                        <div class="bbv-pin rail-hole" data-rail="bottomMinus"></div>
+                        <div class="bbv-pin rail-hole" data-rail="bottomMinus"></div>
+                        <div class="bbv-pin rail-hole" data-rail="bottomMinus"></div>
+                        <div class="bbv-pin rail-hole" data-rail="bottomMinus"></div>
+                        <div class="bbv-pin rail-hole" data-rail="bottomMinus"></div>
+                        <div class="bbv-pin rail-hole" data-rail="bottomMinus"></div>
+                        <div class="bbv-pin rail-hole" data-rail="bottomMinus"></div>
+                        <div class="bbv-pin rail-hole" data-rail="bottomMinus"></div>
+                        <div class="bbv-pin rail-hole" data-rail="bottomMinus"></div>
+                        <div class="rail-mark">−</div>
+                    </div>
+                    <div class="bbv-rail plus-line">
+                        <div class="rail-mark" style="color:#ef5350">+</div>
+                        <div class="bbv-pin rail-hole" data-rail="bottomPlus"></div>
+                        <div class="bbv-pin rail-hole" data-rail="bottomPlus"></div>
+                        <div class="bbv-pin rail-hole" data-rail="bottomPlus"></div>
+                        <div class="bbv-pin rail-hole" data-rail="bottomPlus"></div>
+                        <div class="bbv-pin rail-hole" data-rail="bottomPlus"></div>
+                        <div class="bbv-pin rail-hole" data-rail="bottomPlus"></div>
+                        <div class="bbv-pin rail-hole" data-rail="bottomPlus"></div>
+                        <div class="bbv-pin rail-hole" data-rail="bottomPlus"></div>
+                        <div class="bbv-pin rail-hole" data-rail="bottomPlus"></div>
+                        <div class="bbv-pin rail-hole" data-rail="bottomPlus"></div>
+                        <div class="bbv-pin rail-hole" data-rail="bottomPlus"></div>
+                        <div class="bbv-pin rail-hole" data-rail="bottomPlus"></div>
+                        <div class="bbv-pin rail-hole" data-rail="bottomPlus"></div>
+                        <div class="bbv-pin rail-hole" data-rail="bottomPlus"></div>
+                        <div class="bbv-pin rail-hole" data-rail="bottomPlus"></div>
+                        <div class="bbv-pin rail-hole" data-rail="bottomPlus"></div>
+                        <div class="rail-mark" style="color:#ef5350">+</div>
+                    </div>
+                </div>
+                <div class="status-result" id="railResult">Klik salah satu pin di rail + atau − untuk melihat jalur yang
+                    terhubung.</div>
+            </div>
+        </section>
+
+        <!-- 10 -->
+        <section class="slide" id="connectedQuiz"><span class="chip"><b></b> Activity · Connected or Not?</span>
+            <div class="content stack">
+                <div>
+                    <h2 class="slide-title">Are These Pins Connected?</h2>
+                    <p class="lead">Pilih jawaban berdasarkan struktur breadboard yang horizontal seperti di kit kita.
+                    </p>
+                </div>
+                <div class="question-strip" id="connectQuestion">A3 dan D3 berada pada row yang sama di sisi A–E. Apakah
+                    connected?</div>
+                <div class="status-buttons"><button class="btn2 connect-answer"
+                        data-answer="yes">CONNECTED</button><button class="btn2 connect-answer" data-answer="no">NOT
+                        CONNECTED</button></div>
+                <div class="status-result" id="connectResult">Pilih satu jawaban.</div>
+                <button class="btn" id="nextConnect" style="display:none;justify-self:center">Next</button>
+            </div>
+        </section>
+
+        <!-- 11 -->
+        <section class="slide"><span class="chip"><b></b> Let's Prepare</span>
+            <div class="content stack">
+                <div>
+                    <div class="kicker">LAB KIT</div>
+                    <h2 class="slide-title">Alat dan Komponen</h2>
+                    <p class="lead">Hari ini semua percobaan tetap fokus pada rangkaian di breadboard.</p>
+                </div>
+                <div class="four">
+                    <div class="material">
+                        <img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/598b8458-f9ba-40a3-b43f-9793d6b2f379.png" alt="Breadboard"><strong>1 Breadboard</strong><span>Tempat merangkai circuit.</span>
+                    </div>
+                    <div class="material">
+                        <img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/b36fa80a-2187-4bae-8bff-a39709e7c786.png" alt="Resistor"><strong>Resistor 220 Ohm</strong><span>Gunakan nilai sesuai arahan MT/kit.</span>
+                    </div>
+                    <div class="material">
+                        <img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/48134bf0-2bc3-4ff2-970f-0c9b1f73847a.png" alt="Pushbutton"><strong>Pushbutton</strong><span>Untuk circuit ketiga.</span>
+                    </div>
+                    <div class="material">
+                        <img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/636543ec-9f5b-4cd7-a985-c6b43087dd1c.png" alt="Jumper M-M"><strong>Jumper M-M</strong><span>Membuat connection antar row dan rail.</span>
+                    </div>
+                    <div class="material">
+                        <img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/2258e936-17ff-49a3-9d29-f0b2e60c5431.png" alt="Buzzer"><strong>Buzzer 3-5v</strong><span>Untuk circuit ketiga.</span>
+                    </div>
+                    <div class="material">
+                        <img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/cffe0f4d-8ab0-46a3-b1f4-8ee9de3a77cd.png" alt="Battery"><strong>Battery 9V</strong><span>Power source.</span>
+                    </div>
+                    <div class="material">
+                        <img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/4c94fcb9-50b8-4ca3-bb3b-4db032f5b213.png" alt="Battery Socket"><strong>Battery Socket</strong><span>Connector.</span>
+                    </div>
+                </div>
+                <div class="safety-note">⚠️ Jangan pernah menghubungkan LED langsung ke battery 9V tanpa resistor. Untuk
+                    buzzer, pastikan voltage rating buzzer sesuai dengan sumber yang digunakan sebelum dirangkai.</div>
+            </div>
+        </section>
+
+        <!-- 12 -->
+        <section class="slide"><span class="chip"><b></b> Before Building</span>
+            <div class="content two max">
+                <div class="stack">
+                    <h2 class="slide-title left">Think in Connections, Not Pin Positions</h2>
+                    <p class="lead left">Posisi pin boleh berubah. Yang harus tetap sama adalah siapa yang connected
+                        dengan siapa.</p>
+                    <div class="simple-path"><span class="path-node">Battery +</span><span
+                            class="path-arrow">→</span><span class="path-node">Resistor</span><span
+                            class="path-arrow">→</span><span class="path-node">LED</span><span
+                            class="path-arrow">→</span><span class="path-node">Battery −</span></div>
+                    <div class="card">
+                        <h3>Pertanyaan sebelum menancapkan komponen</h3>
+                        <p>“Kaki ini harus connected ke komponen apa?”</p>
+                    </div>
+                </div>
+                <div class="card icon-card" style="min-height:390px">
+                    <img src="https://static.wixstatic.com/media/3ed36b_8bf687623e87423d8dfe87bf0eb3b16c~mv2.gif" alt="Brain" style="height: 120px; object-fit: contain; margin-bottom: 15px;">
+                    <h3>Don't Memorize the Picture</h3>
+                    <p>Kita menggunakan gambar contoh untuk membantu, tetapi tujuan utamanya adalah memahami jalur
+                        connection.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 13 -->
+        <section class="slide"><span class="chip"><b></b> Circuit 1 · Preview</span>
+            <div class="content build-stage max">
+                <div class="placeholder-wrap"><!-- REPLACE THIS PLACEHOLDER WITH CIRCUIT 1 EXAMPLE IMAGE -->
+                    <div class="image-placeholder">TEMPAT GAMBAR CONTOH RANGKAIAN 1<br><br>9V → Resistor →
+                        LED<code>CIRCUIT_1_IMAGE_HERE</code></div>
+                </div>
+                <div class="stack">
+                    <div class="kicker left">CIRCUIT 1</div>
+                    <h2 class="slide-title left">One LED Circuit</h2>
+                    <p class="lead left">Kita mulai dari rangkaian paling sederhana supaya bisa melihat bagaimana
+                        circuit biasa diterjemahkan ke breadboard.</p>
+                    <div class="simple-path"><span class="path-node">9V +</span><span class="path-arrow">→</span><span
+                            class="path-node">Resistor</span><span class="path-arrow">→</span><span
+                            class="path-node">LED</span><span class="path-arrow">→</span><span class="path-node">9V
+                            −</span></div>
+                    <div class="instruction">🎯 Goal: satu LED menyala stabil.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 14 -->
+        <section class="slide"><span class="chip"><b></b> Circuit 1 · Build</span>
+            <div class="content build-stage max">
+                <div class="stage-card">
+                    <h3>Build Step by Step</h3>
+                    <ol>
+                        <li>Hubungkan <strong>battery (+)</strong> ke positive rail dan battery (−) ke negative rail.
+                        </li>
+                        <li>Pasang <strong>resistor</strong> dari positive path menuju row baru.</li>
+                        <li>Pasang <strong>anode LED</strong> pada row yang connected dengan ujung resistor.</li>
+                        <li>Hubungkan <strong>cathode LED</strong> kembali ke negative rail.</li>
+                        <li>Check polarity, lalu test.</li>
+                    </ol>
+                </div>
+                <div class="stack">
+                    <div class="question-strip">Setelah LED menyala, cabut satu jumper.</div>
+                    <div class="card">
+                        <h3>Apa yang terjadi?</h3>
+                        <p>Circuit menjadi open → LED mati. Pasang jumper kembali → circuit closed → LED menyala.</p>
+                    </div>
+                    <div class="instruction">🔁 Meet 4 tetap berlaku. Hanya medianya yang berubah.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 15 -->
+        <section class="slide" id="rowChallenge"><span class="chip"><b></b> Activity · Find the Connection</span>
+            <div class="content stack">
+                <div>
+                    <h2 class="slide-title">Resistor Harus Bertemu LED di Pin Mana?</h2>
+                    <p class="lead">Bayangkan ujung resistor sudah berada di pin h4. Pilih posisi anode LED yang masih
+                        connected dengannya.</p>
+                </div>
+                <div class="challenge-grid">
+                    <div class="challenge-card" data-row-answer="yes">
+                        <div class="challenge-icon">C4 → E4</div>
+                        <h3>Option A</h3>
+                        <p>Masih pada row 4, sisi A–E.</p>
+                    </div>
+                    <div class="challenge-card" data-row-answer="no">
+                        <div class="challenge-icon">C4 → F4</div>
+                        <h3>Option B</h3>
+                        <p>Menyeberangi center gap.</p>
+                    </div>
+                    <div class="challenge-card" data-row-answer="no">
+                        <div class="challenge-icon">C4 → C5</div>
+                        <h3>Option C</h3>
+                        <p>Berpindah ke row 5.</p>
+                    </div>
+                </div>
+                <div class="status-result" id="rowChallengeResult">Pilih satu option.</div>
+            </div>
+        </section>
+
+        <!-- 16 -->
+        <section class="slide dark"><span class="chip"><b></b> Circuit 1 · Move It</span>
+            <div class="content two max">
+                <img class="robot"
+                    src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/eded3e71-16cf-401e-b1c1-3ff5f887dc38.png"
+                    alt="Robot">
+                <div class="stack">
+                    <div class="kicker left" style="color:var(--cyan)">UNDERSTAND, DON'T COPY</div>
+                    <h2 class="slide-title left">Pindahkan Circuit-nya</h2>
+                    <p class="lead left">Setelah circuit berhasil, pindahkan LED dan resistor ke row lain. Circuit harus
+                        tetap bekerja.</p>
+                    <div class="card">
+                        <h3>Rule</h3>
+                        <p>Kamu boleh memilih pin yang berbeda, tetapi setiap connection pada jalur 9V (+) → resistor →
+                            LED → 9V (−) harus tetap ada.</p>
+                    </div>
+                    <div class="instruction">🧠 Kalau tetap menyala setelah dipindah, berarti kamu mulai memahami
+                        breadboard.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 17 -->
+        <section class="slide"><span class="chip"><b></b> Circuit 2 · Preview</span>
+            <div class="content build-stage max">
+                <div class="placeholder-wrap"><!-- REPLACE THIS PLACEHOLDER WITH CIRCUIT 2 EXAMPLE IMAGE -->
+                    <div class="image-placeholder">TEMPAT GAMBAR CONTOH RANGKAIAN 2<br><br>9V → 3 Resistor → 3
+                        LED<code>CIRCUIT_2_IMAGE_HERE</code></div>
+                </div>
+                <div class="stack">
+                    <div class="kicker left">CIRCUIT 2</div>
+                    <h2 class="slide-title left">Three LED Circuit</h2>
+                    <p class="lead left">Sekarang kita mengulang konsep yang sama tiga kali pada satu breadboard.</p>
+                    <div class="card">
+                        <h3>What changes?</h3>
+                        <p>Ada lebih banyak component dan connection yang perlu dikelola.</p>
+                    </div>
+                    <div class="card">
+                        <h3>What stays the same?</h3>
+                        <p>Setiap LED tetap membutuhkan polarity yang benar dan jalur yang lengkap.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 18 -->
+        <section class="slide"><span class="chip"><b></b> Circuit 2 · Build</span>
+            <div class="content stack max">
+                <div>
+                    <h2 class="slide-title">Build One Branch at a Time</h2>
+                    <p class="lead">Jangan pasang tiga LED sekaligus. Selesaikan dan test satu branch sebelum menambah
+                        berikutnya.</p>
+                </div>
+                <div class="three">
+                    <div class="card icon-card">
+                        <div class="big-icon">①</div>
+                        <h3>LED 1</h3>
+                        <p>Pasang resistor + LED pertama. Test sampai menyala.</p>
+                    </div>
+                    <div class="card icon-card">
+                        <div class="big-icon">②</div>
+                        <h3>LED 2</h3>
+                        <p>Tambahkan branch kedua menggunakan row yang berbeda.</p>
+                    </div>
+                    <div class="card icon-card">
+                        <div class="big-icon">③</div>
+                        <h3>LED 3</h3>
+                        <p>Tambahkan branch ketiga lalu test semuanya.</p>
+                    </div>
+                </div>
+                <div class="instruction">🔎 Kalau satu LED mati, cari masalah hanya pada branch LED tersebut terlebih
+                    dahulu.</div>
+            </div>
+        </section>
+
+        <!-- 19 -->
+        <section class="slide" id="threeLedCheck"><span class="chip"><b></b> Circuit 2 · Troubleshoot</span>
+            <div class="content two max">
+                <div class="stack">
+                    <h2 class="slide-title left">Dua LED Menyala, Satu Mati</h2>
+                    <p class="lead left">Apa yang paling masuk akal untuk diperiksa lebih dulu?</p>
+                    <div class="status-buttons" style="justify-content:flex-start"><button class="btn2 led3-answer"
+                            data-ok="true">Periksa branch LED yang mati</button><button class="btn2 led3-answer"
+                            data-ok="false">Bongkar semua circuit</button><button class="btn2 led3-answer"
+                            data-ok="false">Ganti battery langsung</button></div>
+                    <div class="status-result" id="threeLedResult">Pilih satu tindakan.</div>
+                </div>
+                <div class="card icon-card" style="min-height:360px">
+                    <div style="font-size:6rem">💡 💡 ◯</div>
+                    <h3>Isolate the Problem</h3>
+                    <p>Karena dua LED lain bekerja, power source kemungkinan masih ada. Mulai dari branch yang
+                        bermasalah.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 20 -->
+        <section class="slide"><span class="chip"><b></b> Circuit 3 · Preview</span>
+            <div class="content build-stage max">
+                <div class="placeholder-wrap"><!-- REPLACE THIS PLACEHOLDER WITH CIRCUIT 3 EXAMPLE IMAGE -->
+                    <div class="image-placeholder">TEMPAT GAMBAR CONTOH RANGKAIAN 3<br><br>9V → Button → LED +
+                        Buzzer<code>CIRCUIT_3_IMAGE_HERE</code></div>
+                </div>
+                <div class="stack">
+                    <div class="kicker left">CIRCUIT 3</div>
+                    <h2 class="slide-title left">Button, LED & Buzzer</h2>
+                    <p class="lead left">Sekarang kita menambahkan input sederhana. Button akan membuka dan menutup
+                        jalur circuit.</p>
+                    <div class="simple-path"><span class="path-node">9V</span><span class="path-arrow">→</span><span
+                            class="path-node">Button</span><span class="path-arrow">→</span><span class="path-node">LED
+                            / Buzzer</span><span class="path-arrow">→</span><span class="path-node">Return</span></div>
+                    <div class="safety-note">Gunakan buzzer hanya sesuai voltage rating-nya. Jika buzzer pada kit tidak
+                        rated untuk 9V, jangan hubungkan langsung ke battery 9V.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 21 -->
+        <section class="slide"><span class="chip"><b></b> Circuit 3 · Build</span>
+            <div class="content build-stage max">
+                <div class="stage-card">
+                    <h3>Build Order</h3>
+                    <ol>
+                        <li>Pasang button pada breadboard sesuai contoh circuit.</li>
+                        <li>Hubungkan power menuju button.</li>
+                        <li>Dari output button, buat jalur menuju LED melalui resistor.</li>
+                        <li>Tambahkan buzzer sesuai rangkaian dan voltage rating komponen.</li>
+                        <li>Hubungkan return path ke negative.</li>
+                        <li>Tekan button untuk test.</li>
+                    </ol>
+                </div>
+                <div class="stack">
+                    <div class="card">
+                        <h3>Button released</h3>
+                        <p>Jalur terbuka → output tidak aktif.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Button pressed</h3>
+                        <p>Jalur tertutup → output aktif sesuai circuit.</p>
+                    </div>
+                    <div class="instruction">🔘 Button membuat konsep open / closed circuit terasa langsung.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 22 -->
+        <section class="slide" id="buttonActivity"><span class="chip"><b></b> Activity · Button Placement</span>
+            <div class="content stack">
+                <div>
+                    <h2 class="slide-title">Kenapa Button Sering Dipasang Melintasi Center Gap?</h2>
+                    <p class="lead">Pilih penjelasan yang paling tepat.</p>
+                </div>
+                <div class="challenge-grid">
+                    <div class="challenge-card" data-button-answer="false">
+                        <div class="challenge-icon">A</div>
+                        <h3>Agar terlihat lebih rapi</h3>
+                        <p>Posisi button hanya masalah tampilan.</p>
+                    </div>
+                    <div class="challenge-card" data-button-answer="true">
+                        <div class="challenge-icon">B</div>
+                        <h3>Agar sisi pin terpisah</h3>
+                        <p>Center gap membantu kedua sisi switch berada pada kelompok connection berbeda.</p>
+                    </div>
+                    <div class="challenge-card" data-button-answer="false">
+                        <div class="challenge-icon">C</div>
+                        <h3>Agar voltage bertambah</h3>
+                        <p>Center gap meningkatkan voltage circuit.</p>
+                    </div>
+                </div>
+                <div class="status-result" id="buttonActivityResult">Pilih satu jawaban.</div>
+            </div>
+        </section>
+
+        <!-- 23 -->
+        <section class="slide"><span class="chip"><b></b> Compare the Circuits</span>
+            <div class="content stack">
+                <div>
+                    <h2 class="slide-title">Tiga Circuit, Satu Skill Utama</h2>
+                    <p class="lead">Semakin banyak komponen, semakin penting kita memahami connection breadboard.</p>
+                </div>
+                <div class="lab-table max">
+                    <div class="lab-cell head">Circuit</div>
+                    <div class="lab-cell head">Main Practice</div>
+                    <div class="lab-cell head">What to Check</div>
+                    <div class="lab-cell bold">1 · One LED</div>
+                    <div class="lab-cell">Menerjemahkan basic circuit ke breadboard.</div>
+                    <div class="lab-cell">Rail, resistor, LED polarity, return path.</div>
+                    <div class="lab-cell bold">2 · Three LEDs</div>
+                    <div class="lab-cell">Mengelola beberapa branch dan row.</div>
+                    <div class="lab-cell">Setiap LED punya connection yang lengkap.</div>
+                    <div class="lab-cell bold">3 · Button + Output</div>
+                    <div class="lab-cell">Menggunakan input untuk open / close circuit.</div>
+                    <div class="lab-cell">Button orientation, output path, buzzer rating.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 24 -->
+        <section class="slide"><span class="chip"><b></b> Troubleshooting Lab</span>
+            <div class="content stack">
+                <div>
+                    <h2 class="slide-title">LED Tidak Menyala? Check One by One</h2>
+                    <p class="lead">Klik setiap langkah setelah diperiksa pada circuit-mu.</p>
+                </div>
+                <div class="trouble-grid" id="troubleGrid">
+                    <div class="trouble">
+                        <div class="check">1</div>
+                        <div><strong>Power rail</strong><span>Battery (+) dan (−) masuk ke rail yang benar?</span></div>
+                    </div>
+                    <div class="trouble">
+                        <div class="check">2</div>
+                        <div><strong>Connected pin group</strong><span>Komponen yang harus bertemu benar-benar berada
+                                pada group pin yang sama?</span></div>
+                    </div>
+                    <div class="trouble">
+                        <div class="check">3</div>
+                        <div><strong>LED polarity</strong><span>Anode dan cathode menghadap jalur yang benar?</span>
+                        </div>
+                    </div>
+                    <div class="trouble">
+                        <div class="check">4</div>
+                        <div><strong>Resistor path</strong><span>Resistor benar-benar menjadi bagian dari jalur, bukan
+                                berada pada row yang terpisah?</span></div>
+                    </div>
+                    <div class="trouble">
+                        <div class="check">5</div>
+                        <div><strong>Jumper position</strong><span>Ada jumper yang pindah satu row?</span></div>
+                    </div>
+                    <div class="trouble">
+                        <div class="check">6</div>
+                        <div><strong>Open / closed circuit</strong><span>Apakah jalur kembali ke negative sudah
+                                lengkap?</span></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 25 -->
+        <section class="slide dark"><span class="chip"><b></b> Breadboard Challenge</span>
+            <div class="content two max">
+                <img class="robot"
+                    src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/eded3e71-16cf-401e-b1c1-3ff5f887dc38.png"
+                    alt="Robot">
+                <div class="stack">
+                    <div class="kicker left" style="color:var(--cyan)">FINAL PRACTICE</div>
+                    <h2 class="slide-title left">Jangan Lihat Gambar Contoh Selama 2 Menit</h2>
+                    <p class="lead left">Pilih salah satu circuit yang sudah berhasil. Tutup gambar referensinya, lalu
+                        coba jelaskan jalurnya kepada teman.</p>
+                    <div class="card">
+                        <h3>Gunakan kalimat connection</h3>
+                        <p>“Battery positive connected ke… lalu komponen ini connected ke… kemudian kembali ke battery
+                            negative.”</p>
+                    </div>
+                    <div class="instruction">🎯 Kalau bisa menjelaskan connection, kamu tidak hanya menyalin layout.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 26 -->
+        <section class="slide"><span class="chip"><b></b> Lab Check</span>
+            <div class="content stack">
+                <div>
+                    <h2 class="slide-title">Before We Finish</h2>
+                    <p class="lead">Pastikan kamu sudah mencoba tiga jenis circuit.</p>
+                </div>
+                <div class="three">
+                    <div class="card icon-card">
+                        <div class="big-icon">💡</div>
+                        <h3>Circuit 1</h3>
+                        <p>One LED berhasil menyala.</p>
+                    </div>
+                    <div class="card icon-card">
+                        <div class="big-icon">💡💡💡</div>
+                        <h3>Circuit 2</h3>
+                        <p>Tiga LED berhasil dirangkai dan diuji.</p>
+                    </div>
+                    <div class="card icon-card">
+                        <div class="big-icon">🔘</div>
+                        <h3>Circuit 3</h3>
+                        <p>Button berhasil mengubah kondisi output sesuai circuit.</p>
+                    </div>
+                </div>
+                <div class="instruction">🛠️ Circuit yang belum berhasil bukan berarti gagal—gunakan troubleshooting
+                    untuk mencari connection yang salah.</div>
+            </div>
+        </section>
+
+        <!-- 27 -->
+        <section class="slide dark" id="quickQuizSlide"><span class="chip"><b></b> Quick Quiz</span>
+            <div class="content stack">
+                <div>
+                    <div class="kicker" style="color:var(--cyan)">CHECK YOUR UNDERSTANDING</div>
+                    <h2 class="slide-title">Quick Quiz</h2>
+                </div>
+                <div class="quiz">
+                    <div class="quiz-prog" id="quizProg"></div>
+                    <div class="quiz-q" id="quizQ"></div>
+                    <div class="quiz-options" id="quizOptions"></div>
+                    <div class="quiz-fb" id="quizFb">Pilih satu jawaban.</div><button class="btn" id="quizNext"
+                        style="display:none;margin-top:12px">Next Question</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 28 -->
+        <section class="slide"><span class="chip"><b></b> Review</span>
+            <div class="content stack">
+                <div>
+                    <div class="kicker">TODAY'S REVIEW</div>
+                    <h2 class="slide-title">Apa yang Sudah Kita Pelajari?</h2>
+                </div>
+                <div class="agenda">
+                    <div class="card icon-card">
+                        <div class="big-icon">🔁</div>
+                        <h3>Translate Circuit</h3>
+                        <p>Circuit yang sama bisa dibuat dengan media connection yang berbeda.</p>
+                    </div>
+                    <div class="card icon-card">
+                        <div class="big-icon">🧱</div>
+                        <h3>Breadboard Layout</h3>
+                        <p>Memahami connected pin group, center gap, dan power rail.</p>
+                    </div>
+                    <div class="card icon-card">
+                        <div class="big-icon">💡</div>
+                        <h3>Build 3 Circuits</h3>
+                        <p>Mencoba satu LED, tiga LED, dan button dengan output.</p>
+                    </div>
+                    <div class="card icon-card">
+                        <div class="big-icon">🛠️</div>
+                        <h3>Troubleshoot</h3>
+                        <p>Mencari error berdasarkan connection, bukan sekadar melihat posisi.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 29 -->
+        <section class="slide dark"><span class="chip"><b></b> Feedback</span>
+            <div class="content feedback max"><img class="robot"
+                    src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/eded3e71-16cf-401e-b1c1-3ff5f887dc38.png"
+                    alt="Robot">
+                <div class="stack">
+                    <h2 class="slide-title left">Bagaimana Kelas Hari Ini?</h2>
+                    <p class="lead left">Pilih satu respons yang paling sesuai.</p>
+                    <div class="feedback-choices"><button class="feedback-choice">
+                            <div class="face">🙂</div><strong>Sudah Paham</strong>
+                        </button><button class="feedback-choice">
+                            <div class="face">🤔</div><strong>Perlu Coba Lagi</strong>
+                        </button><button class="feedback-choice">
+                            <div class="face">⚡</div><strong>Siap Lanjut</strong>
+                        </button></div>
+                    <p class="note" id="feedbackNote">Respons ini tidak menyimpan skor atau data pribadi.</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="footer"><span class="counter" id="counter">01 / 29</span><span class="progress"><span class="bar"
+                    id="bar"></span></span></div>
+    </main>
+    <div class="toast" id="toast"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const $ = id => document.getElementById(id);
+            const slides = [...document.querySelectorAll('.slide')], prev = $('prev'), next = $('next'), counter = $('counter'), bar = $('bar'); let current = 0;
+            function nav() { prev.disabled = current === 0; next.disabled = current === slides.length - 1; counter.textContent = String(current + 1).padStart(2, '0') + ' / ' + String(slides.length).padStart(2, '0'); bar.style.width = ((current + 1) / slides.length * 100) + '%' }
+            function go(i) { if (i < 0 || i >= slides.length || i === current) return; slides[current].classList.remove('active'); current = i; slides[current].classList.add('active'); nav() }
+            prev.onclick = () => go(current - 1); next.onclick = () => go(current + 1); document.addEventListener('keydown', e => { if (e.key === 'ArrowRight' || e.key === 'PageDown') go(current + 1); if (e.key === 'ArrowLeft' || e.key === 'PageUp') go(current - 1) }); nav();
+            function toast(msg, t = 2200) { const x = $('toast'); x.textContent = msg; x.classList.add('show'); clearTimeout(toast.timer); toast.timer = setTimeout(() => x.classList.remove('show'), t) }
+            function confetti() { const colors = ['#ffc33d', '#ff8b2b', '#43d5e6', '#38b56f', '#7367f0', '#ef5350']; for (let i = 0; i < 34; i++) { const p = document.createElement('i'); p.className = 'confetti'; p.style.left = innerWidth / 2 + 'px'; p.style.top = innerHeight / 2 + 'px'; p.style.background = colors[i % colors.length]; p.style.setProperty('--x', (Math.random() * 520 - 260) + 'px'); p.style.setProperty('--y', (Math.random() * 360 + 120) + 'px'); document.body.appendChild(p); setTimeout(() => p.remove(), 1700) } }
+
+            // Slide 5 translation stepper
+            let transStep = 0;
+            const transText = ['Mulai dari sumber energi. Kita belum perlu memikirkan semua komponen sekaligus.', 'Tambahkan resistor pada jalur dari positive menuju LED.', 'Hubungkan ujung resistor dengan anode LED menggunakan connected pin group.', 'Lengkapi return path dari cathode LED kembali ke negative battery. Circuit sekarang closed.'];
+            $('nextConnection').onclick = () => { transStep = (transStep + 1) % 4; const items = [...document.querySelectorAll('#connectionList .connection-item')]; items.forEach((x, i) => x.classList.toggle('active', i === transStep)); const nodes = [...$('translationPath').querySelectorAll('.path-node')], arrows = [...$('translationPath').querySelectorAll('.path-arrow')]; nodes.forEach((n, i) => n.style.opacity = i <= transStep ? '1' : '.25'); arrows.forEach((a, i) => a.style.opacity = i < transStep ? '1' : '.25'); $('translationText').textContent = transText[transStep]; $('nextConnection').textContent = transStep === 3 ? 'Start Again' : 'Next Connection'; if (transStep === 3) confetti() };
+
+            // Slide 7 breadboard pins
+            function buildMainHalf(containerId, rowLabels, prefix) {
+                const host = $(containerId);
+                rowLabels.forEach(label => {
+                    const row = document.createElement('div');
+                    row.className = 'bbv-half';
+                    const left = document.createElement('div'); left.className = 'bbv-row-label'; left.textContent = label; row.appendChild(left);
+                    for (let c = 1; c <= 16; c++) {
+                        const p = document.createElement('div');
+                        p.className = 'bbv-pin bb-pin';
+                        p.dataset.group = prefix + c;
+                        p.dataset.name = label + c;
+                        row.appendChild(p);
+                    }
+                    const right = document.createElement('div'); right.className = 'bbv-row-label'; right.textContent = label; row.appendChild(right);
+                    host.appendChild(row);
+                });
+            }
+            buildMainHalf('bbMainTop', ['j', 'i', 'h', 'g', 'f'], 'TOP');
+            buildMainHalf('bbMainBottom', ['e', 'd', 'c', 'b', 'a'], 'BOT');
+            buildMainHalf('railMainPreviewTop', ['j', 'i', 'h', 'g', 'f'], 'PRETOP');
+            buildMainHalf('railMainPreviewBottom', ['e', 'd', 'c', 'b', 'a'], 'PREBOT');
+            [...document.querySelectorAll('.bb-pin')].forEach(p => p.onclick = () => {
+                document.querySelectorAll('.bb-pin').forEach(x => x.classList.remove('connected'));
+                document.querySelectorAll('.bb-pin[data-group="' + p.dataset.group + '"]').forEach(x => x.classList.add('connected'));
+                const area = p.dataset.group.startsWith('TOP') ? 'bagian atas (j–f)' : p.dataset.group.startsWith('BOT') ? 'bagian bawah (e–a)' : 'bagian preview';
+                $('breadboardResult').innerHTML = '<strong>Pin ' + p.dataset.name + '</strong> berada dalam satu connected group dengan pin berwarna kuning pada ' + area + '. Connection di bagian tengah breadboard berjalan atas ke bawah dalam satu nomor yang sama.';
+            });
+
+            // Slide 9 rails
+            [...document.querySelectorAll('.rail-hole')].forEach(h => h.onclick = () => {
+                document.querySelectorAll('.rail-hole').forEach(x => x.classList.remove('rail-active'));
+                document.querySelectorAll('.rail-hole[data-rail="' + h.dataset.rail + '"]').forEach(x => x.classList.add('rail-active'));
+                const labels = { topMinus: 'Top negative rail', topPlus: 'Top positive rail', bottomMinus: 'Bottom negative rail', bottomPlus: 'Bottom positive rail' };
+                $('railResult').innerHTML = '<strong>' + labels[h.dataset.rail] + ':</strong> pin pada rail ini saling terhubung mendatar dari kiri ke kanan.';
+            });
+
+            // Slide 10 connected quiz
+            const connectQs = [
+                { q: 'j3 dan g3 berada pada jalur yang sama di bagian atas. Apakah connected?', a: 'yes', e: 'Ya. Pin j3 sampai f3 berada dalam satu connected group di bagian atas.' },
+                { q: 'f5 dan e5 dipisahkan oleh center gap. Apakah connected?', a: 'no', e: 'Tidak. Center gap memisahkan bagian atas dan bagian bawah.' },
+                { q: 'b2 dan b3 berada pada jalur yang berbeda. Apakah connected?', a: 'no', e: 'Tidak. Pin di bagian tengah terhubung vertikal dalam satu nomor yang sama, bukan ke nomor lain.' }
+            ]; let cq = 0;
+            function showConnect() { $('connectQuestion').textContent = connectQs[cq].q; $('connectResult').textContent = 'Pilih satu jawaban.'; $('nextConnect').style.display = 'none'; document.querySelectorAll('.connect-answer').forEach(b => { b.disabled = false; b.style.opacity = '1' }) }
+            document.querySelectorAll('.connect-answer').forEach(b => b.onclick = () => { const ok = b.dataset.answer === connectQs[cq].a; $('connectResult').textContent = (ok ? 'Benar. ' : 'Belum tepat. ') + connectQs[cq].e; document.querySelectorAll('.connect-answer').forEach(x => x.disabled = true); if (ok) confetti(); if (cq < connectQs.length - 1) $('nextConnect').style.display = 'inline-block' }); $('nextConnect').onclick = () => { cq++; showConnect() }; showConnect();
+
+            // Slide 15 row challenge
+            [...document.querySelectorAll('#rowChallenge .challenge-card')].forEach(c => c.onclick = () => { document.querySelectorAll('#rowChallenge .challenge-card').forEach(x => x.classList.remove('correct', 'wrong')); const ok = c.dataset.rowAnswer === 'yes'; c.classList.add(ok ? 'correct' : 'wrong'); $('rowChallengeResult').textContent = ok ? 'Benar. C4 dan E4 masih berada dalam connected group yang sama.' : 'Belum tepat. Perhatikan row dan center gap.'; if (ok) confetti() });
+
+            // Slide 19 troubleshooting choice
+            [...document.querySelectorAll('.led3-answer')].forEach(b => b.onclick = () => { const ok = b.dataset.ok === 'true'; $('threeLedResult').textContent = ok ? 'Benar. Mulai dari branch LED yang mati agar masalah lebih mudah diisolasi.' : 'Kurang efisien. Dua LED masih bekerja, jadi mulai dari branch yang bermasalah.'; if (ok) confetti() });
+
+            // Slide 22 button placement
+            [...document.querySelectorAll('#buttonActivity .challenge-card')].forEach(c => c.onclick = () => { document.querySelectorAll('#buttonActivity .challenge-card').forEach(x => x.classList.remove('correct', 'wrong')); const ok = c.dataset.buttonAnswer === 'true'; c.classList.add(ok ? 'correct' : 'wrong'); $('buttonActivityResult').textContent = ok ? 'Benar. Center gap membantu memisahkan sisi pin switch ke connected group yang berbeda.' : 'Belum tepat. Posisi button berkaitan dengan connection pin, bukan tampilan atau penambahan voltage.'; if (ok) confetti() });
+
+            // Slide 24 troubleshoot
+            const troubleCards = [...document.querySelectorAll('#troubleGrid .trouble')]; troubleCards.forEach((card, i) => card.onclick = () => { card.classList.toggle('done'); card.querySelector('.check').textContent = card.classList.contains('done') ? '✓' : String(i + 1); if (troubleCards.every(x => x.classList.contains('done'))) { confetti(); toast('Semua connection sudah diperiksa. Test circuit lagi.') } });
+
+            // Quiz
+            const quizData = [
+                { q: 'Pin mana yang connected dengan h4 di bagian atas?', o: ['A. j4', 'B. h5', 'C. d4'], a: 0, e: 'h4 terhubung dengan semua pin pada nomor 4 di bagian atas, yaitu j4 sampai f4.' },
+                { q: 'Kenapa kita tidak cukup menghafal posisi komponen dari gambar contoh?', o: ['A. Karena breadboard tidak punya nomor', 'B. Karena yang penting adalah connection antar komponen', 'C. Karena semua pin saling connected'], a: 1, e: 'Posisi bisa berubah, tetapi hubungan battery, resistor, LED, dan return path harus tetap benar.' },
+                { q: 'LED tidak menyala setelah dipindah ke pin lain. Apa yang diperiksa lebih dulu?', o: ['A. Apakah connection dan polarity masih benar', 'B. Langsung ganti semua komponen', 'C. Tambah battery kedua'], a: 0, e: 'Periksa connected pin, polarity, resistor, jumper, dan return path sebelum mengganti komponen.' }
+            ]; let qi = 0;
+            function renderQuiz() { const q = quizData[qi]; $('quizProg').textContent = 'Question ' + (qi + 1) + ' of ' + quizData.length; $('quizQ').textContent = q.q; $('quizOptions').innerHTML = ''; $('quizFb').textContent = 'Pilih satu jawaban.'; $('quizFb').style.background = '#f4f9fc'; $('quizFb').style.color = 'var(--muted)'; $('quizNext').style.display = 'none'; q.o.forEach((text, i) => { const b = document.createElement('button'); b.className = 'option'; b.textContent = text; b.onclick = () => { const all = [...$('quizOptions').children]; all.forEach(x => x.disabled = true); const ok = i === q.a; b.classList.add(ok ? 'correct' : 'wrong'); all[q.a].classList.add('correct'); $('quizFb').textContent = ok ? 'Benar. ' + q.e : 'Belum tepat. Jawaban yang benar adalah ' + q.o[q.a] + '. ' + q.e; $('quizFb').style.background = ok ? '#eaf9f0' : '#fff1f0'; $('quizFb').style.color = ok ? '#20734a' : '#a33636'; if (qi < quizData.length - 1) $('quizNext').style.display = 'inline-block'; else confetti() }; $('quizOptions').appendChild(b) }) }
+            $('quizNext').onclick = () => { qi++; renderQuiz() }; renderQuiz();
+
+            // Feedback
+            const feedbackButtons = [...document.querySelectorAll('.feedback-choice')]; feedbackButtons.forEach(b => b.onclick = () => { feedbackButtons.forEach(x => x.classList.remove('selected')); b.classList.add('selected'); $('feedbackNote').textContent = 'Terima kasih. Kalau masih bingung, coba jelaskan kembali connection dari battery (+) sampai battery (−).' });
+        });
+    </script>
+
+</body>
+
+</html>
