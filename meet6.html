@@ -1,0 +1,3469 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>RUANGGURU CODING — Mini Sweeper Robot</title>
+    <link rel="icon"
+        href="https://cdn-web-2.ruangguru.com/landing-pages/assets/e7d93748-818d-462d-be57-7db1e479cd62.png"
+        type="image/png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --navy: #073b70;
+            --navy2: #0d4f86;
+            --deep: #062b50;
+            --cyan: #43d5e6;
+            --orange: #ff8b2b;
+            --yellow: #ffc33d;
+            --ink: #153650;
+            --muted: #5e7487;
+            --green: #38b56f;
+            --red: #ef5350;
+            --white: #fff;
+            --cream: #fff9ef;
+            --shadow: 0 18px 46px rgba(2, 25, 50, .28)
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        html,
+        body {
+            height: 100%
+        }
+
+        body {
+            margin: 0;
+            overflow: hidden;
+            font-family: 'Fredoka', sans-serif;
+            color: var(--ink);
+            background: radial-gradient(circle at 80% 18%, rgba(67, 213, 230, .16) 0 12%, transparent 13%), radial-gradient(circle at 10% 82%, rgba(255, 195, 61, .14) 0 15%, transparent 16%), linear-gradient(135deg, var(--deep), var(--navy) 52%, var(--navy2))
+        }
+
+        body:before,
+        body:after {
+            content: "";
+            position: fixed;
+            width: 48vw;
+            height: 8px;
+            background: rgba(255, 255, 255, .035);
+            transform: rotate(-24deg);
+            border-radius: 20px;
+            box-shadow: 0 52px rgba(255, 255, 255, .03), 0 104px rgba(255, 255, 255, .025), 0 156px rgba(255, 255, 255, .02)
+        }
+
+        body:before {
+            left: 2vw;
+            top: 20vh
+        }
+
+        body:after {
+            right: -10vw;
+            bottom: 20vh
+        }
+
+        .brand {
+            position: fixed;
+            left: 22px;
+            top: 18px;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 9px 15px;
+            background: rgba(255, 255, 255, .97);
+            border-radius: 20px;
+            box-shadow: 0 10px 28px rgba(2, 24, 48, .3)
+        }
+
+        .brand img {
+            object-fit: contain;
+            width: auto
+        }
+
+        .brand .k {
+            height: 45px;
+            max-width: 170px
+        }
+
+        .brand .r {
+            height: 38px;
+            max-width: 145px
+        }
+
+        .brand i {
+            width: 2px;
+            height: 34px;
+            background: #dce7f0;
+            border-radius: 10px
+        }
+
+        .presentation {
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -48%);
+            width: min(88vw, 1440px);
+            aspect-ratio: 16/9;
+            max-height: 82vh;
+            border: 5px solid rgba(255, 255, 255, .9);
+            border-radius: 28px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            background: var(--cream)
+        }
+
+        .slide {
+            position: absolute;
+            inset: 0;
+            padding: 70px 74px 62px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 18px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateX(65px) scale(.985);
+            transition: .42s ease;
+            background: radial-gradient(circle at 88% 12%, rgba(67, 213, 230, .12), transparent 25%), linear-gradient(#fffefa, #fff8ed);
+            overflow: hidden
+        }
+
+        .slide.active {
+            opacity: 1;
+            visibility: visible;
+            transform: none;
+            z-index: 5
+        }
+
+        .slide.dark {
+            color: #fff;
+            background: radial-gradient(circle at 78% 44%, rgba(85, 170, 255, .24) 0 17%, rgba(85, 170, 255, .08) 18% 29%, transparent 30%), linear-gradient(135deg, #0b4a81, #083766 58%, #062b50)
+        }
+
+        .slide.orange {
+            color: #fff;
+            background: radial-gradient(circle at 82% 24%, rgba(255, 255, 255, .18), transparent 22%), linear-gradient(135deg, #ffa23d, #ff7e26)
+        }
+
+        .slide:after {
+            content: "";
+            position: absolute;
+            left: -8%;
+            right: -8%;
+            bottom: -32px;
+            height: 64px;
+            background: var(--orange);
+            transform: rotate(-1.5deg);
+            opacity: .94
+        }
+
+        .dark:after {
+            background: linear-gradient(90deg, var(--yellow), var(--orange))
+        }
+
+        .orange:after {
+            background: var(--navy)
+        }
+
+        .content {
+            position: relative;
+            z-index: 2;
+            width: 100%
+        }
+
+        .chip {
+            position: absolute;
+            left: 34px;
+            top: 25px;
+            z-index: 4;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 14px;
+            border-radius: 999px;
+            background: var(--navy);
+            color: #fff;
+            font-weight: 700;
+            font-size: .94rem;
+            box-shadow: 0 6px 16px rgba(7, 59, 112, .2)
+        }
+
+        .dark .chip {
+            background: rgba(255, 255, 255, .14);
+            border: 1px solid rgba(255, 255, 255, .22)
+        }
+
+        .chip b {
+            width: 9px;
+            height: 9px;
+            background: var(--yellow);
+            border-radius: 50%;
+            box-shadow: 0 0 0 4px rgba(255, 195, 61, .16)
+        }
+
+        h1,
+        h2,
+        h3,
+        p {
+            margin: 0
+        }
+
+        .display {
+            font-size: clamp(3.2rem, 5.8vw, 6rem);
+            line-height: .96;
+            font-weight: 700;
+            text-shadow: 0 5px rgba(12, 46, 86, .18)
+        }
+
+        .display .accent {
+            color: var(--yellow)
+        }
+
+        .slide-title {
+            font-size: clamp(2rem, 3.8vw, 3.65rem);
+            line-height: 1.06;
+            text-align: center;
+            color: var(--navy);
+            font-weight: 700
+        }
+
+        .dark .slide-title,
+        .orange .slide-title {
+            color: #fff
+        }
+
+        .kicker {
+            text-align: center;
+            color: var(--orange);
+            font-size: .95rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase
+        }
+
+        .lead {
+            font-size: clamp(1.08rem, 1.58vw, 1.48rem);
+            line-height: 1.5;
+            color: var(--muted);
+            text-align: center;
+            max-width: 980px;
+            font-weight: 500;
+            margin: 0 auto
+        }
+
+        .dark .lead,
+        .orange .lead {
+            color: rgba(255, 255, 255, .9)
+        }
+
+        .highlight {
+            color: var(--orange);
+            font-weight: 700
+        }
+
+        .cyan {
+            color: #00a6bf;
+            font-weight: 700
+        }
+
+        .yellow {
+            color: var(--yellow);
+            font-weight: 700
+        }
+
+        .center {
+            text-align: center
+        }
+
+        .left {
+            text-align: left
+        }
+
+        .stack {
+            display: grid;
+            gap: 15px
+        }
+
+        .w {
+            width: 100%
+        }
+
+        .max {
+            max-width: 1080px
+        }
+
+        .two {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            align-items: center;
+            width: 100%
+        }
+
+        .three {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+            width: 100%
+        }
+
+        .four {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            width: 100%
+        }
+
+        .agenda {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            width: 100%
+        }
+
+        .card {
+            background: #fff;
+            border: 2px solid #e5eef5;
+            border-radius: 24px;
+            padding: 22px;
+            box-shadow: 0 12px 28px rgba(5, 49, 87, .11)
+        }
+
+        .dark .card {
+            color: var(--ink)
+        }
+
+        .card h3,
+        .card-title {
+            font-size: 1.22rem;
+            font-weight: 700;
+            color: var(--navy);
+            margin-bottom: 7px
+        }
+
+        .card p {
+            font-size: .98rem;
+            line-height: 1.44;
+            color: var(--muted)
+        }
+
+        .icon-card {
+            min-height: 155px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            gap: 8px;
+            transition: .2s
+        }
+
+        .icon-card:hover {
+            transform: translateY(-6px);
+            border-color: var(--cyan)
+        }
+
+        .big-icon {
+            font-size: 3rem
+        }
+
+        .instruction {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 9px 15px;
+            border-radius: 999px;
+            background: #edf9fb;
+            border: 2px solid #bdebf1;
+            color: #116c79;
+            font-weight: 600;
+            font-size: .92rem;
+            justify-self: center
+        }
+
+        .dark .instruction {
+            background: rgba(255, 255, 255, .13);
+            border-color: rgba(255, 255, 255, .27);
+            color: #fff
+        }
+
+        .note {
+            font-size: .88rem;
+            color: var(--muted);
+            line-height: 1.44
+        }
+
+        .dark .note {
+            color: rgba(255, 255, 255, .76)
+        }
+
+        .btn,
+        .btn2,
+        .option {
+            font-family: 'Fredoka', sans-serif;
+            font-weight: 700;
+            cursor: pointer;
+            transition: .2s
+        }
+
+        .btn {
+            border: 0;
+            padding: 12px 22px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, var(--orange), var(--yellow));
+            color: #173a59;
+            box-shadow: 0 9px 18px rgba(255, 139, 43, .26);
+            font-size: 1rem
+        }
+
+        .btn:hover:not(:disabled) {
+            transform: translateY(-3px) scale(1.02)
+        }
+
+        .btn:disabled {
+            opacity: .45;
+            cursor: not-allowed
+        }
+
+        .btn2 {
+            border: 0;
+            padding: 11px 18px;
+            border-radius: 15px;
+            background: var(--navy);
+            color: #fff
+        }
+
+        .option {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 14px;
+            border: 2px solid #dbe8f2;
+            background: #f7fbff;
+            color: var(--ink);
+            text-align: left;
+            font-size: .98rem
+        }
+
+        .option:hover:not(:disabled) {
+            border-color: var(--cyan);
+            transform: translateX(4px)
+        }
+
+        .option.selected {
+            outline: 4px solid rgba(67, 213, 230, .2);
+            border-color: var(--cyan)
+        }
+
+        .option.correct {
+            background: #e7f9ef;
+            border-color: var(--green);
+            color: #197247
+        }
+
+        .option.wrong {
+            background: #fff0ef;
+            border-color: var(--red);
+            color: #a93232
+        }
+
+        .option:disabled {
+            cursor: default
+        }
+
+        .nav {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 54px;
+            height: 54px;
+            border-radius: 50%;
+            border: 3px solid rgba(255, 255, 255, .88);
+            background: var(--yellow);
+            color: var(--navy);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.45rem;
+            font-weight: 700;
+            cursor: pointer;
+            z-index: 1100;
+            box-shadow: 0 12px 28px rgba(2, 20, 40, .28);
+            transition: .2s
+        }
+
+        .nav:hover:not(:disabled) {
+            transform: translateY(-50%) scale(1.1);
+            background: var(--orange);
+            color: #fff
+        }
+
+        .nav:disabled {
+            opacity: .28;
+            cursor: not-allowed
+        }
+
+        #prev {
+            left: 18px
+        }
+
+        #next {
+            right: 18px
+        }
+
+        .footer {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 10px;
+            z-index: 10;
+            display: flex;
+            justify-content: center;
+            pointer-events: none
+        }
+
+        .counter {
+            font-size: .78rem;
+            font-weight: 700;
+            letter-spacing: .8px;
+            color: #6a8094;
+            background: rgba(255, 255, 255, .9);
+            border: 1px solid rgba(7, 59, 112, .12);
+            padding: 6px 12px;
+            border-radius: 999px
+        }
+
+        .progress {
+            position: absolute;
+            left: 22%;
+            right: 22%;
+            bottom: 5px;
+            height: 4px;
+            background: rgba(7, 59, 112, .12);
+            border-radius: 999px;
+            overflow: hidden
+        }
+
+        .bar {
+            height: 100%;
+            width: 0;
+            background: linear-gradient(90deg, var(--cyan), var(--orange));
+            transition: .3s
+        }
+
+        .cover {
+            display: grid;
+            grid-template-columns: 1.05fr .95fr;
+            gap: 28px;
+            align-items: center;
+            width: 100%
+        }
+
+        .cover-sub {
+            margin-top: 22px;
+            font-size: 1.22rem;
+            line-height: 1.5;
+            color: rgba(255, 255, 255, .86);
+            max-width: 650px
+        }
+
+        .pill {
+            display: inline-flex;
+            margin-top: 24px;
+            padding: 10px 18px;
+            border-radius: 16px;
+            background: var(--yellow);
+            color: var(--navy);
+            font-weight: 700
+        }
+
+        .cover-image {
+            width: 100%;
+            height: 430px;
+            object-fit: cover;
+            border-radius: 28px;
+            border: 7px solid rgba(255, 255, 255, .92);
+            box-shadow: 0 24px 48px rgba(0, 0, 0, .35), 0 0 60px rgba(67, 213, 230, .23)
+        }
+
+        .photo-card {
+            background: #fff;
+            border: 3px solid #dcebf4;
+            border-radius: 26px;
+            padding: 15px;
+            box-shadow: 0 14px 28px rgba(5, 49, 87, .12)
+        }
+
+        .photo-card img {
+            display: block;
+            width: 100%;
+            height: 360px;
+            object-fit: contain;
+            border-radius: 18px
+        }
+
+        .photo-card.covered img {
+            object-fit: cover
+        }
+
+        .image-caption {
+            text-align: center;
+            margin-top: 10px;
+            color: var(--muted);
+            font-size: .93rem;
+            line-height: 1.4
+        }
+
+        .image-pair {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+            width: 100%
+        }
+
+        .image-pair img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            border-radius: 22px;
+            border: 5px solid #fff;
+            box-shadow: 0 14px 28px rgba(5, 49, 87, .15)
+        }
+
+        .material-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 15px;
+            width: 100%
+        }
+
+        .material {
+            background: #fff;
+            border: 2px solid #e4edf4;
+            border-radius: 22px;
+            padding: 14px;
+            text-align: center;
+            box-shadow: 0 10px 24px rgba(5, 49, 87, .1);
+            transition: .2s
+        }
+
+        .material:hover {
+            transform: translateY(-5px);
+            border-color: var(--cyan)
+        }
+
+        .material img {
+            width: 100%;
+            height: 150px;
+            object-fit: contain
+        }
+
+        .material strong {
+            display: block;
+            color: var(--navy);
+            margin-top: 8px;
+            font-size: 1rem
+        }
+
+        .material span {
+            display: block;
+            color: var(--muted);
+            font-size: .83rem;
+            margin-top: 4px
+        }
+
+        .drag-bank {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 14px;
+            border-radius: 20px;
+            background: #eef6fb;
+            border: 2px solid #dbe9f2;
+            width: 100%
+        }
+
+        .drag-card {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 13px;
+            border-radius: 15px;
+            background: #fff;
+            border: 2px solid #d7e5ee;
+            font-weight: 700;
+            cursor: grab;
+            box-shadow: 0 7px 14px rgba(0, 0, 0, .06);
+            user-select: none;
+            transition: .2s
+        }
+
+        .drag-card img {
+            width: 46px;
+            height: 46px;
+            object-fit: contain;
+            border-radius: 9px
+        }
+
+        .drag-card.selected {
+            border-color: var(--cyan);
+            box-shadow: 0 0 0 4px rgba(67, 213, 230, .16)
+        }
+
+        .drag-card.used {
+            opacity: .35;
+            pointer-events: none
+        }
+
+        .drop-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+            width: 100%
+        }
+
+        .drop-zone {
+            min-height: 110px;
+            border: 3px dashed #aac7d8;
+            border-radius: 18px;
+            background: #f7fbfe;
+            color: #718797;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px;
+            font-weight: 700;
+            text-align: center;
+            transition: .2s
+        }
+
+        .drop-zone.over {
+            border-color: var(--cyan);
+            background: #eafcfd
+        }
+
+        .drop-zone.correct {
+            border-style: solid;
+            border-color: var(--green);
+            background: #e7f9ef;
+            color: #20734a
+        }
+
+        .drop-zone.wrong {
+            border-style: solid;
+            border-color: var(--red);
+            background: #fff1f0;
+            color: #a33636
+        }
+
+        .condition-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+            width: 100%
+        }
+
+        .condition-card {
+            background: #fff;
+            border: 3px solid #e1edf4;
+            border-radius: 22px;
+            padding: 14px;
+            text-align: center;
+            box-shadow: 0 10px 22px rgba(5, 49, 87, .1)
+        }
+
+        .condition-card svg {
+            width: 100%;
+            height: 145px
+        }
+
+        .condition-card h3 {
+            font-size: 1rem;
+            color: var(--navy);
+            min-height: 48px
+        }
+
+        .condition-card .drop-zone {
+            min-height: 70px;
+            margin-top: 10px
+        }
+
+        .info-panel {
+            background: #fff;
+            border: 3px solid #dcebf4;
+            border-radius: 26px;
+            padding: 18px;
+            box-shadow: 0 14px 28px rgba(5, 49, 87, .12)
+        }
+
+        .info-panel img {
+            width: 100%;
+            height: 330px;
+            object-fit: contain;
+            border-radius: 18px
+        }
+
+        .mini-labels {
+            display: grid;
+            gap: 12px
+        }
+
+        .mini-label {
+            padding: 15px 17px;
+            background: #fff;
+            border-left: 8px solid var(--orange);
+            border-radius: 18px;
+            box-shadow: 0 8px 18px rgba(5, 49, 87, .09)
+        }
+
+        .mini-label.blue {
+            border-left-color: var(--cyan)
+        }
+
+        .mini-label.green {
+            border-left-color: var(--green)
+        }
+
+        .mini-label strong {
+            display: block;
+            color: var(--navy);
+            margin-bottom: 3px
+        }
+
+        .mini-label span {
+            color: var(--muted);
+            line-height: 1.42
+        }
+
+        .circuit-illustration {
+            background: linear-gradient(135deg, #eef8ff, #fff9ef);
+            border: 3px solid #d7e9f3;
+            border-radius: 26px;
+            padding: 14px
+        }
+
+        .circuit-illustration svg {
+            width: 100%;
+            height: 390px;
+            display: block
+        }
+
+        .glow {
+            animation: glowPulse .9s ease-in-out infinite alternate
+        }
+
+        @keyframes glowPulse {
+            from {
+                filter: drop-shadow(0 0 7px rgba(255, 90, 90, .45))
+            }
+
+            to {
+                filter: drop-shadow(0 0 28px rgba(255, 90, 90, .98))
+            }
+        }
+
+        .order-layout {
+            display: grid;
+            grid-template-columns: .75fr 1.25fr;
+            gap: 22px;
+            width: 100%;
+            align-items: start
+        }
+
+        .order-bank {
+            display: grid;
+            gap: 10px;
+            padding: 14px;
+            background: #eef6fb;
+            border: 2px solid #dbe9f2;
+            border-radius: 22px;
+            min-height: 390px
+        }
+
+        .order-item {
+            padding: 13px 14px;
+            background: #fff;
+            border: 2px solid #d7e5ee;
+            border-radius: 15px;
+            font-weight: 700;
+            cursor: grab;
+            box-shadow: 0 7px 14px rgba(0, 0, 0, .06)
+        }
+
+        .order-item.selected {
+            border-color: var(--cyan);
+            box-shadow: 0 0 0 4px rgba(67, 213, 230, .16)
+        }
+
+        .order-slots {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px
+        }
+
+        .order-slot {
+            min-height: 104px;
+            border: 3px dashed #aac7d8;
+            border-radius: 17px;
+            background: #f7fbfe;
+            padding: 11px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #718797;
+            font-weight: 700
+        }
+
+        .order-slot .num {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--navy);
+            color: #fff;
+            flex: none
+        }
+
+        .order-slot.correct {
+            border-style: solid;
+            border-color: var(--green);
+            background: #e7f9ef;
+            color: #20734a
+        }
+
+        .order-slot.wrong {
+            border-color: var(--red);
+            background: #fff1f0;
+            color: #a33636
+        }
+
+        .step-photo {
+            display: grid;
+            grid-template-columns: 1.05fr .95fr;
+            gap: 28px;
+            align-items: center;
+            width: 100%
+        }
+
+        .step-photo img {
+            width: 100%;
+            height: 420px;
+            object-fit: contain;
+            border-radius: 24px;
+            background: #fff;
+            border: 5px solid #fff;
+            box-shadow: 0 16px 34px rgba(5, 49, 87, .18)
+        }
+
+        .step-number {
+            display: flex;
+            align-items: center;
+            gap: 15px
+        }
+
+        .step-number b {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: var(--orange);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex: none
+        }
+
+        .step-number span {
+            font-size: 1.22rem;
+            color: var(--navy);
+            font-weight: 700
+        }
+
+        .step-list {
+            display: grid;
+            gap: 12px
+        }
+
+        .step-list div {
+            padding: 14px 16px;
+            background: #fff;
+            border: 2px solid #e2edf4;
+            border-radius: 17px;
+            color: var(--muted);
+            line-height: 1.45
+        }
+
+        .step-list strong {
+            color: var(--navy)
+        }
+
+        .status-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap
+        }
+
+        .status-result {
+            min-height: 72px;
+            padding: 14px 18px;
+            border-radius: 18px;
+            background: #fff;
+            border: 2px solid #dcebf4;
+            color: var(--muted);
+            text-align: center;
+            line-height: 1.45
+        }
+
+        .video-wrap {
+            position: relative;
+            width: min(420px, 100%);
+            aspect-ratio: 9/16;
+            margin: auto;
+            border-radius: 24px;
+            overflow: hidden;
+            border: 7px solid #fff;
+            box-shadow: 0 18px 34px rgba(0, 0, 0, .22);
+            background: #111
+        }
+
+        .video-wrap iframe {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            border: 0
+        }
+
+        .trouble-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            width: 100%
+        }
+
+        .trouble {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 16px;
+            background: #fff;
+            border: 2px solid #e1edf4;
+            border-radius: 18px;
+            cursor: pointer;
+            transition: .2s
+        }
+
+        .trouble:hover {
+            transform: translateY(-3px);
+            border-color: var(--cyan)
+        }
+
+        .trouble.done {
+            background: #e7f9ef;
+            border-color: var(--green)
+        }
+
+        .trouble .check {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #eef5f9;
+            color: var(--navy);
+            font-weight: 700;
+            flex: none
+        }
+
+        .trouble.done .check {
+            background: var(--green);
+            color: #fff
+        }
+
+        .trouble strong {
+            display: block;
+            color: var(--navy);
+            margin-bottom: 4px
+        }
+
+        .trouble span {
+            color: var(--muted);
+            line-height: 1.38
+        }
+
+        .idea-box {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 10px;
+            width: min(780px, 100%);
+            margin: auto
+        }
+
+        .idea-box input {
+            font-family: 'Fredoka';
+            font-size: 1rem;
+            padding: 14px 16px;
+            border: 3px solid #dcebf4;
+            border-radius: 16px;
+            outline: none
+        }
+
+        .idea-box input:focus {
+            border-color: var(--cyan)
+        }
+
+        .idea-result {
+            min-height: 85px;
+            padding: 17px;
+            border-radius: 20px;
+            background: #fff;
+            border: 3px solid #dcebf4;
+            text-align: center;
+            color: var(--muted);
+            font-size: 1.05rem;
+            line-height: 1.45
+        }
+
+        .innovation-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            width: 100%
+        }
+
+        .innovation-card {
+            background: #fff;
+            border: 3px solid #dcebf4;
+            border-radius: 24px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 12px 28px rgba(5, 49, 87, .11)
+        }
+
+        .innovation-card img {
+            width: 100%;
+            height: 280px;
+            object-fit: contain;
+            border-radius: 16px
+        }
+
+        .innovation-card h3 {
+            color: var(--navy);
+            margin-top: 8px
+        }
+
+        .innovation-card p {
+            color: var(--muted);
+            line-height: 1.42;
+            margin-top: 4px
+        }
+
+        .safety-layout {
+            display: grid;
+            grid-template-columns: .9fr 1.1fr;
+            gap: 20px;
+            width: 100%;
+            align-items: start
+        }
+
+        .safety-bank {
+            display: grid;
+            gap: 9px;
+            padding: 13px;
+            background: #eef6fb;
+            border: 2px solid #dbe9f2;
+            border-radius: 20px;
+            min-height: 400px
+        }
+
+        .safety-card {
+            padding: 12px 13px;
+            background: #fff;
+            border: 2px solid #d7e5ee;
+            border-radius: 14px;
+            font-weight: 700;
+            cursor: grab;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, .05);
+            line-height: 1.35
+        }
+
+        .safety-card.selected {
+            border-color: var(--cyan);
+            box-shadow: 0 0 0 4px rgba(67, 213, 230, .16)
+        }
+
+        .safety-columns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px
+        }
+
+        .safety-col {
+            min-height: 400px;
+            border: 3px dashed #aac7d8;
+            border-radius: 22px;
+            padding: 13px;
+            background: #f9fcfe
+        }
+
+        .safety-col h3 {
+            text-align: center;
+            margin-bottom: 12px
+        }
+
+        .safety-col.safe {
+            border-color: #84d6aa;
+            background: #f1fbf5
+        }
+
+        .safety-col.unsafe {
+            border-color: #f3aaa6;
+            background: #fff7f6
+        }
+
+        .safety-col .placed {
+            padding: 10px 11px;
+            background: #fff;
+            border-radius: 12px;
+            border: 2px solid #dce8ef;
+            margin-bottom: 9px;
+            font-size: .9rem;
+            line-height: 1.35;
+            color: var(--ink)
+        }
+
+        .quiz {
+            width: min(860px, 100%);
+            background: #fff;
+            border-radius: 28px;
+            padding: 28px;
+            border: 3px solid #dcebf4;
+            color: var(--ink);
+            margin: 0 auto
+        }
+
+        .quiz-prog {
+            font-size: .9rem;
+            font-weight: 700;
+            color: var(--orange);
+            margin-bottom: 10px
+        }
+
+        .quiz-q {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--navy);
+            line-height: 1.3;
+            margin-bottom: 16px
+        }
+
+        .quiz-options {
+            display: grid;
+            gap: 11px
+        }
+
+        .quiz-fb {
+            min-height: 70px;
+            margin-top: 12px;
+            padding: 13px 15px;
+            border-radius: 16px;
+            background: #f4f9fc;
+            color: var(--muted);
+            line-height: 1.45
+        }
+
+        .feedback {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 28px;
+            align-items: center;
+            width: 100%
+        }
+
+        .feedback-choices {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px
+        }
+
+        .feedback-choice {
+            padding: 22px 10px;
+            border-radius: 20px;
+            background: #fff;
+            border: 3px solid #e0ebf2;
+            text-align: center;
+            cursor: pointer;
+            transition: .2s
+        }
+
+        .feedback-choice:hover,
+        .feedback-choice.selected {
+            transform: translateY(-5px);
+            border-color: var(--cyan);
+            background: #effcfd
+        }
+
+        .face {
+            font-size: 3rem
+        }
+
+        .robot {
+            width: 540px;
+            height: 540px;
+            object-fit: contain;
+            animation: float 3.2s ease-in-out infinite
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0)
+            }
+
+            50% {
+                transform: translateY(-12px)
+            }
+        }
+
+        .toast {
+            position: fixed;
+            left: 50%;
+            bottom: 34px;
+            transform: translate(-50%, 28px);
+            z-index: 3000;
+            padding: 14px 20px;
+            border-radius: 16px;
+            background: #102f4c;
+            color: #fff;
+            font-weight: 700;
+            opacity: 0;
+            pointer-events: none;
+            transition: .25s;
+            max-width: min(660px, 88vw);
+            text-align: center
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translate(-50%, 0)
+        }
+
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 16px;
+            border-radius: 3px;
+            z-index: 3500;
+            pointer-events: none;
+            animation: fall 1.5s ease-out forwards
+        }
+
+        @keyframes fall {
+            to {
+                transform: translate(var(--x), var(--y)) rotate(680deg);
+                opacity: 0
+            }
+        }
+
+        @media(max-width:1100px) {
+            .presentation {
+                width: 94vw
+            }
+
+            .slide {
+                padding: 66px 50px 56px
+            }
+
+            .agenda,
+            .four {
+                grid-template-columns: repeat(2, 1fr)
+            }
+
+            .material-grid {
+                grid-template-columns: repeat(3, 1fr)
+            }
+
+            .drop-grid,
+            .condition-grid {
+                grid-template-columns: repeat(2, 1fr)
+            }
+        }
+
+        @media(max-width:760px) {
+            body {
+                overflow: auto
+            }
+
+            .brand {
+                left: 8px;
+                top: 8px;
+                padding: 7px 10px;
+                gap: 8px
+            }
+
+            .brand .k {
+                height: 30px
+            }
+
+            .brand .r {
+                height: 26px
+            }
+
+            .brand i {
+                height: 25px
+            }
+
+            .presentation {
+                position: absolute;
+                top: 64px;
+                transform: translateX(-50%);
+                width: 100vw;
+                height: calc(100vh - 64px);
+                max-height: none;
+                aspect-ratio: auto;
+                border-radius: 0;
+                border: 0
+            }
+
+            .slide {
+                padding: 68px 20px 62px;
+                overflow-y: auto;
+                justify-content: flex-start
+            }
+
+            .nav {
+                width: 42px;
+                height: 42px;
+                top: auto;
+                bottom: 12px
+            }
+
+            #prev {
+                left: 12px
+            }
+
+            #next {
+                right: 12px
+            }
+
+            .chip {
+                left: 16px;
+                top: 18px
+            }
+
+            .two,
+            .three,
+            .cover,
+            .feedback,
+            .step-photo,
+            .order-layout,
+            .safety-layout {
+                grid-template-columns: 1fr
+            }
+
+            .agenda,
+            .four,
+            .material-grid,
+            .drop-grid,
+            .condition-grid,
+            .trouble-grid,
+            .innovation-grid,
+            .safety-columns {
+                grid-template-columns: 1fr
+            }
+
+            .display {
+                text-align: center;
+                font-size: 3rem
+            }
+
+            .cover-image {
+                height: 300px
+            }
+
+            .slide:after {
+                display: none
+            }
+
+            .photo-card img {
+                height: 260px
+            }
+
+            .robot {
+                width: 600px;
+                height: 600px;
+                position: relative;
+                margin: auto;
+                animation: float 3.2s ease-in-out infinite;
+                object-fit: contain;
+                display: block
+            }
+
+            .order-slots {
+                grid-template-columns: 1fr
+            }
+        }
+    </style>
+
+    <style>
+        .compare-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            width: 100%
+        }
+
+        .circuit-card {
+            background: #fff;
+            border: 3px solid #dcebf4;
+            border-radius: 24px;
+            padding: 18px;
+            box-shadow: 0 12px 28px rgba(5, 49, 87, .11);
+            text-align: center;
+            position: relative;
+            overflow: hidden
+        }
+
+        .circuit-card h3 {
+            color: var(--navy);
+            font-size: 1.25rem;
+            margin-bottom: 6px
+        }
+
+        .circuit-card p {
+            color: var(--muted);
+            line-height: 1.42
+        }
+
+        .circuit-card svg {
+            width: 100%;
+            height: 220px;
+            display: block;
+            margin: 8px 0
+        }
+
+        .state-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 14px;
+            border-radius: 999px;
+            font-weight: 700;
+            background: #edf5fa;
+            color: var(--navy);
+            border: 2px solid #d8e8f1
+        }
+
+        .state-pill.on {
+            background: #e7f9ef;
+            color: #20734a;
+            border-color: #90d7ae
+        }
+
+        .state-pill.off {
+            background: #fff1f0;
+            color: #a33636;
+            border-color: #efb4b0
+        }
+
+        .reveal-box {
+            opacity: 0;
+            transform: translateY(8px);
+            transition: .25s
+        }
+
+        .reveal-box.show {
+            opacity: 1;
+            transform: none
+        }
+
+        .copper-hero {
+            display: grid;
+            grid-template-columns: .9fr 1.1fr;
+            gap: 28px;
+            align-items: center;
+            width: 100%
+        }
+
+        .copper-hero img {
+            width: 100%;
+            height: 360px;
+            object-fit: contain;
+            background: #fff;
+            border: 5px solid #fff;
+            border-radius: 24px;
+            box-shadow: 0 16px 34px rgba(5, 49, 87, .16)
+        }
+
+        .reason-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            width: 100%
+        }
+
+        .reason {
+            padding: 18px;
+            background: #fff;
+            border: 2px solid #e1edf4;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 10px 22px rgba(5, 49, 87, .09)
+        }
+
+        .reason b {
+            display: block;
+            color: var(--navy);
+            margin: 7px 0
+        }
+
+        .reason span {
+            color: var(--muted);
+            font-size: .92rem;
+            line-height: 1.4
+        }
+
+        .reason .big-icon {
+            font-size: 2.6rem
+        }
+
+        .project-preview {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+            width: 100%
+        }
+
+        .project-preview .photo-card img {
+            height: 310px;
+            object-fit: cover
+        }
+
+        .material-grid.six {
+            grid-template-columns: repeat(6, 1fr)
+        }
+
+        .fold-sim {
+            display: grid;
+            grid-template-columns: 1fr .8fr;
+            gap: 22px;
+            align-items: center;
+            width: 100%
+        }
+
+        .paper-window {
+            position: relative;
+            width: 100%;
+            height: 410px;
+            border-radius: 26px;
+            background: #eaf1f5;
+            border: 3px solid #cfe0ea;
+            overflow: hidden;
+            box-shadow: inset 0 0 35px rgba(7, 59, 112, .08)
+        }
+
+        .paper-face {
+            position: absolute;
+            inset: 24px;
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 12px 26px rgba(5, 49, 87, .12);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: .45s ease;
+            overflow: hidden
+        }
+
+        .paper-face img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain
+        }
+
+        .paper-face.inside {
+            opacity: 0;
+            transform: translateX(22px) scale(.97)
+        }
+
+        .paper-window.open .paper-face.front {
+            opacity: 0;
+            transform: translateX(-22px) scale(.97)
+        }
+
+        .paper-window.open .paper-face.inside {
+            opacity: 1;
+            transform: none
+        }
+
+        .sim-controls {
+            display: grid;
+            gap: 12px
+        }
+
+        .sim-result {
+            padding: 16px;
+            background: #fff;
+            border: 2px solid #dcebf4;
+            border-radius: 18px;
+            color: var(--muted);
+            line-height: 1.45
+        }
+
+        .sim-result strong {
+            color: var(--navy)
+        }
+
+        .path-activity {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            width: 100%
+        }
+
+        .path-option {
+            border: 3px solid #dcebf4;
+            border-radius: 22px;
+            background: #fff;
+            padding: 16px;
+            cursor: pointer;
+            transition: .2s;
+            text-align: center
+        }
+
+        .path-option:hover {
+            transform: translateY(-4px);
+            border-color: var(--cyan)
+        }
+
+        .path-option.correct {
+            border-color: var(--green);
+            background: #e7f9ef
+        }
+
+        .path-option.wrong {
+            border-color: var(--red);
+            background: #fff1f0
+        }
+
+        .path-option svg {
+            width: 100%;
+            height: 190px
+        }
+
+        .loop-demo {
+            display: grid;
+            grid-template-columns: 1.1fr .9fr;
+            gap: 24px;
+            align-items: center;
+            width: 100%
+        }
+
+        .loop-board {
+            background: #fff;
+            border: 3px solid #dcebf4;
+            border-radius: 26px;
+            padding: 16px;
+            box-shadow: 0 14px 28px rgba(5, 49, 87, .11)
+        }
+
+        .loop-board svg {
+            width: 100%;
+            height: 340px
+        }
+
+        .led-glow {
+            filter: drop-shadow(0 0 14px rgba(67, 213, 230, .9))
+        }
+
+        .loop-gap {
+            transition: .25s
+        }
+
+        .loop-board.closed .loop-gap {
+            opacity: 0
+        }
+
+        .loop-board .closed-bridge {
+            opacity: 0;
+            transition: .25s
+        }
+
+        .loop-board.closed .closed-bridge {
+            opacity: 1
+        }
+
+        .loop-board .demo-led {
+            fill: #8aa3b5
+        }
+
+        .loop-board.closed .demo-led {
+            fill: #46cfea;
+            filter: drop-shadow(0 0 24px rgba(67, 213, 230, 1))
+        }
+
+        .build-check {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+            width: 100%
+        }
+
+        .check-card {
+            background: #fff;
+            border: 2px solid #e1edf4;
+            border-radius: 18px;
+            padding: 15px;
+            text-align: center
+        }
+
+        .check-card b {
+            display: block;
+            color: var(--navy);
+            margin: 6px 0
+        }
+
+        .check-card span {
+            color: var(--muted);
+            font-size: .9rem
+        }
+
+        .trouble.done .check {
+            background: var(--green);
+            color: #fff
+        }
+
+        .video-note {
+            padding: 14px 16px;
+            border-radius: 18px;
+            background: #fff8e8;
+            border: 2px solid #ffe1a0;
+            color: #7b5a16;
+            line-height: 1.42
+        }
+
+        .quiz {
+            max-height: 520px;
+            overflow: auto
+        }
+
+        @media(max-width:1100px) {
+            .material-grid.six {
+                grid-template-columns: repeat(3, 1fr)
+            }
+
+            .reason-grid {
+                grid-template-columns: 1fr 1fr
+            }
+
+            .build-check {
+                grid-template-columns: 1fr 1fr
+            }
+        }
+
+        @media(max-width:760px) {
+
+            .compare-grid,
+            .copper-hero,
+            .project-preview,
+            .fold-sim,
+            .path-activity,
+            .loop-demo,
+            .reason-grid,
+            .material-grid.six,
+            .build-check {
+                grid-template-columns: 1fr
+            }
+
+            .paper-window {
+                height: 330px
+            }
+        }
+    </style>
+
+    <style>
+        /* ===== SESSION 5 · BREADBOARD ===== */
+        .breadboard-hero {
+            display: grid;
+            grid-template-columns: 1.05fr .95fr;
+            gap: 26px;
+            align-items: center;
+            width: 100%
+        }
+
+        .translate-flow {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+            width: 100%
+        }
+
+        .translate-card {
+            background: #fff;
+            border: 3px solid #dcebf4;
+            border-radius: 22px;
+            padding: 18px;
+            text-align: center;
+            box-shadow: 0 10px 24px rgba(5, 49, 87, .09);
+            transition: .2s
+        }
+
+        .translate-card.active {
+            border-color: var(--orange);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 28px rgba(255, 139, 43, .18)
+        }
+
+        .translate-card .arrow {
+            font-size: 2rem;
+            color: var(--orange);
+            font-weight: 700;
+            margin: 8px 0
+        }
+
+        .simple-path {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            padding: 14px 18px;
+            border-radius: 20px;
+            background: #f4f9fc;
+            border: 2px solid #dcebf4;
+            color: var(--navy);
+            font-weight: 700;
+            font-size: 1.05rem
+        }
+
+        .path-node {
+            padding: 9px 12px;
+            border-radius: 12px;
+            background: #fff;
+            border: 2px solid #d8e8f1;
+            box-shadow: 0 5px 12px rgba(5, 49, 87, .06)
+        }
+
+        .path-arrow {
+            color: var(--orange);
+            font-size: 1.3rem
+        }
+
+        .breadboard-shell {
+            background: #f7fafc;
+            border: 4px solid #cddce5;
+            border-radius: 28px;
+            padding: 16px;
+            box-shadow: 0 14px 30px rgba(5, 49, 87, .14);
+            width: 100%;
+            overflow: hidden
+        }
+
+        .bb-rail {
+            display: grid;
+            grid-template-columns: 36px repeat(16, 1fr);
+            gap: 5px;
+            align-items: center;
+            margin: 5px 0
+        }
+
+        .bb-rail-label {
+            font-weight: 700;
+            text-align: center;
+            font-size: .9rem
+        }
+
+        .bb-row {
+            display: grid;
+            grid-template-columns: 36px repeat(5, 1fr) 26px repeat(5, 1fr);
+            gap: 6px;
+            align-items: center;
+            margin: 6px 0
+        }
+
+        .bb-label {
+            font-weight: 700;
+            color: var(--navy);
+            text-align: center;
+            font-size: .86rem
+        }
+
+        .bb-gap {
+            height: 100%;
+            background: linear-gradient(90deg, transparent 0 35%, #dce7ee 35% 65%, transparent 65%);
+            border-radius: 8px
+        }
+
+        .hole {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #dbe4ea;
+            border: 3px solid #aebcc6;
+            margin: auto;
+            cursor: pointer;
+            transition: .16s;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, .12)
+        }
+
+        .hole:hover {
+            transform: scale(1.15);
+            border-color: var(--cyan)
+        }
+
+        .hole.connected {
+            background: var(--yellow);
+            border-color: var(--orange);
+            box-shadow: 0 0 0 5px rgba(255, 195, 61, .18)
+        }
+
+        .hole.power-plus {
+            background: #ffd9d7;
+            border-color: #ef8f8b
+        }
+
+        .hole.power-minus {
+            background: #d7edff;
+            border-color: #83b9df
+        }
+
+        .hole.rail-active {
+            background: var(--yellow);
+            border-color: var(--orange);
+            box-shadow: 0 0 0 4px rgba(255, 195, 61, .16)
+        }
+
+        .bb-key {
+            display: flex;
+            justify-content: center;
+            gap: 18px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+            color: var(--muted);
+            font-size: .9rem
+        }
+
+        .bb-key span {
+            display: flex;
+            align-items: center;
+            gap: 7px
+        }
+
+        .dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            display: inline-block;
+            border: 2px solid #aaa
+        }
+
+        .dot.plus {
+            background: #ffd9d7;
+            border-color: #ef8f8b
+        }
+
+        .dot.minus {
+            background: #d7edff;
+            border-color: #83b9df
+        }
+
+        .dot.conn {
+            background: var(--yellow);
+            border-color: var(--orange)
+        }
+
+        .connection-stepper {
+            display: grid;
+            grid-template-columns: 1fr .95fr;
+            gap: 24px;
+            align-items: center;
+            width: 100%
+        }
+
+        .connection-list {
+            display: grid;
+            gap: 10px
+        }
+
+        .connection-item {
+            padding: 14px 16px;
+            border-radius: 17px;
+            background: #fff;
+            border: 2px solid #e2edf4;
+            color: var(--muted);
+            transition: .2s
+        }
+
+        .connection-item.active {
+            border-color: var(--orange);
+            background: #fff7ea;
+            color: var(--ink);
+            transform: translateX(5px)
+        }
+
+        .connection-item strong {
+            color: var(--navy)
+        }
+
+        .placeholder-wrap {
+            background: #fff;
+            border: 3px solid #dcebf4;
+            border-radius: 26px;
+            padding: 14px;
+            box-shadow: 0 14px 28px rgba(5, 49, 87, .12)
+        }
+
+        .image-placeholder {
+            height: 365px;
+            border: 4px dashed #aac7d8;
+            border-radius: 18px;
+            background: linear-gradient(135deg, #f7fbfe, #fffaf0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 30px;
+            color: #718797;
+            font-weight: 700;
+            line-height: 1.5;
+            position: relative
+        }
+
+        .image-placeholder:before {
+            content: '🖼️';
+            display: block;
+            position: absolute;
+            top: 72px;
+            font-size: 3.2rem;
+            opacity: .7
+        }
+
+        .image-placeholder code {
+            display: block;
+            margin-top: 14px;
+            padding: 6px 9px;
+            border-radius: 8px;
+            background: #edf5fa;
+            color: var(--navy);
+            font-size: .78rem
+        }
+
+        .build-stage {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 22px;
+            align-items: center;
+            width: 100%
+        }
+
+        .stage-card {
+            background: #fff;
+            border: 3px solid #dcebf4;
+            border-radius: 22px;
+            padding: 18px;
+            box-shadow: 0 12px 24px rgba(5, 49, 87, .09)
+        }
+
+        .stage-card h3 {
+            color: var(--navy);
+            margin-bottom: 10px
+        }
+
+        .stage-card ol {
+            margin: 0;
+            padding-left: 22px;
+            color: var(--muted);
+            line-height: 1.55
+        }
+
+        .stage-card li {
+            margin: 7px 0
+        }
+
+        .stage-card strong {
+            color: var(--navy)
+        }
+
+        .challenge-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            width: 100%
+        }
+
+        .challenge-card {
+            background: #fff;
+            border: 3px solid #e1edf4;
+            border-radius: 22px;
+            padding: 18px;
+            text-align: center;
+            cursor: pointer;
+            transition: .2s;
+            box-shadow: 0 10px 22px rgba(5, 49, 87, .08)
+        }
+
+        .challenge-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--cyan)
+        }
+
+        .challenge-card.correct {
+            background: #e7f9ef;
+            border-color: var(--green)
+        }
+
+        .challenge-card.wrong {
+            background: #fff1f0;
+            border-color: var(--red)
+        }
+
+        .challenge-card h3 {
+            color: var(--navy);
+            margin: 8px 0
+        }
+
+        .challenge-card p {
+            color: var(--muted);
+            line-height: 1.4
+        }
+
+        .challenge-icon {
+            font-size: 3rem
+        }
+
+        .component-line {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 9px;
+            flex-wrap: wrap
+        }
+
+        .comp {
+            padding: 10px 13px;
+            border: 2px solid #dcebf4;
+            border-radius: 13px;
+            background: #fff;
+            font-weight: 700;
+            color: var(--navy)
+        }
+
+        .circuit-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap
+        }
+
+        .circuit-tab {
+            border: 2px solid #dcebf4;
+            background: #fff;
+            padding: 10px 16px;
+            border-radius: 999px;
+            font-family: 'Fredoka';
+            font-weight: 700;
+            color: var(--navy);
+            cursor: pointer
+        }
+
+        .circuit-tab.active {
+            background: var(--navy);
+            color: #fff;
+            border-color: var(--navy)
+        }
+
+        .lab-table {
+            display: grid;
+            grid-template-columns: 140px 1fr 1fr;
+            gap: 2px;
+            background: #dcebf4;
+            border: 2px solid #dcebf4;
+            border-radius: 18px;
+            overflow: hidden;
+            width: 100%
+        }
+
+        .lab-cell {
+            background: #fff;
+            padding: 13px 14px;
+            color: var(--muted);
+            line-height: 1.35
+        }
+
+        .lab-cell.head {
+            background: #edf5fa;
+            color: var(--navy);
+            font-weight: 700
+        }
+
+        .lab-cell.bold {
+            color: var(--navy);
+            font-weight: 700
+        }
+
+        .question-strip {
+            padding: 16px 18px;
+            border-radius: 18px;
+            background: #fff;
+            border: 3px solid #dcebf4;
+            font-size: 1.12rem;
+            font-weight: 700;
+            color: var(--navy);
+            text-align: center
+        }
+
+        .safety-note {
+            padding: 13px 15px;
+            border-radius: 16px;
+            background: #fff5df;
+            border: 2px solid #ffd57d;
+            color: #74520a;
+            line-height: 1.4;
+            font-size: .92rem
+        }
+
+        .quiz {
+            max-height: none;
+            overflow: visible
+        }
+
+        @media(max-width:1100px) {
+            .challenge-grid {
+                grid-template-columns: 1fr 1fr
+            }
+
+            .image-placeholder {
+                height: 300px
+            }
+        }
+
+        @media(max-width:760px) {
+
+            .breadboard-hero,
+            .translate-flow,
+            .connection-stepper,
+            .build-stage,
+            .challenge-grid {
+                grid-template-columns: 1fr
+            }
+
+            .bb-row {
+                grid-template-columns: 28px repeat(5, 1fr) 18px repeat(5, 1fr);
+                gap: 3px
+            }
+
+            .hole {
+                width: 18px;
+                height: 18px;
+                border-width: 2px
+            }
+
+            .bb-rail {
+                grid-template-columns: 28px repeat(16, 1fr);
+                gap: 2px
+            }
+
+            .image-placeholder {
+                height: 260px
+            }
+
+            .lab-table {
+                grid-template-columns: 1fr
+            }
+
+            .lab-cell.head {
+                display: none
+            }
+        }
+    </style>
+
+    <style>
+        /* ===== SESSION 6 · MINI SWEEPER ROBOT ===== */
+        .project-hero {
+            display: grid;
+            grid-template-columns: .95fr 1.05fr;
+            gap: 28px;
+            align-items: center;
+            width: 100%
+        }
+
+        .project-hero img {
+            width: 100%;
+            height: 430px;
+            object-fit: contain;
+            border-radius: 26px;
+            background: #fff;
+            border: 5px solid #fff;
+            box-shadow: 0 16px 34px rgba(5, 49, 87, .18)
+        }
+
+        .system-map {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+            width: 100%
+        }
+
+        .system-card {
+            background: #fff;
+            border: 3px solid #dcebf4;
+            border-radius: 22px;
+            padding: 18px;
+            text-align: center;
+            box-shadow: 0 10px 22px rgba(5, 49, 87, .09)
+        }
+
+        .system-card .big-icon {
+            font-size: 2.8rem
+        }
+
+        .system-card strong {
+            display: block;
+            color: var(--navy);
+            font-size: 1.08rem;
+            margin: 7px 0
+        }
+
+        .system-card span {
+            color: var(--muted);
+            font-size: .9rem;
+            line-height: 1.4
+        }
+
+        .circuit-flow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            padding: 18px;
+            border-radius: 22px;
+            background: #f3f9fc;
+            border: 3px solid #dcebf4;
+            width: 100%
+        }
+
+        .circuit-node {
+            padding: 12px 15px;
+            border-radius: 15px;
+            background: #fff;
+            border: 2px solid #dcebf4;
+            color: var(--navy);
+            font-weight: 700;
+            box-shadow: 0 6px 14px rgba(5, 49, 87, .07)
+        }
+
+        .circuit-arrow {
+            font-size: 1.5rem;
+            color: var(--orange);
+            font-weight: 700
+        }
+
+        .switch-demo {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            width: 100%;
+            align-items: center
+        }
+
+        .motor-box {
+            height: 340px;
+            background: #fff;
+            border: 3px solid #dcebf4;
+            border-radius: 26px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            box-shadow: 0 14px 28px rgba(5, 49, 87, .11);
+            overflow: hidden
+        }
+
+        .motor-body {
+            width: 170px;
+            height: 110px;
+            border-radius: 22px;
+            background: linear-gradient(#d9e1e5, #aeb8bf);
+            border: 4px solid #87949c;
+            position: relative
+        }
+
+        .motor-body:after {
+            content: '';
+            position: absolute;
+            right: -70px;
+            top: 48px;
+            width: 70px;
+            height: 14px;
+            border-radius: 8px;
+            background: #777
+        }
+
+        .rotor-arm {
+            position: absolute;
+            left: calc(50% + 105px);
+            top: 50%;
+            width: 130px;
+            height: 16px;
+            border-radius: 10px;
+            background: #43d5e6;
+            transform-origin: 8px 8px;
+            transform: translateY(-50%)
+        }
+
+        .motor-box.on .rotor-arm {
+            animation: spinRotor .55s linear infinite
+        }
+
+        @keyframes spinRotor {
+            to {
+                transform: translateY(-50%) rotate(360deg)
+            }
+        }
+
+        .motor-state {
+            position: absolute;
+            bottom: 22px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 9px 15px;
+            border-radius: 999px;
+            font-weight: 700;
+            background: #fff1f0;
+            color: #a33636;
+            border: 2px solid #efb4b0
+        }
+
+        .motor-box.on .motor-state {
+            background: #e7f9ef;
+            color: #20734a;
+            border-color: #90d7ae
+        }
+
+        .switch-toggle {
+            display: flex;
+            gap: 12px;
+            justify-content: center
+        }
+
+        .switch-toggle button {
+            min-width: 115px
+        }
+
+        .placeholder-photo {
+            height: 360px;
+            border: 4px dashed #aac7d8;
+            border-radius: 22px;
+            background: linear-gradient(135deg, #f7fbfe, #fff9ef);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: #718797;
+            font-weight: 700;
+            padding: 26px;
+            line-height: 1.5;
+            position: relative
+        }
+
+        .placeholder-photo:before {
+            content: '🖼️';
+            position: absolute;
+            top: 58px;
+            font-size: 3.2rem;
+            opacity: .65
+        }
+
+        .placeholder-photo code {
+            display: block;
+            margin-top: 14px;
+            padding: 6px 9px;
+            background: #eaf3f8;
+            color: var(--navy);
+            border-radius: 8px;
+            font-size: .78rem
+        }
+
+        .build-step-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            align-items: center;
+            width: 100%
+        }
+
+        .build-card {
+            background: #fff;
+            border: 3px solid #dcebf4;
+            border-radius: 24px;
+            padding: 19px;
+            box-shadow: 0 12px 26px rgba(5, 49, 87, .1)
+        }
+
+        .build-card h3 {
+            color: var(--navy);
+            margin-bottom: 10px
+        }
+
+        .build-card ol {
+            margin: 0;
+            padding-left: 22px;
+            color: var(--muted);
+            line-height: 1.5
+        }
+
+        .build-card li {
+            margin: 8px 0
+        }
+
+        .build-card strong {
+            color: var(--navy)
+        }
+
+        .material-grid.fourteen {
+            grid-template-columns: repeat(4, 1fr)
+        }
+
+        .material.compact img {
+            height: 118px
+        }
+
+        .material.compact {
+            padding: 11px
+        }
+
+        .material.compact strong {
+            font-size: .94rem
+        }
+
+        .checkline {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+            width: 100%
+        }
+
+        .checkitem {
+            background: #fff;
+            border: 2px solid #dcebf4;
+            border-radius: 18px;
+            padding: 14px;
+            text-align: center
+        }
+
+        .checkitem strong {
+            display: block;
+            color: var(--navy);
+            margin: 6px 0
+        }
+
+        .checkitem span {
+            font-size: .88rem;
+            color: var(--muted);
+            line-height: 1.35
+        }
+
+        .build-safety {
+            padding: 14px 16px;
+            border-radius: 18px;
+            background: #fff5df;
+            border: 2px solid #ffd57d;
+            color: #74520a;
+            line-height: 1.45
+        }
+
+        @media(max-width:1100px) {
+
+            .system-map,
+            .checkline,
+            .material-grid.fourteen {
+                grid-template-columns: repeat(2, 1fr)
+            }
+        }
+
+        @media(max-width:760px) {
+
+            .project-hero,
+            .switch-demo,
+            .build-step-grid {
+                grid-template-columns: 1fr
+            }
+
+            .system-map,
+            .checkline,
+            .material-grid.fourteen {
+                grid-template-columns: 1fr
+            }
+
+            .project-hero img {
+                height: 300px
+            }
+
+            .placeholder-photo {
+                height: 280px
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="brand"><img class="k"
+            src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/5b36ddb1-5ff5-490e-af31-9a171820e051.png"
+            alt="Kalananti"><i></i><img class="r"
+            src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/7e71d258-897f-42b7-9c8b-2ff76376ffc6.png"
+            alt="Ruangguru Coding"></div>
+    <button class="nav" id="prev">◀</button><button class="nav" id="next">▶</button>
+    <main class="presentation" id="presentation">
+
+        <!-- 1 -->
+        <section class="slide dark active">
+            <div class="cover content">
+                <div>
+                    <div class="kicker left" style="color:var(--cyan)">WELCOME TO DIY ROBOTIC CLASS</div>
+                    <h1 class="display"><span class="accent">Mini Sweeper</span><br>Robot</h1>
+                    <p class="cover-sub">Membuat robot sederhana dengan battery sebagai body, switch sebagai kontrol,
+                        dan DC motor sebagai sumber gerakan.</p>
+                    <div class="pill">SESSION 6 · SWITCH & DC MOTOR</div>
+                </div><img class="robot"
+                    src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/eded3e71-16cf-401e-b1c1-3ff5f887dc38.png"
+                    alt="Robot">
+            </div>
+        </section>
+
+        <!-- 2 -->
+        <section class="slide"><span class="chip"><b></b> Today's Agenda</span>
+            <div class="content stack">
+                <div>
+                    <div class="kicker">WHAT WE WILL DO TODAY</div>
+                    <h2 class="slide-title">Rencana Belajar Hari Ini</h2>
+                </div>
+                <div class="agenda">
+                    <div class="card icon-card">
+                        <div class="big-icon">🔁</div>
+                        <h3>Review Circuit</h3>
+                        <p>Mengingat kembali open, closed, dan jalur dari positive ke negative.</p>
+                    </div>
+                    <div class="card icon-card">
+                        <div class="big-icon">🔘</div>
+                        <h3>Control with Switch</h3>
+                        <p>Menggunakan switch 0/1 untuk memutus dan menyambungkan circuit.</p>
+                    </div>
+                    <div class="card icon-card">
+                        <div class="big-icon">⚙️</div>
+                        <h3>DC Motor Output</h3>
+                        <p>Mengubah energi listrik menjadi gerakan berputar.</p>
+                    </div>
+                    <div class="card icon-card">
+                        <div class="big-icon">🤖</div>
+                        <h3>Build the Robot</h3>
+                        <p>Menggabungkan struktur, circuit, dan gerakan menjadi satu robot sederhana.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3 -->
+        <section class="slide"><span class="chip"><b></b> Quick Review</span>
+            <div class="content two max">
+                <div class="stack">
+                    <div class="kicker left">LAST SESSION</div>
+                    <h2 class="slide-title left">Circuit yang Sama, Bentuk yang Berbeda</h2>
+                    <p class="lead left">Di Meet 5 kita belajar bahwa circuit tetap mengikuti jalur yang sama walaupun
+                        dirangkai menggunakan breadboard.</p>
+                    <div class="simple-path"><span class="path-node">Battery +</span><span
+                            class="path-arrow">→</span><span class="path-node">Component</span><span
+                            class="path-arrow">→</span><span class="path-node">Output</span><span
+                            class="path-arrow">→</span><span class="path-node">Battery −</span></div>
+                    <div class="instruction">Hari ini jalurnya akan kita masukkan ke dalam sebuah robot.</div>
+                </div>
+                <div class="card icon-card" style="min-height:390px">
+                    <div style="font-size:7rem">🔋 → 🔘 → ⚙️</div>
+                    <h3>From Circuit to Robot</h3>
+                    <p>Komponen yang sebelumnya hanya berada di meja sekarang menjadi bagian dari struktur robot.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4 -->
+        <section class="slide orange"><span class="chip"><b></b> First Robot Build</span>
+            <div class="content two max">
+                <div class="stack">
+                    <div class="kicker left" style="color:#fff7df">NOW WE BUILD A ROBOT</div>
+                    <h2 class="slide-title left">Komponennya Sekaligus Menjadi Bagian Robot</h2>
+                    <p class="lead left">Kali ini battery tidak hanya menjadi power source. Battery 9V juga menjadi
+                        <strong>body</strong> robot. Motor, switch, dan material crafting akan dipasang langsung pada
+                        struktur tersebut.</p>
+                    <div class="instruction">⚡ Electronics + Structure + Movement</div>
+                </div>
+                <div class="card icon-card" style="min-height:360px">
+                    <div style="font-size:7rem">🤖</div>
+                    <h3>Simple Robotic System</h3>
+                    <p>Switch mengontrol circuit, motor menghasilkan gerakan, dan struktur membuat gerakan itu terlihat
+                        pada robot.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5 -->
+        <section class="slide"><span class="chip"><b></b> Project Preview</span>
+            <div class="content project-hero max">
+                <div class="photo-card"><img
+                        src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/b525632e-009f-4a07-bcd2-019996face74.png"
+                        alt="Mini Sweeper Robot"></div>
+                <div class="stack">
+                    <div class="kicker left">TODAY'S PROJECT</div>
+                    <h2 class="slide-title left">Mini Sweeper Robot</h2>
+                    <p class="lead left">Robot berdiri menggunakan dua kaki, memegang alat sweeping sederhana, dan
+                        memiliki motor DC di bagian atas body.</p>
+                    <div class="mini-labels">
+                        <div class="mini-label"><strong>🔋 Battery = Body</strong><span>Battery 9V menjadi sumber energi
+                                sekaligus struktur utama.</span></div>
+                        <div class="mini-label blue"><strong>⚙️ Motor = Movement</strong><span>Potongan sedotan pada
+                                shaft ikut berputar saat motor aktif.</span></div>
+                        <div class="mini-label green"><strong>🔘 Switch = Control</strong><span>Posisi 0 mematikan
+                                circuit dan posisi 1 mengaktifkannya.</span></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6 -->
+        <section class="slide"><span class="chip"><b></b> Robot System</span>
+            <div class="content stack">
+                <div>
+                    <h2 class="slide-title">What Makes the Robot Work?</h2>
+                    <p class="lead">Setiap bagian punya fungsi berbeda di dalam satu system.</p>
+                </div>
+                <div class="system-map">
+                    <div class="system-card">
+                        <div class="big-icon">🔋</div><strong>Power</strong><span>Battery 9V menyediakan energi.</span>
+                    </div>
+                    <div class="system-card">
+                        <div class="big-icon">🔘</div><strong>Control</strong><span>Switch 0/1 membuka atau menutup
+                            circuit.</span>
+                    </div>
+                    <div class="system-card">
+                        <div class="big-icon">⚙️</div><strong>Output</strong><span>DC motor mengubah energi listrik
+                            menjadi putaran.</span>
+                    </div>
+                    <div class="system-card">
+                        <div class="big-icon">🧱</div><strong>Structure</strong><span>Stik, tusuk sate, sedotan, dan
+                            tutup botol membentuk robot.</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 7 -->
+        <section class="slide"><span class="chip"><b></b> Before Building</span>
+            <div class="content two max">
+                <div class="photo-card"><img
+                        src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/b96b1376-64d1-4282-a662-916add693b31.png"
+                        alt="Circuit Diagram"></div>
+                <div class="stack">
+                    <div class="kicker left">CIRCUIT FIRST</div>
+                    <h2 class="slide-title left">Pahami Circuit Sebelum Menempel Komponen</h2>
+                    <p class="lead left">Sebelum membuat badan robot, kita harus tahu jalur listrik yang akan membuat
+                        motor menyala dan mati.</p>
+                    <div class="circuit-flow"><span class="circuit-node">9V (+)</span><span
+                            class="circuit-arrow">→</span><span class="circuit-node">Switch</span><span
+                            class="circuit-arrow">→</span><span class="circuit-node">DC Motor</span><span
+                            class="circuit-arrow">→</span><span class="circuit-node">9V (−)</span></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 8 -->
+        <section class="slide" id="circuitOrder"><span class="chip"><b></b> Activity · Follow the Circuit</span>
+            <div class="content stack">
+                <div>
+                    <h2 class="slide-title">Ikuti Jalurnya Satu per Satu</h2>
+                    <p class="lead">Klik Next Connection untuk melihat bagaimana circuit menjadi lengkap.</p>
+                </div>
+                <div class="connection-stepper max">
+                    <div class="connection-list" id="connectionList">
+                        <div class="connection-item active"><strong>1. Battery (+)</strong><br>Mulai dari positive pada
+                            socket battery.</div>
+                        <div class="connection-item"><strong>2. Switch</strong><br>Positive masuk ke salah satu terminal
+                            switch.</div>
+                        <div class="connection-item"><strong>3. Motor</strong><br>Terminal switch yang lain terhubung ke
+                            salah satu terminal motor.</div>
+                        <div class="connection-item"><strong>4. Return</strong><br>Terminal motor yang tersisa kembali
+                            ke negative battery.</div>
+                    </div>
+                    <div class="stack">
+                        <div class="circuit-flow" id="flowPath"><span class="circuit-node">9V +</span><span
+                                class="circuit-arrow">→</span><span class="circuit-node"
+                                style="opacity:.25">Switch</span><span class="circuit-arrow"
+                                style="opacity:.25">→</span><span class="circuit-node"
+                                style="opacity:.25">Motor</span><span class="circuit-arrow"
+                                style="opacity:.25">→</span><span class="circuit-node" style="opacity:.25">9V −</span>
+                        </div>
+                        <div class="status-result" id="flowText">Mulai dari positive battery.</div><button class="btn"
+                            id="nextConnection">Next Connection</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 9 -->
+        <section class="slide" id="switchSlide"><span class="chip"><b></b> Switch 0 / 1</span>
+            <div class="content switch-demo max">
+                <div class="motor-box" id="motorBox">
+                    <div class="motor-body"></div>
+                    <div class="rotor-arm"></div>
+                    <div class="motor-state" id="motorState">0 · OFF · OPEN CIRCUIT</div>
+                </div>
+                <div class="stack">
+                    <div class="kicker left">TRY THE SWITCH</div>
+                    <h2 class="slide-title left">Switch Mengontrol Jalurnya</h2>
+                    <p class="lead left">Saat switch berada pada 0, jalur terputus. Saat switch berada pada 1, jalur
+                        tersambung dan motor dapat berputar.</p>
+                    <div class="switch-toggle"><button class="btn2" id="switchOff">0 · OFF</button><button class="btn"
+                            id="switchOn">1 · ON</button></div>
+                    <div class="status-result" id="switchResult"><strong>OFF:</strong> circuit open → motor berhenti.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 10 -->
+        <section class="slide"><span class="chip"><b></b> Test Before Crafting</span>
+            <div class="content stack max">
+                <div>
+                    <h2 class="slide-title">Test Before Build</h2>
+                    <p class="lead">Test circuit dalam kondisi terpisah terlebih dahulu. Setelah motor dapat ON dan OFF
+                        dengan switch, baru circuit dipasang pada robot.</p>
+                </div>
+                <div class="checkline">
+                    <div class="checkitem">
+                        <div class="big-icon">🔋</div><strong>Battery</strong><span>Socket terpasang dan battery
+                            memiliki power.</span>
+                    </div>
+                    <div class="checkitem">
+                        <div class="big-icon">🔘</div><strong>Switch</strong><span>0 = OFF dan 1 = ON.</span>
+                    </div>
+                    <div class="checkitem">
+                        <div class="big-icon">⚙️</div><strong>Motor</strong><span>Motor berputar saat circuit
+                            closed.</span>
+                    </div>
+                    <div class="checkitem">
+                        <div class="big-icon">🔌</div><strong>Connection</strong><span>Tidak ada sambungan longgar atau
+                            short.</span>
+                    </div>
+                </div>
+                <div class="build-safety">⚠️ Pastikan motor sesuai dengan sumber power yang digunakan. Matikan switch
+                    saat memperbaiki sambungan dan jangan menahan shaft motor ketika sedang berputar.</div>
+            </div>
+        </section>
+
+        <!-- 11 -->
+        <section class="slide"><span class="chip"><b></b> Let's Prepare · Electronics</span>
+            <div class="content stack">
+                <div>
+                    <div class="kicker">TOOLS & MATERIALS</div>
+                    <h2 class="slide-title">Electronic Parts</h2>
+                </div>
+                <div class="material-grid fourteen">
+                    <div class="material compact"><img
+                            src="https://down-id.img.susercontent.com/file/07059cfb90417f8b0f5cd35bb046d6a8"
+                            alt="Baterai Kotak 9V"><strong>Baterai Kotak 9V</strong><span>1 buah</span></div>
+                    <div class="material compact"><img
+                            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQm-ez1PwhX9H_FKXWVlRIkePTNcPDHCAGtJ8gGufshvtiYSRzEWVDUFa4&s=10"
+                            alt="Socket Baterai 9V"><strong>Socket Baterai 9V</strong><span>1 buah</span></div>
+                    <div class="material compact"><img
+                            src="https://image.made-in-china.com/2f0j00JZTlkGEnhYps/12V-DC-Motor-Mini-Electric-Motor-DC-Long-Life-Time.webp"
+                            alt="Motor DC"><strong>Motor DC</strong><span>1 buah</span></div>
+                    <div class="material compact"><img
+                            src="https://id-live-01.slatic.net/p/6b767fc51ce13d35a5d6d000320f6f49.jpg"
+                            alt="Sakelar ON/OFF"><strong>Sakelar ON/OFF</strong><span>1 buah</span></div>
+                    <div class="material compact"><img
+                            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRXttCc4Petrg24D5bHwNd72mGn4ph0-eJH5HJMjY5-tjSiX2ODnckgqKM9&s=10"
+                            alt="Jumper Male-Male"><strong>Jumper Male-Male</strong><span>20 buah</span></div>
+                </div>
+                <div class="instruction">✅ Test battery, switch, dan motor sebelum dirakit permanen.</div>
+            </div>
+        </section>
+
+        <!-- 12 -->
+        <section class="slide"><span class="chip"><b></b> Let's Prepare · Structure</span>
+            <div class="content stack">
+                <div>
+                    <div class="kicker">TOOLS & MATERIALS</div>
+                    <h2 class="slide-title">Structure & Crafting Parts</h2>
+                </div>
+                <div class="material-grid fourteen">
+                    <div class="material compact"><img
+                            src="https://id-test-11.slatic.net/p/87bed99a607df1f2aee762edd79be637.jpg"
+                            alt="Stik Es Krim"><strong>Stik Es Krim</strong><span>10 buah</span></div>
+                    <div class="material compact"><img
+                            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEiyMSsaq1cPipi88zxdueueIim6CbF3LXqdIVHiID-Q&s=10"
+                            alt="Tusuk Sate Kayu"><strong>Tusuk Sate Kayu</strong><span>5 buah</span></div>
+                    <div class="material compact"><img
+                            src="https://image.made-in-china.com/202f0j00rQHcmPkgZSov/Collapsible-Straw-Colorful-Disposable-Plastic-Tableware-260mm-Length-PP-Plastic-Straw-Custom-Party-Supply.webp"
+                            alt="Sedotan Plastik"><strong>Sedotan Plastik</strong><span>2 buah</span></div>
+                    <div class="material compact"><img
+                            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnu1blReuvekXJkXapRdHZ_WGrvJJZHLNt8ibNsFMLp7dCoC2Mt6w2MOk&s=10"
+                            alt="Tutup Botol Plastik"><strong>Tutup Botol Plastik</strong><span>2 buah</span></div>
+                    <div class="material compact"><img
+                            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRf3nvZDqCbqoXWJGxnIQ3V3YUKwg_K3dd9jk9a_1HENQ&s=10"
+                            alt="Lem Putih"><strong>Lem Putih</strong><span>1 botol kecil</span></div>
+                    <div class="material compact"><img
+                            src="https://abro.com/wp-content/uploads/2020/07/2123Y-Masking-Tape-Automotive-White-1in.jpg"
+                            alt="Masking Tape"><strong>Masking Tape</strong><span>1 roll</span></div>
+                    <div class="material compact"><img
+                            src="https://down-id.img.susercontent.com/file/d3790a6c680bd1e4030343859524286d"
+                            alt="Gunting"><strong>Gunting</strong><span>1 buah</span></div>
+                </div>
+                <div class="build-safety">✂️ Potong tusuk sate dengan hati-hati. Jika menggunakan lem tembak, lakukan
+                    dengan pengawasan MT dan jangan menyentuh lem saat masih panas.</div>
+            </div>
+        </section>
+
+        <!-- 13 -->
+        <section class="slide orange"><span class="chip"><b></b> Build Plan</span>
+            <div class="content stack center">
+                <div>
+                    <div class="kicker" style="color:#fff7df">BUILD IN 3 PARTS</div>
+                    <h2 class="slide-title">Jangan Campur Semua Step Sekaligus</h2>
+                </div>
+                <div class="three">
+                    <div class="card icon-card">
+                        <div class="big-icon">🧱</div>
+                        <h3>Step 1 · Structure</h3>
+                        <p>Buat body, kaki, tangan, dan sweeping tool.</p>
+                    </div>
+                    <div class="card icon-card">
+                        <div class="big-icon">⚡</div>
+                        <h3>Step 2 · Electronics</h3>
+                        <p>Pasang socket, switch, motor, dan moving straw.</p>
+                    </div>
+                    <div class="card icon-card">
+                        <div class="big-icon">🙂</div>
+                        <h3>Step 3 · Head</h3>
+                        <p>Tambahkan tutup botol sebagai visual kepala robot.</p>
+                    </div>
+                </div>
+                <div class="instruction">Build → Test → Attach → Test Again</div>
+            </div>
+        </section>
+
+        <!-- 14 -->
+        <section class="slide"><span class="chip"><b></b> Build · Step 1</span>
+            <div class="content build-step-grid max">
+                <div class="placeholder-wrap">
+                    <div class="placeholder-photo">PICTURE PLACEHOLDER<br><br>Battery body + legs +
+                        arms<code>STEP1_BODY_IMAGE_HERE</code></div>
+                </div>
+                <div class="build-card">
+                    <h3>Build the Body</h3>
+                    <ol>
+                        <li>Siapkan <strong>battery 9V</strong> sebagai body utama robot.</li>
+                        <li>Potong dan atur <strong>stik es krim</strong> menjadi dua kaki agar robot dapat berdiri.
+                        </li>
+                        <li>Tambahkan dua stik sebagai <strong>tangan</strong> di sisi body.</li>
+                        <li>Tempel sementara dengan masking tape untuk mengecek posisi dan keseimbangan.</li>
+                        <li>Setelah posisi pas, perkuat sambungan menggunakan lem.</li>
+                    </ol>
+                </div>
+            </div>
+        </section>
+
+        <!-- 15 -->
+        <section class="slide"><span class="chip"><b></b> Build · Step 1</span>
+            <div class="content build-step-grid max">
+                <div class="placeholder-wrap">
+                    <div class="placeholder-photo">PICTURE PLACEHOLDER<br><br>Popsicle stick + wooden
+                        skewers<code>STEP1_SWEEPER_IMAGE_HERE</code></div>
+                </div>
+                <div class="build-card">
+                    <h3>Make the Sweeping Tool</h3>
+                    <ol>
+                        <li>Gunakan satu stik es krim sebagai <strong>bagian utama sweeper</strong>.</li>
+                        <li>Potong beberapa tusuk sate menjadi bagian kecil dengan ukuran yang mirip.</li>
+                        <li>Tempel potongan tusuk sate berjajar pada stik sehingga terlihat seperti <strong>spikes /
+                                bristles</strong>.</li>
+                        <li>Tambahkan satu tusuk sate sebagai pegangan.</li>
+                        <li>Posisikan pegangan di antara dua tangan robot.</li>
+                    </ol>
+                </div>
+            </div>
+        </section>
+
+        <!-- 16 -->
+        <section class="slide"><span class="chip"><b></b> Structure Check</span>
+            <div class="content two max">
+                <div class="photo-card"><img
+                        src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/b525632e-009f-4a07-bcd2-019996face74.png"
+                        alt="Robot structure reference"></div>
+                <div class="stack">
+                    <h2 class="slide-title left">Sebelum Lanjut ke Elektronik</h2>
+                    <p class="lead left">Robot belum harus bergerak. Yang penting struktur awalnya cukup stabil untuk
+                        menahan motor dan switch.</p>
+                    <div class="mini-labels">
+                        <div class="mini-label"><strong>Can it stand?</strong><span>Dua kaki dapat menahan body tanpa
+                                terus dipegang.</span></div>
+                        <div class="mini-label blue"><strong>Can it hold the sweeper?</strong><span>Tangan dan alat
+                                sweeping tidak mudah lepas.</span></div>
+                        <div class="mini-label green"><strong>Is the top area clear?</strong><span>Masih ada ruang di
+                                atas battery untuk motor, switch, dan kepala.</span></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 17 -->
+        <section class="slide"><span class="chip"><b></b> Build · Step 2</span>
+            <div class="content build-step-grid max">
+                <div class="placeholder-wrap">
+                    <div class="placeholder-photo">PICTURE PLACEHOLDER<br><br>Motor mounted above
+                        battery<code>STEP2_MOTOR_IMAGE_HERE</code></div>
+                </div>
+                <div class="build-card">
+                    <h3>Attach the Motor</h3>
+                    <ol>
+                        <li>Pasang <strong>socket 9V</strong> pada battery.</li>
+                        <li>Tentukan area di bagian atas body untuk <strong>DC motor</strong>.</li>
+                        <li>Letakkan motor sehingga shaft masih bebas berputar dan tidak tertutup struktur.</li>
+                        <li>Gunakan masking tape untuk test posisi terlebih dahulu.</li>
+                        <li>Jika posisi sudah benar, perkuat mounting dengan lem sesuai kebutuhan.</li>
+                    </ol>
+                </div>
+            </div>
+        </section>
+
+        <!-- 18 -->
+        <section class="slide"><span class="chip"><b></b> Build · Step 2</span>
+            <div class="content build-step-grid max">
+                <div class="placeholder-wrap">
+                    <div class="placeholder-photo">PICTURE PLACEHOLDER<br><br>Socket → Switch → Motor →
+                        Negative<code>STEP2_CIRCUIT_IMAGE_HERE</code></div>
+                </div>
+                <div class="build-card">
+                    <h3>Connect the Circuit</h3>
+                    <ol>
+                        <li>Hubungkan <strong>positive socket battery</strong> menuju salah satu terminal switch.</li>
+                        <li>Dari terminal switch yang lain, buat connection menuju salah satu terminal motor.</li>
+                        <li>Hubungkan terminal motor yang tersisa kembali ke <strong>negative socket battery</strong>.
+                        </li>
+                        <li>Rapikan connection menggunakan jumper / connector yang tersedia pada kit.</li>
+                        <li>Sebelum ditempel permanen, test: <strong>0 = motor OFF</strong>, <strong>1 = motor
+                                ON</strong>.</li>
+                    </ol>
+                </div>
+            </div>
+        </section>
+
+        <!-- 19 -->
+        <section class="slide" id="testCircuit"><span class="chip"><b></b> Test the Electronics</span>
+            <div class="content switch-demo max">
+                <div class="motor-box" id="motorBox2">
+                    <div class="motor-body"></div>
+                    <div class="rotor-arm"></div>
+                    <div class="motor-state" id="motorState2">0 · OFF</div>
+                </div>
+                <div class="stack">
+                    <h2 class="slide-title left">Test Sebelum Menambah Sedotan</h2>
+                    <p class="lead left">Motor harus bisa dikontrol menggunakan switch sebelum kita menambah bagian
+                        mekanis.</p>
+                    <div class="switch-toggle"><button class="btn2" id="testOff">0 · OFF</button><button class="btn"
+                            id="testOn">1 · ON</button></div>
+                    <div class="status-result" id="testResult">Motor OFF. Pastikan shaft berhenti sepenuhnya.</div>
+                    <div class="instruction">🔎 Kalau motor tidak bergerak, periksa connection dulu. Jangan lanjut
+                        crafting.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 20 -->
+        <section class="slide"><span class="chip"><b></b> Build · Step 2</span>
+            <div class="content build-step-grid max">
+                <div class="placeholder-wrap">
+                    <div class="placeholder-photo">PICTURE PLACEHOLDER <br><br>Small straw rotating
+                        arm<code>STEP2_STRAW_IMAGE_HERE</code></div>
+                </div>
+                <div class="build-card">
+                    <h3>Add the Moving Straw</h3>
+                    <ol>
+                        <li>Potong sedotan menjadi bagian kecil dan ringan.</li>
+                        <li>Pasang pada <strong>shaft motor</strong> sehingga mengikuti putaran shaft.</li>
+                        <li>Biarkan sebagian kecil sedotan <strong>mencuat keluar</strong> agar gerakannya terlihat.
+                        </li>
+                        <li>Pastikan sedotan tidak menyentuh kabel, switch, atau struktur lain saat berputar.</li>
+                        <li>Aktifkan motor sebentar dan lihat apakah putaran menghasilkan gerakan pada robot.</li>
+                    </ol>
+                </div>
+            </div>
+        </section>
+
+        <!-- 21 -->
+        <section class="slide"><span class="chip"><b></b> Movement</span>
+            <div class="content two max">
+                <div class="card icon-card" style="min-height:380px">
+                    <div style="font-size:7rem">⚙️ ➜ 🥤 ➜ 🤖</div>
+                    <h3>Motor Creates Movement</h3>
+                    <p>Motor memutar shaft. Sedotan ikut berputar. Putaran tersebut membuat bagian robot bergerak atau
+                        bergetar.</p>
+                </div>
+                <div class="stack">
+                    <h2 class="slide-title left">Electrical Energy → Mechanical Movement</h2>
+                    <p class="lead left">Inilah alasan motor disebut <strong>output</strong>. Kita tidak hanya melihat
+                        listrik dalam bentuk cahaya, tetapi sekarang menjadi gerakan fisik.</p>
+                    <div class="card">
+                        <h3>Observe</h3>
+                        <p>Apakah robot bergerak stabil? Apakah sedotannya terlalu panjang? Apakah ada bagian yang
+                            mengenai body?</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 22 -->
+        <section class="slide"><span class="chip"><b></b> Build · Step 3</span>
+            <div class="content build-step-grid max">
+                <div class="placeholder-wrap">
+                    <div class="placeholder-photo">PICTURE PLACEHOLDER<br><br>Bottle cap above
+                        motor<code>STEP3_HEAD_IMAGE_HERE</code></div>
+                </div>
+                <div class="build-card">
+                    <h3>Add the Robot Head</h3>
+                    <ol>
+                        <li>Ambil satu <strong>tutup botol plastik</strong>.</li>
+                        <li>Gambar mata atau ekspresi sederhana pada permukaannya.</li>
+                        <li>Pasang tutup botol di atas / dekat area motor sebagai visual kepala robot.</li>
+                        <li>Pastikan kepala tidak menekan shaft atau menghalangi sedotan yang berputar.</li>
+                        <li>Rapikan posisi switch agar tetap mudah dijangkau.</li>
+                    </ol>
+                </div>
+            </div>
+        </section>
+
+        <!-- 23 -->
+        <section class="slide dark"><span class="chip"><b></b> Final Assembly</span>
+            <div class="content project-hero max"><img
+                    src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/b525632e-009f-4a07-bcd2-019996face74.png"
+                    alt="Mini Sweeper Robot final">
+                <div class="stack">
+                    <div class="kicker left" style="color:var(--cyan)">PUT EVERYTHING TOGETHER</div>
+                    <h2 class="slide-title left">Final Check Before ON</h2>
+                    <div class="card">
+                        <h3>Structure</h3>
+                        <p>Kaki, tangan, sweeper, motor, dan kepala tidak mudah lepas.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Electronics</h3>
+                        <p>Tidak ada sambungan terbuka yang dapat bersentuhan secara tidak sengaja.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Movement Area</h3>
+                        <p>Sedotan mempunyai ruang untuk berputar tanpa mengenai tangan atau wajah.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 24 -->
+        <section class="slide"><span class="chip"><b></b> Final Test</span>
+            <div class="content stack max">
+                <div>
+                    <h2 class="slide-title">Turn It ON</h2>
+                    <p class="lead">Letakkan robot pada permukaan datar, lalu aktifkan switch ke posisi 1.</p>
+                </div>
+                <div class="checkline">
+                    <div class="checkitem">
+                        <div class="big-icon">🔘</div><strong>Switch</strong><span>0 = berhenti, 1 = bergerak.</span>
+                    </div>
+                    <div class="checkitem">
+                        <div class="big-icon">⚙️</div><strong>Motor</strong><span>Berputar tanpa macet.</span>
+                    </div>
+                    <div class="checkitem">
+                        <div class="big-icon">🥤</div><strong>Straw</strong><span>Ikut berputar dan tidak mengenai
+                            kabel.</span>
+                    </div>
+                    <div class="checkitem">
+                        <div class="big-icon">🤖</div><strong>Robot</strong><span>Tetap berdiri atau menunjukkan gerakan
+                            yang dapat diamati.</span>
+                    </div>
+                </div>
+                <div class="instruction">🎯 Goal: switch dapat mengontrol gerakan robot dengan jelas.</div>
+            </div>
+        </section>
+
+        <!-- 25 -->
+        <section class="slide"><span class="chip"><b></b> Troubleshoot</span>
+            <div class="content stack">
+                <div>
+                    <h2 class="slide-title">Robot Belum Bergerak? Check One by One</h2>
+                    <p class="lead">Klik setiap langkah setelah diperiksa.</p>
+                </div>
+                <div class="trouble-grid" id="troubleGrid">
+                    <div class="trouble">
+                        <div class="check">1</div>
+                        <div><strong>Battery & socket</strong><span>Socket menempel rapat dan battery masih memiliki
+                                power?</span></div>
+                    </div>
+                    <div class="trouble">
+                        <div class="check">2</div>
+                        <div><strong>Switch</strong><span>Switch benar-benar berada pada posisi 1 saat test?</span>
+                        </div>
+                    </div>
+                    <div class="trouble">
+                        <div class="check">3</div>
+                        <div><strong>Circuit path</strong><span>Positive → switch → motor → negative sudah
+                                lengkap?</span></div>
+                    </div>
+                    <div class="trouble">
+                        <div class="check">4</div>
+                        <div><strong>Loose connection</strong><span>Ada jumper atau terminal yang tidak menyentuh dengan
+                                baik?</span></div>
+                    </div>
+                    <div class="trouble">
+                        <div class="check">5</div>
+                        <div><strong>Motor shaft</strong><span>Shaft bebas bergerak dan tidak tertahan lem atau
+                                struktur?</span></div>
+                    </div>
+                    <div class="trouble">
+                        <div class="check">6</div>
+                        <div><strong>Straw movement</strong><span>Sedotan terlalu panjang, terlalu berat, atau mengenai
+                                body?</span></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 26 -->
+        <section class="slide dark"><span class="chip"><b></b> Help Your Friends</span>
+            <div class="content two max"><img class="robot"
+                    src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/eded3e71-16cf-401e-b1c1-3ff5f887dc38.png"
+                    alt="Robot">
+                <div class="stack">
+                    <h2 class="slide-title left">Sudah Berhasil?</h2>
+                    <p class="lead left">Kalau robot-mu sudah bekerja, bantu teman mengecek project mereka tanpa
+                        langsung mengambil alih.</p>
+                    <div class="card">
+                        <h3>Mulai dari pertanyaan ini</h3>
+                        <p>“Switch sudah ON? Motor sudah dites sebelum ditempel? Jalur positive sampai negative sudah
+                            lengkap? Shaft masih bebas bergerak?”</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 27 -->
+        <section class="slide dark" id="quickQuizSlide"><span class="chip"><b></b> Quick Quiz</span>
+            <div class="content stack">
+                <div>
+                    <div class="kicker" style="color:var(--cyan)">CHECK YOUR UNDERSTANDING</div>
+                    <h2 class="slide-title">Quick Quiz</h2>
+                </div>
+                <div class="quiz">
+                    <div class="quiz-prog" id="quizProg"></div>
+                    <div class="quiz-q" id="quizQ"></div>
+                    <div class="quiz-options" id="quizOptions"></div>
+                    <div class="quiz-fb" id="quizFb">Pilih satu jawaban.</div><button type="button" class="btn"
+                        id="quizNext" style="display:none;margin-top:12px">Next Question</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 28 -->
+        <section class="slide"><span class="chip"><b></b> Review</span>
+            <div class="content stack">
+                <div>
+                    <div class="kicker">TODAY'S REVIEW</div>
+                    <h2 class="slide-title">Apa yang Sudah Kita Pelajari?</h2>
+                </div>
+                <div class="agenda">
+                    <div class="card icon-card">
+                        <div class="big-icon">🔘</div>
+                        <h3>Switch Control</h3>
+                        <p>0 membuka circuit dan 1 menutup circuit.</p>
+                    </div>
+                    <div class="card icon-card">
+                        <div class="big-icon">⚙️</div>
+                        <h3>DC Motor</h3>
+                        <p>Mengubah energi listrik menjadi gerakan berputar.</p>
+                    </div>
+                    <div class="card icon-card">
+                        <div class="big-icon">🧱</div>
+                        <h3>Robot Structure</h3>
+                        <p>Komponen elektronik dapat menjadi bagian dari body robot.</p>
+                    </div>
+                    <div class="card icon-card">
+                        <div class="big-icon">🛠️</div>
+                        <h3>Test & Improve</h3>
+                        <p>Menguji circuit sebelum dirakit permanen dan memperbaiki masalah.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 29 -->
+        <section class="slide dark"><span class="chip"><b></b> Feedback</span>
+            <div class="content feedback max"><img class="robot"
+                    src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/eded3e71-16cf-401e-b1c1-3ff5f887dc38.png"
+                    alt="Robot">
+                <div class="stack">
+                    <h2 class="slide-title left">Bagaimana Kelas Hari Ini?</h2>
+                    <p class="lead left">Pilih satu respons yang paling sesuai.</p>
+                    <div class="feedback-choices"><button class="feedback-choice">
+                            <div class="face">🙂</div><strong>Sudah Paham</strong>
+                        </button><button class="feedback-choice">
+                            <div class="face">🤔</div><strong>Perlu Coba Lagi</strong>
+                        </button><button class="feedback-choice">
+                            <div class="face">⚡</div><strong>Siap Lanjut</strong>
+                        </button></div>
+                    <p class="note" id="feedbackNote">Respons ini tidak menyimpan skor atau data pribadi.</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="footer"><span class="counter" id="counter">01 / 29</span><span class="progress"><span class="bar"
+                    id="bar"></span></span></div>
+    </main>
+    <div class="toast" id="toast"></div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const $ = id => document.getElementById(id);
+            const slides = [...document.querySelectorAll('.slide')], prev = $('prev'), next = $('next'), counter = $('counter'), bar = $('bar'); let current = 0;
+            function nav() { prev.disabled = current === 0; next.disabled = current === slides.length - 1; counter.textContent = String(current + 1).padStart(2, '0') + ' / ' + String(slides.length).padStart(2, '0'); bar.style.width = ((current + 1) / slides.length * 100) + '%' }
+            function go(i) { if (i < 0 || i >= slides.length || i === current) return; slides[current].classList.remove('active'); current = i; slides[current].classList.add('active'); nav() }
+            prev.onclick = () => go(current - 1); next.onclick = () => go(current + 1); document.addEventListener('keydown', e => { if (e.key === 'ArrowRight' || e.key === 'PageDown') go(current + 1); if (e.key === 'ArrowLeft' || e.key === 'PageUp') go(current - 1) }); nav();
+            function confetti() { const colors = ['#ffc33d', '#ff8b2b', '#43d5e6', '#38b56f', '#7367f0', '#ef5350']; for (let i = 0; i < 34; i++) { const p = document.createElement('i'); p.className = 'confetti'; p.style.left = innerWidth / 2 + 'px'; p.style.top = innerHeight / 2 + 'px'; p.style.background = colors[i % colors.length]; p.style.setProperty('--x', (Math.random() * 520 - 260) + 'px'); p.style.setProperty('--y', (Math.random() * 360 + 120) + 'px'); document.body.appendChild(p); setTimeout(() => p.remove(), 1700) } }
+            // circuit stepper
+            let step = 0; const flowTexts = ['Mulai dari positive battery.', 'Positive battery masuk ke switch.', 'Dari switch, jalur menuju motor.', 'Motor kembali ke negative battery. Circuit lengkap.'];
+            $('nextConnection').onclick = () => { step = (step + 1) % 4; const items = [...document.querySelectorAll('#connectionList .connection-item')]; items.forEach((x, i) => x.classList.toggle('active', i === step)); const nodes = [...$('flowPath').querySelectorAll('.circuit-node')], arrows = [...$('flowPath').querySelectorAll('.circuit-arrow')]; nodes.forEach((n, i) => n.style.opacity = i <= step ? '1' : '.25'); arrows.forEach((a, i) => a.style.opacity = i < step ? '1' : '.25'); $('flowText').textContent = flowTexts[step]; $('nextConnection').textContent = step === 3 ? 'Start Again' : 'Next Connection'; if (step === 3) confetti() };
+            function setMotor(boxId, stateId, resultId, on) { const box = $(boxId); box.classList.toggle('on', on); $(stateId).textContent = on ? '1 · ON · CLOSED CIRCUIT' : '0 · OFF · OPEN CIRCUIT'; if (resultId) $(resultId).innerHTML = on ? '<strong>ON:</strong> circuit closed → motor berputar.' : '<strong>OFF:</strong> circuit open → motor berhenti.' }
+            $('switchOff').onclick = () => setMotor('motorBox', 'motorState', 'switchResult', false); $('switchOn').onclick = () => { setMotor('motorBox', 'motorState', 'switchResult', true); confetti() };
+            $('testOff').onclick = () => { $('motorBox2').classList.remove('on'); $('motorState2').textContent = '0 · OFF'; $('testResult').textContent = 'Motor OFF. Pastikan shaft berhenti sepenuhnya.' };
+            $('testOn').onclick = () => { $('motorBox2').classList.add('on'); $('motorState2').textContent = '1 · ON'; $('testResult').textContent = 'Motor ON. Shaft berputar. Circuit siap dipasang pada robot.'; confetti() };
+            const trouble = [...document.querySelectorAll('#troubleGrid .trouble')]; trouble.forEach((card, i) => card.onclick = () => { card.classList.toggle('done'); card.querySelector('.check').textContent = card.classList.contains('done') ? '✓' : String(i + 1) });
+            const quizData = [
+                { q: 'Apa yang terjadi saat switch berada pada posisi 0?', o: ['A. Circuit open dan motor berhenti', 'B. Motor berputar lebih cepat', 'C. Battery menjadi 0V'], a: 0, e: 'Posisi 0 digunakan untuk membuka jalur circuit sehingga motor tidak mendapat aliran listrik.' },
+                { q: 'Urutan circuit yang benar untuk mengontrol motor adalah...', o: ['A. Battery (+) → motor → switch → battery (+)', 'B. Battery (+) → switch → motor → battery (−)', 'C. Switch → battery (−) → battery (+) → motor'], a: 1, e: 'Circuit harus membentuk jalur lengkap dari positive battery, melewati switch dan motor, lalu kembali ke negative battery.' },
+                { q: 'Kenapa circuit sebaiknya dites sebelum motor dilem pada robot?', o: ['A. Supaya kita tahu electronics bekerja sebelum assembly permanen', 'B. Supaya battery menjadi lebih berat', 'C. Supaya switch tidak perlu digunakan'], a: 0, e: 'Testing lebih awal membuat masalah connection lebih mudah ditemukan sebelum semua komponen terpasang pada struktur.' }
+            ]; let qi = 0;
+            function renderQuiz() { const q = quizData[qi]; $('quizProg').textContent = 'Question ' + (qi + 1) + ' of ' + quizData.length; $('quizQ').textContent = q.q; $('quizOptions').innerHTML = ''; $('quizFb').textContent = 'Pilih satu jawaban.'; $('quizFb').style.background = '#f4f9fc'; $('quizFb').style.color = 'var(--muted)'; $('quizNext').style.display = 'none'; q.o.forEach((text, i) => { const b = document.createElement('button'); b.type = 'button'; b.className = 'option'; b.textContent = text; b.onclick = () => { const all = [...$('quizOptions').children]; all.forEach(x => x.disabled = true); const ok = i === q.a; b.classList.add(ok ? 'correct' : 'wrong'); all[q.a].classList.add('correct'); $('quizFb').textContent = ok ? 'Benar. ' + q.e : 'Belum tepat. Jawaban yang benar adalah ' + q.o[q.a] + '. ' + q.e; $('quizFb').style.background = ok ? '#eaf9f0' : '#fff1f0'; $('quizFb').style.color = ok ? '#20734a' : '#a33636'; if (qi < quizData.length - 1) $('quizNext').style.display = 'inline-block'; else confetti() }; $('quizOptions').appendChild(b) }) }
+            $('quizNext').onclick = () => { qi++; renderQuiz() }; renderQuiz();
+            const feedbackButtons = [...document.querySelectorAll('.feedback-choice')]; feedbackButtons.forEach(b => b.onclick = () => { feedbackButtons.forEach(x => x.classList.remove('selected')); b.classList.add('selected'); $('feedbackNote').textContent = 'Terima kasih. Sampaikan ke MT kalau ada bagian circuit atau build yang masih membingungkan.' });
+        });
+    </script>
+</body>
+
+</html>
