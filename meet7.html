@@ -1,0 +1,2078 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>RUANGGURU CODING — Conductivity Tester Robot</title>
+    <link rel="icon"
+        href="https://cdn-web-2.ruangguru.com/landing-pages/assets/e7d93748-818d-462d-be57-7db1e479cd62.png"
+        type="image/png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --navy: #073b70;
+            --navy2: #0d4f86;
+            --deep: #062b50;
+            --cyan: #43d5e6;
+            --orange: #ff8b2b;
+            --yellow: #ffc33d;
+            --ink: #153650;
+            --muted: #5e7487;
+            --green: #38b56f;
+            --red: #ef5350;
+            --white: #fff;
+            --cream: #fff9ef;
+            --shadow: 0 18px 46px rgba(2, 25, 50, .28)
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        html,
+        body {
+            height: 100%
+        }
+
+        body {
+            margin: 0;
+            overflow: hidden;
+            font-family: 'Fredoka', sans-serif;
+            color: var(--ink);
+            background: radial-gradient(circle at 80% 18%, rgba(67, 213, 230, .16) 0 12%, transparent 13%), radial-gradient(circle at 10% 82%, rgba(255, 195, 61, .14) 0 15%, transparent 16%), linear-gradient(135deg, var(--deep), var(--navy) 52%, var(--navy2))
+        }
+
+        body:before,
+        body:after {
+            content: "";
+            position: fixed;
+            width: 48vw;
+            height: 8px;
+            background: rgba(255, 255, 255, .035);
+            transform: rotate(-24deg);
+            border-radius: 20px;
+            box-shadow: 0 52px rgba(255, 255, 255, .03), 0 104px rgba(255, 255, 255, .025), 0 156px rgba(255, 255, 255, .02)
+        }
+
+        body:before {
+            left: 2vw;
+            top: 20vh
+        }
+
+        body:after {
+            right: -10vw;
+            bottom: 20vh
+        }
+
+        .brand {
+            position: fixed;
+            left: 22px;
+            top: 18px;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 9px 15px;
+            background: rgba(255, 255, 255, .97);
+            border-radius: 20px;
+            box-shadow: 0 10px 28px rgba(2, 24, 48, .3)
+        }
+
+        .brand img {
+            object-fit: contain;
+            width: auto
+        }
+
+        .brand .k {
+            height: 45px;
+            max-width: 170px
+        }
+
+        .brand .r {
+            height: 38px;
+            max-width: 145px
+        }
+
+        .brand i {
+            width: 2px;
+            height: 34px;
+            background: #dce7f0;
+            border-radius: 10px
+        }
+
+        .presentation {
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -48%);
+            width: min(88vw, 1440px);
+            aspect-ratio: 16/9;
+            max-height: 82vh;
+            border: 5px solid rgba(255, 255, 255, .9);
+            border-radius: 28px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            background: var(--cream)
+        }
+
+        .slide {
+            position: absolute;
+            inset: 0;
+            padding: 70px 74px 62px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 18px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateX(65px) scale(.985);
+            transition: .42s ease;
+            background: radial-gradient(circle at 88% 12%, rgba(67, 213, 230, .12), transparent 25%), linear-gradient(#fffefa, #fff8ed);
+            overflow: hidden
+        }
+
+        .slide.active {
+            opacity: 1;
+            visibility: visible;
+            transform: none;
+            z-index: 5
+        }
+
+        .slide.dark {
+            color: #fff;
+            background: radial-gradient(circle at 78% 44%, rgba(85, 170, 255, .24) 0 17%, rgba(85, 170, 255, .08) 18% 29%, transparent 30%), linear-gradient(135deg, #0b4a81, #083766 58%, #062b50)
+        }
+
+        .slide.orange {
+            color: #fff;
+            background: radial-gradient(circle at 82% 24%, rgba(255, 255, 255, .18), transparent 22%), linear-gradient(135deg, #ffa23d, #ff7e26)
+        }
+
+        .slide:after {
+            content: "";
+            position: absolute;
+            left: -8%;
+            right: -8%;
+            bottom: -32px;
+            height: 64px;
+            background: var(--orange);
+            transform: rotate(-1.5deg);
+            opacity: .94
+        }
+
+        .dark:after {
+            background: linear-gradient(90deg, var(--yellow), var(--orange))
+        }
+
+        .orange:after {
+            background: var(--navy)
+        }
+
+        .content {
+            position: relative;
+            z-index: 2;
+            width: 100%
+        }
+
+        .chip {
+            position: absolute;
+            left: 34px;
+            top: 25px;
+            z-index: 4;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 14px;
+            border-radius: 999px;
+            background: var(--navy);
+            color: #fff;
+            font-weight: 700;
+            font-size: .94rem;
+            box-shadow: 0 6px 16px rgba(7, 59, 112, .2)
+        }
+
+        .dark .chip {
+            background: rgba(255, 255, 255, .14);
+            border: 1px solid rgba(255, 255, 255, .22)
+        }
+
+        .chip b {
+            width: 9px;
+            height: 9px;
+            background: var(--yellow);
+            border-radius: 50%;
+            box-shadow: 0 0 0 4px rgba(255, 195, 61, .16)
+        }
+
+        h1,
+        h2,
+        h3,
+        p {
+            margin: 0
+        }
+
+        .display {
+            font-size: clamp(3.2rem, 5.8vw, 6rem);
+            line-height: .96;
+            font-weight: 700;
+            text-shadow: 0 5px rgba(12, 46, 86, .18)
+        }
+
+        .display .accent {
+            color: var(--yellow)
+        }
+
+        .slide-title {
+            font-size: clamp(2rem, 3.8vw, 3.65rem);
+            line-height: 1.06;
+            text-align: center;
+            color: var(--navy);
+            font-weight: 700
+        }
+
+        .dark .slide-title,
+        .orange .slide-title {
+            color: #fff
+        }
+
+        .kicker {
+            text-align: center;
+            color: var(--orange);
+            font-size: .95rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase
+        }
+
+        .lead {
+            font-size: clamp(1.05rem, 1.52vw, 1.42rem);
+            line-height: 1.5;
+            color: var(--muted);
+            text-align: center;
+            max-width: 980px;
+            font-weight: 500;
+            margin: 0 auto
+        }
+
+        .dark .lead,
+        .orange .lead {
+            color: rgba(255, 255, 255, .9)
+        }
+
+        .highlight {
+            color: var(--orange);
+            font-weight: 700
+        }
+
+        .cyan {
+            color: #00a6bf;
+            font-weight: 700
+        }
+
+        .yellow {
+            color: var(--yellow);
+            font-weight: 700
+        }
+
+        .center {
+            text-align: center
+        }
+
+        .left {
+            text-align: left
+        }
+
+        .stack {
+            display: grid;
+            gap: 15px
+        }
+
+        .w {
+            width: 100%
+        }
+
+        .max {
+            max-width: 1100px
+        }
+
+        .two {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 28px;
+            align-items: center;
+            width: 100%
+        }
+
+        .three {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+            width: 100%
+        }
+
+        .four {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            width: 100%
+        }
+
+        .agenda {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            width: 100%
+        }
+
+        .card {
+            background: #fff;
+            border: 2px solid #e5eef5;
+            border-radius: 24px;
+            padding: 22px;
+            box-shadow: 0 12px 28px rgba(5, 49, 87, .11)
+        }
+
+        .dark .card {
+            color: var(--ink)
+        }
+
+        .card h3,
+        .card-title {
+            font-size: 1.18rem;
+            font-weight: 700;
+            color: var(--navy);
+            margin-bottom: 7px
+        }
+
+        .card p {
+            font-size: .98rem;
+            line-height: 1.44;
+            color: var(--muted)
+        }
+
+        .icon-card {
+            min-height: 150px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            gap: 8px;
+            transition: .2s
+        }
+
+        .icon-card:hover {
+            transform: translateY(-6px);
+            border-color: var(--cyan)
+        }
+
+        .big-icon {
+            font-size: 3rem
+        }
+
+        .instruction {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 9px 15px;
+            border-radius: 999px;
+            background: #edf9fb;
+            border: 2px solid #bdebf1;
+            color: #116c79;
+            font-weight: 600;
+            font-size: .92rem;
+            justify-self: center
+        }
+
+        .dark .instruction {
+            background: rgba(255, 255, 255, .13);
+            border-color: rgba(255, 255, 255, .27);
+            color: #fff
+        }
+
+        .note {
+            font-size: .88rem;
+            color: var(--muted);
+            line-height: 1.44
+        }
+
+        .dark .note {
+            color: rgba(255, 255, 255, .76)
+        }
+
+        .btn,
+        .btn2,
+        .option {
+            font-family: 'Fredoka', sans-serif;
+            font-weight: 700;
+            cursor: pointer;
+            transition: .2s
+        }
+
+        .btn {
+            border: 0;
+            padding: 12px 22px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, var(--orange), var(--yellow));
+            color: #173a59;
+            box-shadow: 0 9px 18px rgba(255, 139, 43, .26);
+            font-size: 1rem
+        }
+
+        .btn:hover:not(:disabled) {
+            transform: translateY(-3px) scale(1.02)
+        }
+
+        .btn:disabled {
+            opacity: .45;
+            cursor: not-allowed
+        }
+
+        .btn2 {
+            border: 0;
+            padding: 11px 18px;
+            border-radius: 15px;
+            background: var(--navy);
+            color: #fff
+        }
+
+        .option {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 14px;
+            border: 2px solid #dbe8f2;
+            background: #f7fbff;
+            color: var(--ink);
+            text-align: left;
+            font-size: .98rem
+        }
+
+        .option:hover:not(:disabled) {
+            border-color: var(--cyan);
+            transform: translateX(4px)
+        }
+
+        .option.correct {
+            background: #e7f9ef;
+            border-color: var(--green);
+            color: #197247
+        }
+
+        .option.wrong {
+            background: #fff0ef;
+            border-color: var(--red);
+            color: #a93232
+        }
+
+        .option:disabled {
+            cursor: default
+        }
+
+        .nav {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 54px;
+            height: 54px;
+            border-radius: 50%;
+            border: 3px solid rgba(255, 255, 255, .88);
+            background: var(--yellow);
+            color: var(--navy);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.45rem;
+            font-weight: 700;
+            cursor: pointer;
+            z-index: 1100;
+            box-shadow: 0 12px 28px rgba(2, 20, 40, .28);
+            transition: .2s
+        }
+
+        .nav:hover:not(:disabled) {
+            transform: translateY(-50%) scale(1.1);
+            background: var(--orange);
+            color: #fff
+        }
+
+        .nav:disabled {
+            opacity: .28;
+            cursor: not-allowed
+        }
+
+        #prev {
+            left: 18px
+        }
+
+        #next {
+            right: 18px
+        }
+
+        .footer {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 10px;
+            z-index: 10;
+            display: flex;
+            justify-content: center;
+            pointer-events: none
+        }
+
+        .counter {
+            font-size: .78rem;
+            font-weight: 700;
+            letter-spacing: .8px;
+            color: #6a8094;
+            background: rgba(255, 255, 255, .9);
+            border: 1px solid rgba(7, 59, 112, .12);
+            padding: 6px 12px;
+            border-radius: 999px
+        }
+
+        .progress {
+            position: absolute;
+            left: 22%;
+            right: 22%;
+            bottom: 5px;
+            height: 4px;
+            background: rgba(7, 59, 112, .12);
+            border-radius: 999px;
+            overflow: hidden
+        }
+
+        .bar {
+            height: 100%;
+            width: 0;
+            background: linear-gradient(90deg, var(--cyan), var(--orange));
+            transition: .3s
+        }
+
+        .cover {
+            display: grid;
+            grid-template-columns: 1.05fr .95fr;
+            gap: 28px;
+            align-items: center;
+            width: 100%
+        }
+
+        .cover-sub {
+            margin-top: 22px;
+            font-size: 1.18rem;
+            line-height: 1.5;
+            color: rgba(255, 255, 255, .86);
+            max-width: 650px
+        }
+
+        .pill {
+            display: inline-flex;
+            margin-top: 24px;
+            padding: 10px 18px;
+            border-radius: 16px;
+            background: var(--yellow);
+            color: var(--navy);
+            font-weight: 700
+        }
+
+        .hero-robot {
+            width: 100%;
+            max-width: 480px;
+            height: 420px;
+            object-fit: contain;
+            justify-self: end
+        }
+
+        .photo-card,
+        .info-panel,
+        .placeholder-wrap,
+        .media-card {
+            background: #fff;
+            border: 3px solid #dcebf4;
+            border-radius: 26px;
+            padding: 15px;
+            box-shadow: 0 14px 28px rgba(5, 49, 87, .12)
+        }
+
+        .photo-card img,
+        .info-panel img,
+        .media-card img {
+            display: block;
+            width: 100%;
+            height: 300px;
+            object-fit: contain;
+            border-radius: 18px
+        }
+
+        .image-caption {
+            text-align: center;
+            margin-top: 10px;
+            color: var(--muted);
+            font-size: .93rem;
+            line-height: 1.4
+        }
+
+        .status-result {
+            min-height: 72px;
+            padding: 14px 18px;
+            border-radius: 18px;
+            background: #fff;
+            border: 2px solid #dcebf4;
+            color: var(--muted);
+            text-align: center;
+            line-height: 1.45
+        }
+
+        .mini-labels {
+            display: grid;
+            gap: 12px
+        }
+
+        .mini-label {
+            padding: 15px 17px;
+            background: #fff;
+            border-left: 8px solid var(--orange);
+            border-radius: 18px;
+            box-shadow: 0 8px 18px rgba(5, 49, 87, .09)
+        }
+
+        .mini-label.blue {
+            border-left-color: var(--cyan)
+        }
+
+        .mini-label.green {
+            border-left-color: var(--green)
+        }
+
+        .mini-label strong {
+            display: block;
+            color: var(--navy);
+            margin-bottom: 3px
+        }
+
+        .mini-label span {
+            color: var(--muted);
+            line-height: 1.42
+        }
+
+        .material-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 15px;
+            width: 100%
+        }
+
+        .material {
+            background: #fff;
+            border: 2px solid #e4edf4;
+            border-radius: 22px;
+            padding: 12px;
+            text-align: center;
+            box-shadow: 0 10px 24px rgba(5, 49, 87, .1);
+            transition: .2s
+        }
+
+        .material:hover {
+            transform: translateY(-5px);
+            border-color: var(--cyan)
+        }
+
+        .material img {
+            width: 100%;
+            height: 100px;
+            object-fit: contain;
+            border-radius: 12px;
+            background: #fff
+        }
+
+        .material strong {
+            display: block;
+            margin-top: 10px;
+            color: var(--navy);
+            font-size: .94rem;
+            line-height: 1.25
+        }
+
+        .material span {
+            display: block;
+            margin-top: 4px;
+            font-size: .84rem;
+            color: var(--muted)
+        }
+
+        .diagram,
+        .circuit-white {
+            background: #fff;
+            border: 3px solid #dcebf4;
+            border-radius: 26px;
+            padding: 16px;
+            box-shadow: 0 12px 28px rgba(5, 49, 87, .12)
+        }
+
+        .diagram svg,
+        .circuit-white img,
+        .circuit-white svg {
+            display: block;
+            width: 100%;
+            height: 320px;
+            border-radius: 16px;
+            background: #fff
+        }
+
+        .svg-note {
+            font-size: .9rem;
+            color: var(--muted);
+            text-align: center;
+            margin-top: 8px
+        }
+
+        .drag-layout {
+            display: grid;
+            grid-template-columns: 1fr 1.1fr;
+            gap: 26px;
+            align-items: start;
+            width: 100%
+        }
+
+        .drag-bank {
+            background: #fff;
+            border: 2px dashed #bcdbe9;
+            border-radius: 24px;
+            padding: 16px;
+            min-height: 290px
+        }
+
+        .tokens {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px
+        }
+
+        .token {
+            padding: 10px 14px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #fff, #f2fbff);
+            border: 2px solid #d1e7f2;
+            color: var(--ink);
+            font-weight: 700;
+            cursor: grab;
+            user-select: none
+        }
+
+        .token.dragging {
+            opacity: .45
+        }
+
+        .dropzones {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px
+        }
+
+        .zone {
+            min-height: 290px;
+            border-radius: 22px;
+            border: 3px dashed #cfe0ec;
+            padding: 16px;
+            background: #fff
+        }
+
+        .zone h3 {
+            margin-bottom: 8px;
+            color: var(--navy)
+        }
+
+        .zone.good {
+            background: #eefbf2;
+            border-color: #9be0b2
+        }
+
+        .zone.bad {
+            background: #fff3ee;
+            border-color: #ffc1af
+        }
+
+        .zone .slot {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            align-content: flex-start;
+            min-height: 220px
+        }
+
+        .zone .token {
+            cursor: default
+        }
+
+        .test-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center
+        }
+
+        .test-pill {
+            border: 2px solid #dbe8f2;
+            background: #fff;
+            border-radius: 999px;
+            padding: 10px 16px;
+            font-weight: 700;
+            cursor: pointer
+        }
+
+        .test-pill.active,
+        .test-pill:hover {
+            border-color: var(--cyan);
+            background: #eefcff
+        }
+
+        .sim-panel {
+            display: grid;
+            grid-template-columns: 1fr .95fr;
+            gap: 24px;
+            align-items: center
+        }
+
+        .sim-screen {
+            background: #fff;
+            border: 3px solid #dcebf4;
+            border-radius: 24px;
+            padding: 20px;
+            min-height: 290px;
+            display: grid;
+            place-items: center
+        }
+
+        .probe-visual {
+            width: 100%;
+            max-width: 540px
+        }
+
+        .probe-state {
+            padding: 15px 18px;
+            border-radius: 18px;
+            background: #fff;
+            border: 2px solid #dcebf4;
+            color: var(--muted);
+            line-height: 1.45
+        }
+
+        .probe-state strong {
+            color: var(--navy)
+        }
+
+        .step-photo {
+            display: grid;
+            grid-template-columns: .92fr 1.08fr;
+            gap: 24px;
+            align-items: center;
+            width: 100%
+        }
+
+        .placeholder-photo {
+            height: 320px;
+            border-radius: 20px;
+            border: 2px dashed #bdd9e9;
+            background: linear-gradient(135deg, #f7fbff, #edf8fc);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #5a7690;
+            font-weight: 600;
+            text-align: center;
+            padding: 18px;
+            line-height: 1.5
+        }
+
+        .step-number {
+            display: flex;
+            align-items: center;
+            gap: 14px
+        }
+
+        .step-number b {
+            width: 56px;
+            height: 56px;
+            border-radius: 18px;
+            background: var(--yellow);
+            color: var(--navy);
+            display: grid;
+            place-items: center;
+            font-size: 1.55rem
+        }
+
+        .step-number span {
+            font-size: 1.45rem;
+            font-weight: 700;
+            color: var(--navy)
+        }
+
+        .step-list {
+            display: grid;
+            gap: 11px
+        }
+
+        .step-list div {
+            padding: 12px 14px;
+            background: #fff;
+            border: 2px solid #e2edf5;
+            border-radius: 16px;
+            color: var(--muted);
+            line-height: 1.44
+        }
+
+        .step-list strong {
+            color: var(--navy)
+        }
+
+        .quiz-box {
+            max-width: 860px;
+            margin: auto
+        }
+
+        .quiz-card {
+            background: #fff;
+            border: 3px solid #dcebf4;
+            border-radius: 26px;
+            padding: 24px;
+            box-shadow: 0 12px 28px rgba(5, 49, 87, .12)
+        }
+
+        .quiz-q {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--navy);
+            line-height: 1.38;
+            margin-bottom: 14px
+        }
+
+        .quiz-fb {
+            margin-top: 14px;
+            padding: 14px 16px;
+            border-radius: 16px;
+            background: #f7fbff;
+            border: 2px solid #dcebf4;
+            color: var(--muted);
+            line-height: 1.45
+        }
+
+        .feedback {
+            display: grid;
+            grid-template-columns: .85fr 1.15fr;
+            gap: 24px;
+            align-items: center
+        }
+
+        .feedback-choices {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px
+        }
+
+        .feedback-choice {
+            border: 2px solid #dcebf4;
+            border-radius: 20px;
+            background: #fff;
+            padding: 16px 14px;
+            cursor: pointer;
+            font-family: 'Fredoka', sans-serif;
+            font-weight: 700;
+            color: var(--navy);
+            transition: .2s
+        }
+
+        .feedback-choice:hover,
+        .feedback-choice.active {
+            transform: translateY(-5px);
+            border-color: var(--cyan);
+            box-shadow: 0 12px 24px rgba(5, 49, 87, .12)
+        }
+
+        .face {
+            font-size: 2rem;
+            display: block;
+            margin-bottom: 6px
+        }
+
+        .embed-wrap {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            border-radius: 20px;
+            border: 3px solid #dcebf4;
+            background: #fff
+        }
+
+        .embed-wrap iframe {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%
+        }
+
+        .compare-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+            width: 100%
+        }
+
+        .small {
+            font-size: .92rem
+        }
+
+        @media(max-width:760px) {
+            body {
+                overflow: auto
+            }
+
+            .brand {
+                left: 8px;
+                top: 8px;
+                padding: 7px 10px;
+                gap: 8px
+            }
+
+            .brand .k {
+                height: 30px
+            }
+
+            .brand .r {
+                height: 26px
+            }
+
+            .brand i {
+                height: 25px
+            }
+
+            .presentation {
+                position: absolute;
+                top: 64px;
+                transform: translateX(-50%);
+                width: 100vw;
+                height: calc(100vh - 64px);
+                max-height: none;
+                aspect-ratio: auto;
+                border-radius: 0;
+                border: 0
+            }
+
+            .slide {
+                padding: 68px 20px 62px;
+                overflow-y: auto;
+                justify-content: flex-start
+            }
+
+            .nav {
+                width: 42px;
+                height: 42px;
+                top: auto;
+                bottom: 12px
+            }
+
+            #prev {
+                left: 12px
+            }
+
+            #next {
+                right: 12px
+            }
+
+            .chip {
+                left: 16px;
+                top: 18px
+            }
+
+            .two,
+            .three,
+            .four,
+            .cover,
+            .feedback,
+            .step-photo,
+            .drag-layout,
+            .sim-panel,
+            .compare-grid {
+                grid-template-columns: 1fr
+            }
+
+            .agenda,
+            .material-grid,
+            .feedback-choices,
+            .dropzones {
+                grid-template-columns: 1fr
+            }
+
+            .display {
+                text-align: center;
+                font-size: 3rem
+            }
+
+            .slide:after {
+                display: none
+            }
+
+            .hero-robot {
+                height: 260px;
+                justify-self: center
+            }
+
+            .material-grid {
+                grid-template-columns: repeat(2, 1fr)
+            }
+
+            .photo-card img,
+            .info-panel img,
+            .media-card img,
+            .diagram svg,
+            .circuit-white img,
+            .circuit-white svg {
+                height: 220px
+            }
+
+            .placeholder-photo {
+                height: 230px
+            }
+
+            .embed-wrap {
+                margin-bottom: 12px
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="brand"><img class="k"
+            src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/5b36ddb1-5ff5-490e-af31-9a171820e051.png"
+            alt="Kalananti"><i></i><img class="r"
+            src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/7e71d258-897f-42b7-9c8b-2ff76376ffc6.png"
+            alt="Ruangguru Coding"></div>
+    <button id="prev" class="nav">‹</button>
+    <button id="next" class="nav">›</button>
+    <div class="presentation">
+
+        <!-- 1 -->
+        <section class="slide dark active">
+            <div class="cover content">
+                <div>
+                    <div class="kicker left" style="color:var(--cyan)">WELCOME TO DIY ROBOTIC CLASS</div>
+                    <h1 class="display"><span class="accent">Conductivity</span><br>Tester Robot</h1>
+                    <p class="cover-sub">Hari ini kita akan belajar tentang <span class="yellow">conductor</span>, <span
+                            class="yellow">insulator</span>, dan bagaimana sebuah <span class="yellow">buzzer</span>
+                        bisa menyala ketika circuit berhasil ditutup oleh material tertentu.</p>
+                    <div class="pill">SESSION 7 · TESTING CONDUCTIVE PATHS</div>
+                </div>
+                <img class="hero-robot"
+                    src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/eded3e71-16cf-401e-b1c1-3ff5f887dc38.png"
+                    alt="Conductivity Tester Robot">
+            </div>
+        </section>
+
+        <!-- 2 -->
+        <section class="slide">
+            <span class="chip"><b></b> Today’s Agenda</span>
+            <div class="content stack">
+                <div>
+                    <h2 class="slide-title">What Will We Do Today?</h2>
+                    <p class="lead">Kita akan mulai dari konsep, lalu mencoba rangkaian buzzer, dan akhirnya merakit
+                        robot sederhana.</p>
+                </div>
+                <div class="agenda max">
+                    <div class="card icon-card">
+                        <div class="big-icon">⚡</div>
+                        <h3>Conductor vs Insulator</h3>
+                        <p>Mengenal material yang bisa dan tidak bisa membantu current mengalir.</p>
+                    </div>
+                    <div class="card icon-card">
+                        <div class="big-icon">🔊</div>
+                        <h3>Meet the Buzzer</h3>
+                        <p>Belajar fungsi buzzer dan cara menghubungkannya ke battery.</p>
+                    </div>
+                    <div class="card icon-card">
+                        <div class="big-icon">🧪</div>
+                        <h3>Test the Circuit</h3>
+                        <p>Menguji probe dengan air dan beberapa material lain.</p>
+                    </div>
+                    <div class="card icon-card">
+                        <div class="big-icon">🤖</div>
+                        <h3>Build the Robot</h3>
+                        <p>Menyusun tester menjadi Conductivity Tester Robot.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3 -->
+        <section class="slide">
+            <span class="chip"><b></b> Start with Materials</span>
+            <div class="content two max">
+                <div class="photo-card" style="padding:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+                    <img src="https://i.ytimg.com/vi/JX2f2EzSWHg/maxresdefault.jpg"
+                        alt="Conductor vs Insulator" style="height:330px;width:100%;object-fit:contain;border-radius:16px;">
+                    <div class="image-caption">Perbedaan material konduktor yang menghantarkan arus listrik dan isolator.</div>
+                </div>
+                <div class="stack">
+                    <h2 class="slide-title left">What Is a Conductor? What Is an Insulator?</h2>
+                    <p class="lead left"><span class="highlight">Conductor</span> adalah material yang membantu
+                        <em>electric current</em> mengalir. <span class="highlight">Insulator</span> adalah material
+                        yang sulit atau tidak membiarkan current mengalir.</p>
+                    <div class="mini-labels">
+                        <div class="mini-label"><strong>Examples of conductors</strong><span>Logam, gunting besi, kabel
+                                tembaga, dan beberapa cairan seperti air keran atau air dengan garam terlarut.</span>
+                        </div>
+                        <div class="mini-label blue"><strong>Examples of insulators</strong><span>Plastik, kayu kering,
+                                kertas kering, dan udara.</span></div>
+                    </div>
+                    <div class="instruction">💡 Hari ini kita tidak hanya membuat robot, tapi juga melakukan mini
+                        experiment.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4 -->
+        <section class="slide orange">
+            <span class="chip"><b></b> Why It Matters</span>
+            <div class="content stack max">
+                <div>
+                    <h2 class="slide-title">Kenapa Kita Perlu Tahu Ini?</h2>
+                    <p class="lead">Saat kita membuat robot atau rangkaian, kita perlu tahu material mana yang bisa
+                        menutup circuit dan mana yang justru membuat circuit tetap terbuka.</p>
+                </div>
+                <div class="four">
+                    <div class="card icon-card">
+                        <div class="big-icon">🔌</div>
+                        <h3>Wire</h3>
+                        <p>Biasanya terbuat dari logam supaya current bisa lewat.</p>
+                    </div>
+                    <div class="card icon-card">
+                        <div class="big-icon">🧴</div>
+                        <h3>Plastic Cover</h3>
+                        <p>Melindungi kita karena plastik adalah insulator.</p>
+                    </div>
+                    <div class="card icon-card">
+                        <div class="big-icon">✂️</div>
+                        <h3>Metal Tools</h3>
+                        <p>Bagian besi pada gunting dapat menghantarkan listrik.</p>
+                    </div>
+                    <div class="card icon-card">
+                        <div class="big-icon">💧</div>
+                        <h3>Water</h3>
+                        <p>Air keran bisa membantu current lewat karena mengandung mineral dan ion.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5 -->
+        <section class="slide" id="dragSlide">
+            <span class="chip"><b></b> Drag & Drop</span>
+            <div class="content stack max">
+                <div>
+                    <h2 class="slide-title">Conductor or Insulator?</h2>
+                    <p class="lead">Seret setiap material ke kolom yang tepat.</p>
+                </div>
+                <div class="drag-layout">
+                    <div class="drag-bank">
+                        <h3 class="card-title">Material Bank</h3>
+                        <div class="tokens" id="tokenBank">
+                            <div class="token" draggable="true" data-type="conductor">Metal Scissors</div>
+                            <div class="token" draggable="true" data-type="insulator">Plastic Ruler</div>
+                            <div class="token" draggable="true" data-type="conductor">Tap Water</div>
+                            <div class="token" draggable="true" data-type="insulator">Dry Cardstock</div>
+                            <div class="token" draggable="true" data-type="conductor">Salt Water</div>
+                            <div class="token" draggable="true" data-type="insulator">Dry Wood Stick</div>
+                        </div>
+                    </div>
+                    <div class="dropzones">
+                        <div class="zone good" data-zone="conductor">
+                            <h3>Conductor ⚡</h3>
+                            <p class="note">Membantu current mengalir.</p>
+                            <div class="slot"></div>
+                        </div>
+                        <div class="zone bad" data-zone="insulator">
+                            <h3>Insulator 🛡️</h3>
+                            <p class="note">Sulit mengalirkan current.</p>
+                            <div class="slot"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="status-result" id="dragResult">Setelah semua material dipindahkan, klik <strong>Check
+                        Answer</strong>.</div>
+                <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap"><button class="btn"
+                        id="checkDrag">Check Answer</button><button class="btn2" id="resetDrag">Reset</button></div>
+            </div>
+        </section>
+
+        <!-- 6 -->
+        <section class="slide">
+            <span class="chip"><b></b> Meet the Output</span>
+            <div class="content two max">
+                <div class="photo-card"><img
+                        src="https://www.sunfounder.com/cdn/shop/products/sunfounder-arduino-step-by-step-getting-started-default-title-20pcs-3-5v-2-terminals-passive-buzzer-29907743506667_1200x.jpg?v=1768446906"
+                        alt="Buzzer">
+                    <div class="image-caption">Buzzer hitam kecil 3–5V yang akan kita gunakan hari ini.</div>
+                </div>
+                <div class="stack">
+                    <h2 class="slide-title left">What Is a Buzzer?</h2>
+                    <p class="lead left">Buzzer adalah komponen <span class="highlight">output</span> yang mengubah
+                        energi listrik menjadi <span class="highlight">suara</span>. Saat circuit lengkap, buzzer bisa
+                        berbunyi.</p>
+                    <div class="mini-labels">
+                        <div class="mini-label"><strong>Biasanya dipakai untuk</strong><span>Alarm sederhana,
+                                notifikasi, indikator, atau peringatan.</span></div>
+                        <div class="mini-label blue"><strong>Today’s role</strong><span>Buzzer akan memberi tahu kita
+                                apakah material yang diuji berhasil menutup circuit atau tidak.</span></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 7 -->
+        <section class="slide">
+            <span class="chip"><b></b> Basic Buzzer Circuit</span>
+            <div class="content two max">
+                <div class="photo-card" style="padding:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+                    <img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/2f2ce4a9-ccb2-4531-945c-012e421e44c4.png"
+                        alt="Basic Buzzer Circuit" style="height:320px;width:100%;object-fit:contain;border-radius:16px;">
+                    <div class="image-caption">Sirkuit dasar: Battery 2xAA terhubung langsung ke Active Buzzer.</div>
+                </div>
+                <div class="stack">
+                    <h2 class="slide-title left">Cara Paling Sederhana Menggunakan Buzzer</h2>
+                    <p class="lead left">Ya, konsep dasarnya sesederhana ini: <span class="highlight">positive
+                            battery</span> ke salah satu kaki buzzer, lalu kaki buzzer yang lain kembali ke <span
+                            class="highlight">negative battery</span>.</p>
+                    <div class="step-list">
+                        <div><strong>Battery (+) → Buzzer</strong> untuk memberi energi ke output.</div>
+                        <div><strong>Buzzer → Battery (−)</strong> untuk melengkapi jalur circuit.</div>
+                        <div><strong>Jika belum bunyi</strong>, cek posisi kaki buzzer dan pastikan battery masih bagus.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 8 -->
+        <section class="slide dark">
+            <span class="chip"><b></b> One Application</span>
+            <div class="content two max">
+                <div class="media-card"><img
+                        src="https://ewscripps.brightspotcdn.com/dims4/default/e7ea52c/2147483647/strip/true/crop/597x336+0+0/resize/320x180!/quality/90/?url=http%3A%2F%2Fewscripps-brightspot.s3.amazonaws.com%2Fbc%2F0d%2Fc3a24fcf488b8d82d5593b723f63%2Fhnet-image.gif"
+                        alt="Rain">
+                    <div class="image-caption">Rain can be one example of a conductive trigger.</div>
+                </div>
+                <div class="stack">
+                    <h2 class="slide-title left">From Conductivity to Rain Detection</h2>
+                    <p class="lead left">Salah satu aplikasi dari conductivity tester adalah <span class="yellow">rain
+                            alarm</span>. Kalau air menyentuh dua probe sekaligus, circuit bisa tertutup dan buzzer
+                        berbunyi.</p>
+                    <div class="instruction">🌧️ Jadi, project hari ini tetap bisa dipakai untuk ide rain detector
+                        sederhana.</div>
+                    <div class="mini-labels">
+                        <div class="mini-label"><strong>Tapi fokus belajarnya sekarang</strong><span>Bukan hanya “air
+                                hujan”, melainkan <em>material apa saja yang dapat membantu current lewat</em>.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 9 -->
+        <section class="slide">
+            <span class="chip"><b></b> Water as a Bridge</span>
+            <div class="content two max">
+                <div class="diagram">
+                    <svg viewBox="0 0 720 340">
+                        <rect x="18" y="18" width="684" height="304" rx="26" fill="#fffdf8" stroke="#dcebf4"
+                            stroke-width="3" />
+                        <text x="180" y="56" text-anchor="middle" font-size="28" font-weight="700"
+                            fill="#073b70">DRY</text>
+                        <text x="540" y="56" text-anchor="middle" font-size="28" font-weight="700"
+                            fill="#073b70">WET</text>
+                        <rect x="72" y="90" width="90" height="18" rx="9" fill="#ef5350" />
+                        <rect x="218" y="90" width="90" height="18" rx="9" fill="#073b70" />
+                        <text x="118" y="82" text-anchor="middle" font-size="16" font-weight="700" fill="#ef5350">Probe
+                            A</text>
+                        <text x="264" y="82" text-anchor="middle" font-size="16" font-weight="700" fill="#073b70">Probe
+                            B</text>
+                        <text x="190" y="103" text-anchor="middle" font-size="18" font-weight="700"
+                            fill="#ef5350">GAP</text>
+                        <circle cx="190" cy="210" r="42" fill="#fff" stroke="#073b70" stroke-width="4" />
+                        <text x="190" y="203" text-anchor="middle" font-size="17" font-weight="700"
+                            fill="#073b70">BUZZER</text>
+                        <text x="190" y="225" text-anchor="middle" font-size="16" font-weight="700"
+                            fill="#ef5350">OFF</text>
+
+                        <rect x="430" y="90" width="90" height="18" rx="9" fill="#ef5350" />
+                        <rect x="576" y="90" width="90" height="18" rx="9" fill="#073b70" />
+                        <text x="475" y="82" text-anchor="middle" font-size="16" font-weight="700" fill="#ef5350">Probe
+                            A</text>
+                        <text x="621" y="82" text-anchor="middle" font-size="16" font-weight="700" fill="#073b70">Probe
+                            B</text>
+                        <path d="M518 96 C536 120 554 120 574 96" fill="none" stroke="#43d5e6" stroke-width="14"
+                            stroke-linecap="round" />
+                        <text x="548" y="136" text-anchor="middle" font-size="18" font-weight="700"
+                            fill="#00a6bf">WATER</text>
+                        <circle cx="548" cy="210" r="42" fill="#fff" stroke="#073b70" stroke-width="4" />
+                        <text x="548" y="203" text-anchor="middle" font-size="17" font-weight="700"
+                            fill="#073b70">BUZZER</text>
+                        <text x="548" y="225" text-anchor="middle" font-size="16" font-weight="700"
+                            fill="#38b56f">ON</text>
+                    </svg>
+                    <div class="svg-note">Ilustrasi: saat kering, ada gap. Saat air menyentuh kedua probe, air bertindak
+                        seperti jembatan sementara.</div>
+                </div>
+                <div class="stack">
+                    <h2 class="slide-title left">Why Can Water Close the Circuit?</h2>
+                    <p class="lead left"><span class="highlight">Tap water</span> dan <span class="highlight">rain
+                            water</span> biasanya mengandung mineral dan ion kecil. Ion ini membantu current melewati
+                        air.</p>
+                    <div class="mini-labels">
+                        <div class="mini-label"><strong>Dry</strong><span>Open circuit → buzzer OFF.</span></div>
+                        <div class="mini-label blue"><strong>Wet</strong><span>Water touches Probe A and Probe B →
+                                closed circuit → buzzer ON.</span></div>
+                    </div>
+                    <div class="instruction">💧 Water acts like a temporary electrical bridge between the two probes.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 10: Rain Detector Robot Example -->
+        <section class="slide dark">
+            <span class="chip"><b></b> Robot Example</span>
+            <div class="content two max">
+                <div class="photo-card" style="padding:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#fff;border-radius:26px;">
+                    <a href="https://youtube.com/shorts/N5XKagbdfvc" target="_blank" style="display:block;position:relative;width:100%;overflow:hidden;border-radius:18px;text-decoration:none;">
+                        <img src="https://i.ytimg.com/vi/N5XKagbdfvc/maxresdefault.jpg"
+                            alt="Rain Detector Robot" style="width:100%;height:300px;object-fit:cover;border-radius:18px;display:block;">
+                        <div style="position:absolute;inset:0;background:rgba(0,0,0,0.25);display:flex;align-items:center;justify-content:center;">
+                            <div style="width:60px;height:60px;background:#ef5350;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.6rem;box-shadow:0 8px 24px rgba(0,0,0,0.35);padding-left:4px;">▶</div>
+                        </div>
+                    </a>
+                    <div class="image-caption" style="margin-top:10px;font-weight:600;color:var(--navy);">Contoh Robot Pendeteksi Hujan (Klik untuk tonton video)</div>
+                </div>
+                <div class="stack">
+                    <h2 class="slide-title left">Contoh Rain Detector Robot</h2>
+                    <p class="lead left">Ini adalah salah satu contoh <span class="yellow">Rain Detector Robot</span> sederhana yang bekerja menggunakan prinsip conductivity tester.</p>
+                    <div class="mini-labels">
+                        <div class="mini-label" style="background:rgba(255,255,255,0.95);"><strong>Prinsip Kerja</strong><span>Saat air hujan menyentuh sensor probe, air menjadi konduktor penghubung sehingga sirkuit tertutup dan alarm berbunyi.</span></div>
+                        <div class="mini-label blue" style="background:rgba(255,255,255,0.95);"><strong>Fungsi Praktis</strong><span>Memberi peringatan dini ketika hujan mulai turun, misalnya untuk jemuran atau jendela.</span></div>
+                    </div>
+                    <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+                        <div class="instruction">🤖 Kita bisa membuat robot dengan prinsip serupa hari ini!</div>
+                        <a href="https://youtube.com/shorts/N5XKagbdfvc" target="_blank" class="btn" style="text-decoration:none;display:inline-flex;align-items:center;gap:8px;padding:10px 18px;font-size:0.95rem;">
+                            <span>▶</span> Tonton Video YouTube
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 10 -->
+        <section class="slide">
+            <span class="chip"><b></b> Circuit Diagram</span>
+            <div class="content two max">
+                <div class="photo-card"><img
+                        src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/0f658809-bffa-461f-81eb-825aa2f91244.png"
+                        alt="Conductivity tester circuit">
+                    <div class="image-caption">Rangkaian dasar: battery 2xAA → active buzzer → Probe A → test gap →
+                        Probe B → kembali ke battery.</div>
+                </div>
+                <div class="stack">
+                    <h2 class="slide-title left">Read the Circuit First</h2>
+                    <div class="step-list">
+                        <div><strong>Battery (+)</strong> menuju salah satu kaki buzzer.</div>
+                        <div><strong>Kaki buzzer yang lain</strong> menuju Probe A.</div>
+                        <div><strong>Probe B</strong> kembali ke battery (−).</div>
+                        <div><strong>Di antara Probe A dan Probe B</strong> ada gap terbuka yang nanti diuji dengan air
+                            atau material lain.</div>
+                    </div>
+                    <div class="instruction">🔍 Sebelum merakit robot, kita uji dulu circuit ini di luar struktur.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 11 -->
+        <section class="slide">
+            <span class="chip"><b></b> Tools & Materials</span>
+            <div class="content stack max">
+                <div>
+                    <h2 class="slide-title">Prepare the Kit</h2>
+                </div>
+                <div class="material-grid">
+                    <div class="material"><img src="https://m.media-amazon.com/images/I/71xTnwH0-dL.jpg"
+                            alt="Battery holder"><strong>Battery Holder 2xAA</strong><span>1 buah · individu</span>
+                    </div>
+                    <div class="material"><img
+                            src="https://media.monotaro.id/mid01/full/Kebutuhan%20Kantor/Baterai%20Kantor/Baterai%20Mangan/Mangan%20C/ABC%20(Battery)%20Blue%20Battery%20AA%20(Baterai%20AA)/ABC%20(Battery)%20Blue%20Battery%20AA%20(Baterai%20AA)%20R-06%201pack(4pcs)/rbS028112983-2.jpg"
+                            alt="AA battery"><strong>AA Battery</strong><span>2 buah · individu</span></div>
+                    <div class="material"><img
+                            src="https://p16-oec-sg.ibyteimg.com/tos-alisg-i-aphluv4xwc-sg/img/product-1/2018/7/6/2461990/2461990_8c9c64ea-6b82-41bc-b690-3772b95a1e3a_610_558.jpg~tplv-aphluv4xwc-resize-jpeg:700:0.jpg"
+                            alt="Active buzzer"><strong>Active Buzzer 3–5V</strong><span>1 buah · individu</span></div>
+                    <div class="material"><img
+                            src="https://digiwarestore.com/10834-thickbox_default/kabel-jumper-male-to-male-dupont-20cm-331193.jpg"
+                            alt="Jumper"><strong>Jumper Male-Male</strong><span>10 buah · individu</span></div>
+                    <div class="material"><img
+                            src="https://i0.wp.com/maxwel.com/wp-content/uploads/2022/03/electrical_tape.jpg?fit=640%2C640&ssl=1"
+                            alt="Electrical tape"><strong>Electrical Tape Mini</strong><span>1 roll · sharing</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 12 -->
+        <section class="slide">
+            <span class="chip"><b></b> More Materials</span>
+            <div class="content stack max">
+                <div>
+                    <h2 class="slide-title">Structure Materials</h2>
+                </div>
+                <div class="material-grid" style="grid-template-columns: repeat(4, 1fr); max-width: 900px; margin: 0 auto;">
+                    <div class="material"><img
+                            src="https://image.made-in-china.com/365f3j00iJHhrtAEEqbw/28mm-38mm-45mm-Tutup-Penutup-Botol-Plastik-untuk-Botol-Air-Murni.webp"
+                            alt="Bottle cap"><strong>Tutup Botol Plastik</strong><span>2 buah · individu</span></div>
+                    <div class="material"><img
+                            src="https://stationary.co.id/cdn/shop/products/joyko-lem-cair-putih-60ml-gl-w02-office-stationery-toko-atk_583_1024x1024.jpg?v=1543434171"
+                            alt="Glue"><strong>Lem Putih</strong><span>1 botol kecil · sharing</span></div>
+                    <div class="material"><img
+                            src="https://i5.walmartimages.com/seo/Hamilco-White-Cardstock-Thick-11x17-Paper-Heavy-Weight-80-lb-Cover-Card-Stock-25-Pack_499398ce-e708-496f-9f85-3393c0544e6a.5874e7f7c808c0d57dc7ae07779d3292.jpeg"
+                            alt="Cardstock"><strong>Cardstock Putih</strong><span>5 lembar · individu</span></div>
+                    <div class="material"><img
+                            src="https://down-id.img.susercontent.com/file/d3790a6c680bd1e4030343859524286d"
+                            alt="Scissors"><strong>Gunting</strong><span>1 buah · sharing</span></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 13 -->
+        <section class="slide">
+            <span class="chip"><b></b> Test Before Build</span>
+            <div class="content two max">
+                <div class="embed-wrap"><iframe src="https://jumpshare.com/embed/qwg294d3tWE7Ly7n1Pd2" frameborder="0"
+                        webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe></div>
+                <div class="stack">
+                    <h2 class="slide-title left">Test the Circuit Outside the Robot</h2>
+                    <p class="lead left">Sebelum merakit bentuk robot, pastikan circuit dasar sudah siap. Hubungkan
+                        semuanya dulu di luar struktur dengan bantuan electrical tape.</p>
+                    <div class="step-list">
+                        <div><strong>Rangkai battery + buzzer + probe</strong> sesuai diagram.</div>
+                        <div><strong>Tempel sambungan sementara</strong> supaya tidak mudah lepas saat diuji.</div>
+                        <div><strong>Fokus pada function first</strong>, baru setelah itu masuk ke bentuk robot.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 14 -->
+        <section class="slide">
+            <span class="chip"><b></b> Quick Functional Test</span>
+            <div class="content two max">
+                <div class="stack">
+                    <h2 class="slide-title left">Touch the Two Probes</h2>
+                    <p class="lead left">Coba sambungkan kedua probe secara langsung. Kalau buzzer bunyi, berarti
+                        battery dan buzzer-mu sudah siap.</p>
+                    <div class="mini-labels">
+                        <div class="mini-label"><strong>If it works</strong><span>Komponen utama siap dipakai untuk
+                                eksperimen berikutnya.</span></div>
+                        <div class="mini-label blue"><strong>If it does not work</strong><span>Coba tukar posisi kaki
+                                buzzer dan pastikan battery AA terpasang benar.</span></div>
+                    </div>
+                    <div class="instruction">✅ Direct contact test dulu sebelum testing dengan material lain.</div>
+                </div>
+                <div class="photo-card" style="padding:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+                    <img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/30c3e63f-fe41-4d0f-b974-9517e91da751.png"
+                        alt="Touch the Two Probes" style="height:320px;width:100%;object-fit:contain;border-radius:16px;">
+                    <div class="image-caption">Uji sambungkan ujung kedua probe secara langsung.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 15 -->
+        <section class="slide">
+            <span class="chip"><b></b> Test Water Conductivity</span>
+            <div class="content two max">
+                <div class="embed-wrap"><iframe src="https://jumpshare.com/embed/daryCPzv9jfWIesnXFIo" frameborder="0"
+                        webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe></div>
+                <div class="stack">
+                    <h2 class="slide-title left">Now Test with Water</h2>
+                    <p class="lead left">Perhatikan apakah buzzer bekerja saat air menyentuh kedua probe. Kalau bekerja,
+                        artinya air tersebut cukup conductive untuk membantu menutup circuit.</p>
+                    <div class="instruction">💧 Gunakan sedikit air saja. Jangan sampai battery holder atau buzzer ikut
+                        basah.</div>
+                    <div class="note">Catatan: tidak semua air memberi hasil yang sama. Air keran, air hujan, dan air
+                        dengan garam terlarut bisa menghasilkan respons yang berbeda.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 16 -->
+        <section class="slide">
+            <span class="chip"><b></b> Test Other Materials</span>
+            <div class="content two max">
+                <div class="embed-wrap"><iframe src="https://jumpshare.com/embed/cTbvzGwIsarYwKxRaymA" frameborder="0"
+                        webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe></div>
+                <div class="stack">
+                    <h2 class="slide-title left">Not Just Water</h2>
+                    <p class="lead left">Karena project kita sekarang adalah <span class="highlight">Conductivity
+                            Tester</span>, kita juga bisa mencoba material lain seperti gunting besi atau benda logam
+                        lain.</p>
+                    <div class="step-list">
+                        <div><strong>Metal object</strong> berpotensi menutup circuit dengan lebih mudah.</div>
+                        <div><strong>Plastic or dry paper</strong> biasanya tidak akan menyalakan buzzer.</div>
+                        <div><strong>Compare the results</strong> untuk melihat perbedaan conductivity antar material.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 17 -->
+        <section class="slide" id="simSlide">
+            <span class="chip"><b></b> Interactive Test</span>
+            <div class="content stack max">
+                <div>
+                    <h2 class="slide-title">Which Material Closes the Circuit?</h2>
+                    <p class="lead">Klik satu kondisi, lalu amati apa yang terjadi pada probe dan buzzer.</p>
+                </div>
+                <div class="test-buttons">
+                    <button class="test-pill active" data-sim="dry">Dry Air</button>
+                    <button class="test-pill" data-sim="tap">Tap Water</button>
+                    <button class="test-pill" data-sim="salt">Salt Water</button>
+                    <button class="test-pill" data-sim="metal">Metal</button>
+                    <button class="test-pill" data-sim="plastic">Plastic</button>
+                </div>
+                <div class="sim-panel">
+                    <div class="sim-screen" id="simVisual"></div>
+                    <div class="probe-state" id="simText"><strong>Dry Air</strong><br>Masih ada gap terbuka, jadi
+                        circuit tetap open dan buzzer OFF.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 18 -->
+        <section class="slide">
+            <span class="chip"><b></b> Build Idea</span>
+            <div class="content two max">
+                <div class="photo-card"><img
+                        src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/74462b9b-7214-49b8-9ed1-c10f4a512356.png"
+                        alt="Robot example">
+                    <div class="image-caption">Robot box dengan area test di bagian atas.</div>
+                </div>
+                <div class="stack">
+                    <h2 class="slide-title left">How Should the Robot Work?</h2>
+                    <p class="lead left">Supaya tetap nyambung dengan ide awal, kita bisa membuat robot berbentuk box
+                        dengan <span class="highlight">test tray</span> dari tutup botol di bagian atas.</p>
+                    <div class="mini-labels">
+                        <div class="mini-label"><strong>Tutup botol sebagai test tray</strong><span>Bisa dipakai untuk
+                                menaruh sedikit air atau air garam saat ingin menguji cairan.</span></div>
+                        <div class="mini-label blue"><strong>Probe tetap bisa dipakai untuk benda
+                                padat</strong><span>Untuk logam atau benda lain, cukup sentuhkan dua probe ke objek yang
+                                diuji di luar tray.</span></div>
+                    </div>
+                    <div class="instruction">🤖 Jadi satu robot bisa dipakai untuk dua mode test: liquids dan solids.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 19 -->
+        <section class="slide">
+            <span class="chip"><b></b> Build · Step 1</span>
+            <div class="content step-photo max">
+                <div class="embed-wrap" style="height:320px;padding-bottom:0;">
+                    <iframe src="https://jumpshare.com/embed/qwg294d3tWE7Ly7n1Pd2" frameborder="0"
+                        webkitallowfullscreen mozallowfullscreen allowfullscreen style="width:100%;height:100%;border:none;border-radius:18px;"></iframe>
+                </div>
+                <div class="stack">
+                    <div class="step-number"><b>1</b><span>Prepare the Circuit</span></div>
+                    <div class="step-list">
+                        <div><strong>Pasang dua AA battery</strong> pada holder.</div>
+                        <div><strong>Hubungkan battery (+) → buzzer → Probe A</strong>, lalu <strong>Probe B → battery
+                                (−)</strong>.</div>
+                        <div><strong>Gunakan electrical tape</strong> untuk menahan sambungan agar tidak mudah lepas.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 20 -->
+        <section class="slide">
+            <span class="chip"><b></b> Build · Step 2</span>
+            <div class="content step-photo max">
+                <div class="photo-card" style="padding:15px;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+                    <img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/0c02a1bf-9eae-4259-82f2-c6a963a03bc8.png"
+                        alt="Build Step 2" style="height:310px;width:100%;object-fit:contain;border-radius:16px;">
+                </div>
+                <div class="stack">
+                    <div class="step-number"><b>2</b><span>Create the Test Area</span></div>
+                    <div class="step-list">
+                        <div><strong>Gunakan satu tutup botol</strong> sebagai tray kecil untuk pengujian cairan.</div>
+                        <div><strong>Pasang dua probe</strong> dengan gap kecil di area tersebut.</div>
+                        <div><strong>Jangan menutup ujung logam probe</strong> karena bagian itu harus menyentuh air
+                            atau material uji.</div>
+                    </div>
+                    <div class="instruction">📏 Gap kecil lebih mudah dijembatani oleh air.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 21 -->
+        <section class="slide">
+            <span class="chip"><b></b> Build · Step 3</span>
+            <div class="content step-photo max">
+                <div class="photo-card" style="padding:15px;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+                    <img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/bdf2f1dc-7b17-4db2-9e7a-87235f6e3e57.png"
+                        alt="Build Step 3" style="height:310px;width:100%;object-fit:contain;border-radius:16px;">
+                </div>
+                <div class="stack">
+                    <div class="step-number"><b>3</b><span>Build the Robot Body</span></div>
+                    <div class="step-list">
+                        <div><strong>Buat body sederhana</strong> dari cardstock.</div>
+                        <div><strong>Tempel battery holder dan buzzer</strong> pada body, jauh dari area yang akan
+                            terkena air.</div>
+                        <div><strong>Tambahkan satu tutup botol lagi</strong> sebagai kepala atau dekorasi agar tampilan
+                            robot lebih menarik.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 22 -->
+        <section class="slide">
+            <span class="chip"><b></b> Final Check</span>
+            <div class="content stack max">
+                <div>
+                    <h2 class="slide-title">Before You Test the Robot</h2>
+                    <p class="lead">Pastikan empat hal ini sudah beres.</p>
+                </div>
+                <div class="four">
+                    <div class="card icon-card">
+                        <div class="big-icon">🔋</div>
+                        <h3>Battery Ready</h3>
+                        <p>Dua AA terpasang sesuai polarity.</p>
+                    </div>
+                    <div class="card icon-card">
+                        <div class="big-icon">🔊</div>
+                        <h3>Buzzer Ready</h3>
+                        <p>Sudah pernah bunyi saat direct contact test.</p>
+                    </div>
+                    <div class="card icon-card">
+                        <div class="big-icon">〰️</div>
+                        <h3>Probe Gap</h3>
+                        <p>Dekat, tapi tidak menyentuh saat kering.</p>
+                    </div>
+                    <div class="card icon-card">
+                        <div class="big-icon">💧</div>
+                        <h3>Dry & Safe</h3>
+                        <p>Area battery dan buzzer tetap kering.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 23 -->
+        <section class="slide">
+            <span class="chip"><b></b> Troubleshoot</span>
+            <div class="content stack max">
+                <div>
+                    <h2 class="slide-title">Why Doesn’t It Work Yet?</h2>
+                    <p class="lead">Cek satu per satu.</p>
+                </div>
+                <div class="four">
+                    <div class="card">
+                        <h3>1. Battery</h3>
+                        <p>Pastikan AA masih bagus dan holder terpasang benar.</p>
+                    </div>
+                    <div class="card">
+                        <h3>2. Buzzer</h3>
+                        <p>Coba direct contact test dulu. Kalau masih diam, coba tukar kaki buzzer.</p>
+                    </div>
+                    <div class="card">
+                        <h3>3. Probe</h3>
+                        <p>Jangan terlalu jauh. Gap terlalu besar membuat air sulit menjembatani.</p>
+                    </div>
+                    <div class="card">
+                        <h3>4. Test Material</h3>
+                        <p>Tidak semua material conductive. Air garam biasanya lebih mudah memberi hasil daripada benda
+                            insulator.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 24: Quick Quiz (Combined) -->
+        <section class="slide" id="quizSlide">
+            <span class="chip"><b></b> Quick Quiz</span>
+            <div class="content quiz-box">
+                <div class="quiz-card">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+                        <span class="chip" style="position:static;padding:6px 14px;font-size:0.88rem;" id="quizBadge">Pertanyaan 1 dari 3</span>
+                        <div style="display:flex;gap:6px;" id="quizDots">
+                            <span class="quiz-dot" id="dot1" style="width:10px;height:10px;border-radius:50%;background:var(--orange);"></span>
+                            <span class="quiz-dot" id="dot2" style="width:10px;height:10px;border-radius:50%;background:#dbe8f2;"></span>
+                            <span class="quiz-dot" id="dot3" style="width:10px;height:10px;border-radius:50%;background:#dbe8f2;"></span>
+                        </div>
+                    </div>
+
+                    <!-- Question 1 -->
+                    <div class="quiz-step" id="qStep1">
+                        <div class="quiz-q">1. Material manakah yang paling mungkin menutup circuit dengan mudah?</div>
+                        <div class="stack" style="gap:8px">
+                            <button class="option q1" data-correct="true">A. Gunting besi</button>
+                            <button class="option q1" data-correct="false">B. Penggaris plastik</button>
+                            <button class="option q1" data-correct="false">C. Kertas kering</button>
+                        </div>
+                        <div class="quiz-fb" id="fb1" style="display:none;"></div>
+                        <button class="btn" id="btnNext1" style="display:none;margin-top:14px;width:100%;">Lanjut ke Pertanyaan 2 ›</button>
+                    </div>
+
+                    <!-- Question 2 -->
+                    <div class="quiz-step" id="qStep2" style="display:none;">
+                        <div class="quiz-q">2. Pada project ini, kapan buzzer akan berbunyi?</div>
+                        <div class="stack" style="gap:8px">
+                            <button class="option q2" data-correct="false">A. Saat probe tetap terpisah dan kering</button>
+                            <button class="option q2" data-correct="true">B. Saat ada material conductive yang menjembatani dua probe</button>
+                            <button class="option q2" data-correct="false">C. Saat cardstock ditempel lebih rapat</button>
+                        </div>
+                        <div class="quiz-fb" id="fb2" style="display:none;"></div>
+                        <button class="btn" id="btnNext2" style="display:none;margin-top:14px;width:100%;">Lanjut ke Pertanyaan 3 ›</button>
+                    </div>
+
+                    <!-- Question 3 -->
+                    <div class="quiz-step" id="qStep3" style="display:none;">
+                        <div class="quiz-q">3. Kenapa kita masih bisa memakai tutup botol pada robot ini?</div>
+                        <div class="stack" style="gap:8px">
+                            <button class="option q3" data-correct="false">A. Karena tutup botol menghantarkan listrik dengan sangat baik</button>
+                            <button class="option q3" data-correct="false">B. Karena tutup botol adalah sumber energi</button>
+                            <button class="option q3" data-correct="true">C. Karena tutup botol bisa menjadi test tray untuk cairan, sementara probe tetap menguji material lain</button>
+                        </div>
+                        <div class="quiz-fb" id="fb3" style="display:none;"></div>
+                        <div id="quizDoneBox" style="display:none;margin-top:14px;text-align:center;">
+                            <div style="font-size:1.15rem;font-weight:700;color:var(--green);margin-bottom:10px;">🎉 Hebat! Kamu sudah menyelesaikan semua kuis!</div>
+                            <button class="btn2" id="btnResetQuiz">Ulangi Kuis</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Review -->
+        <section class="slide">
+            <span class="chip"><b></b> Review</span>
+            <div class="content stack max">
+                <div>
+                    <h2 class="slide-title">What Did We Learn Today?</h2>
+                    <p class="lead">Review singkat sebelum closing.</p>
+                </div>
+                <div class="agenda">
+                    <div class="card icon-card">
+                        <div class="big-icon">⚡</div>
+                        <h3>Conductor & Insulator</h3>
+                        <p>Material memiliki kemampuan berbeda dalam menghantarkan current.</p>
+                    </div>
+                    <div class="card icon-card">
+                        <div class="big-icon">🔊</div>
+                        <h3>Buzzer</h3>
+                        <p>Buzzer adalah output suara yang bekerja saat circuit lengkap.</p>
+                    </div>
+                    <div class="card icon-card">
+                        <div class="big-icon">💧</div>
+                        <h3>Water Bridge</h3>
+                        <p>Air tertentu dapat bertindak sebagai jembatan sementara antara dua probe.</p>
+                    </div>
+                    <div class="card icon-card">
+                        <div class="big-icon">🤖</div>
+                        <h3>Conductivity Tester Robot</h3>
+                        <p>Satu robot dapat dipakai untuk menguji cairan dan benda padat.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Feedback -->
+        <section class="slide dark">
+            <span class="chip"><b></b> Feedback</span>
+            <div class="content feedback max">
+                <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:320px;background:rgba(255,255,255,0.08);border:2px solid rgba(255,255,255,0.18);border-radius:26px;box-shadow:0 14px 28px rgba(0,0,0,0.25);">
+                    <div style="font-size:7.5rem;line-height:1;margin-bottom:12px;">🤖</div>
+                    <div style="font-size:1.1rem;font-weight:700;color:var(--yellow);letter-spacing:1px;text-transform:uppercase;">Conductivity Robot</div>
+                </div>
+                <div class="stack">
+                    <h2 class="slide-title left">How Was Today’s Class?</h2>
+                    <p class="lead left">Pilih satu respons yang paling sesuai.</p>
+                    <div class="feedback-choices">
+                        <button class="feedback-choice"><span class="face">🙂</span>Sudah Paham</button>
+                        <button class="feedback-choice"><span class="face">🤔</span>Perlu Coba Lagi</button>
+                        <button class="feedback-choice"><span class="face">⚡</span>Siap Lanjut</button>
+                    </div>
+                    <p class="note" id="feedbackNote">Respons ini tidak menyimpan skor atau data pribadi.</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="footer">
+            <div class="counter" id="counter">1 / 27</div>
+        </div>
+        <div class="progress">
+            <div class="bar" id="bar"></div>
+        </div>
+    </div>
+
+    <script>
+        const slides = [...document.querySelectorAll('.slide')];
+        const prev = document.getElementById('prev');
+        const next = document.getElementById('next');
+        const counter = document.getElementById('counter');
+        const bar = document.getElementById('bar');
+        let idx = 0;
+        function show(i) {
+            idx = Math.max(0, Math.min(slides.length - 1, i));
+            slides.forEach((s, n) => s.classList.toggle('active', n === idx));
+            counter.textContent = `${idx + 1} / ${slides.length}`;
+            bar.style.width = `${((idx + 1) / slides.length) * 100}%`;
+            prev.disabled = idx === 0;
+            next.disabled = idx === slides.length - 1;
+        }
+        prev.onclick = () => show(idx - 1); next.onclick = () => show(idx + 1);
+        document.addEventListener('keydown', e => { if (e.key === 'ArrowRight' || e.key === 'PageDown') show(idx + 1); if (e.key === 'ArrowLeft' || e.key === 'PageUp') show(idx - 1) });
+        show(0);
+
+        // Drag and drop classification
+        let dragged = null;
+        function wireTokens() {
+            document.querySelectorAll('.token[draggable="true"]').forEach(t => {
+                t.addEventListener('dragstart', () => { dragged = t; t.classList.add('dragging') });
+                t.addEventListener('dragend', () => { t.classList.remove('dragging') });
+            });
+        }
+        wireTokens();
+        document.querySelectorAll('.zone,.tokens').forEach(zone => {
+            zone.addEventListener('dragover', e => e.preventDefault());
+            zone.addEventListener('drop', e => {
+                e.preventDefault();
+                if (!dragged) return;
+                const slot = zone.classList.contains('zone') ? zone.querySelector('.slot') : zone;
+                slot.appendChild(dragged);
+            });
+        });
+        document.getElementById('checkDrag').onclick = () => {
+            const zones = [...document.querySelectorAll('.zone')];
+            let total = 0, correct = 0;
+            zones.forEach(z => z.querySelectorAll('.token').forEach(t => { total++; if (t.dataset.type === z.dataset.zone) correct++; }));
+            const bank = document.querySelectorAll('#tokenBank .token').length;
+            if (bank > 0) { document.getElementById('dragResult').innerHTML = 'Masih ada material di <strong>Material Bank</strong>. Pindahkan semuanya dulu.'; return }
+            if (correct === total) document.getElementById('dragResult').innerHTML = '✅ Semua benar. Metal scissors, tap water, dan salt water masuk conductor. Plastic ruler, dry cardstock, dan dry wood stick masuk insulator.';
+            else document.getElementById('dragResult').innerHTML = `Belum semua tepat. Skor sementara: <strong>${correct}/${total}</strong>. Coba cek lagi apakah material itu membantu current mengalir atau tidak.`;
+        };
+        document.getElementById('resetDrag').onclick = () => {
+            const bank = document.getElementById('tokenBank');
+            document.querySelectorAll('.zone .token').forEach(t => bank.appendChild(t));
+            document.getElementById('dragResult').innerHTML = 'Setelah semua material dipindahkan, klik <strong>Check Answer</strong>.';
+        };
+
+        // Interactive material simulator
+        const simVisual = document.getElementById('simVisual');
+        const simText = document.getElementById('simText');
+        const simData = {
+            dry: { label: 'Dry Air', desc: 'Masih ada gap terbuka, jadi circuit tetap open dan buzzer OFF.', bridge: 'GAP', color: '#ef5350', status: 'OFF', statusColor: '#ef5350' },
+            tap: { label: 'Tap Water', desc: 'Air keran bisa membantu menutup circuit karena mengandung mineral dan ion. Hasil bisa berbeda-beda.', bridge: 'TAP WATER', color: '#43d5e6', status: 'ON / MAYBE', statusColor: '#ff8b2b' },
+            salt: { label: 'Salt Water', desc: 'Air garam biasanya lebih conductive, jadi lebih mudah membantu current lewat dan buzzer lebih mungkin berbunyi.', bridge: 'SALT WATER', color: '#43d5e6', status: 'ON', statusColor: '#38b56f' },
+            metal: { label: 'Metal', desc: 'Logam adalah conductor yang baik, jadi dua probe yang menyentuh logam biasanya akan menutup circuit dengan mudah.', bridge: 'METAL', color: '#b1bcc8', status: 'ON', statusColor: '#38b56f' },
+            plastic: { label: 'Plastic', desc: 'Plastik adalah insulator, jadi current tidak bisa lewat dengan mudah. Circuit tetap open dan buzzer OFF.', bridge: 'PLASTIC', color: '#f6d8d8', status: 'OFF', statusColor: '#ef5350' }
+        };
+        function renderSim(key) {
+            const d = simData[key];
+            simVisual.innerHTML = `<svg class="probe-visual" viewBox="0 0 560 260"><rect x="44" y="92" width="118" height="80" rx="16" fill="#ffe08a" stroke="#073b70" stroke-width="4"/><text x="103" y="139" text-anchor="middle" font-size="22" font-weight="700" fill="#073b70">2xAA</text><path d="M162 116 H280" stroke="#ef5350" stroke-width="8"/><circle cx="338" cy="116" r="42" fill="#fff" stroke="#073b70" stroke-width="4"/><text x="338" y="111" text-anchor="middle" font-size="15" font-weight="700" fill="#073b70">BUZZER</text><text x="338" y="131" text-anchor="middle" font-size="15" font-weight="700" fill="${d.statusColor}">${d.status}</text><path d="M380 116 H430" stroke="#073b70" stroke-width="8"/><path d="M430 116 V185" stroke="#073b70" stroke-width="8"/><path d="M480 116 V185" stroke="#073b70" stroke-width="8"/><rect x="432" y="168" width="46" height="34" rx="10" fill="${d.color}" stroke="#073b70" stroke-width="3"/><text x="455" y="190" text-anchor="middle" font-size="12" font-weight="700" fill="#073b70">${d.bridge}</text><path d="M480 185 H103 V172" stroke="#073b70" stroke-width="8" fill="none"/></svg>`;
+            simText.innerHTML = `<strong>${d.label}</strong><br>${d.desc}`;
+            document.querySelectorAll('.test-pill').forEach(b => b.classList.toggle('active', b.dataset.sim === key));
+        }
+        renderSim('dry');
+        document.querySelectorAll('.test-pill').forEach(btn => btn.onclick = () => renderSim(btn.dataset.sim));
+
+        // Step-by-step Quiz Handler
+        function setupQuizStep(qNum, nextBtnId, fbId, correctExplanation, wrongExplanation, isFinal) {
+            const options = document.querySelectorAll(`.q${qNum}`);
+            const fb = document.getElementById(fbId);
+            const nextBtn = document.getElementById(nextBtnId);
+            const doneBox = document.getElementById('quizDoneBox');
+
+            options.forEach(btn => {
+                btn.onclick = () => {
+                    options.forEach(b => b.disabled = true);
+                    if (btn.dataset.correct === 'true') {
+                        btn.classList.add('correct');
+                        fb.innerHTML = '✅ Benar. ' + correctExplanation;
+                    } else {
+                        btn.classList.add('wrong');
+                        const correctOne = [...options].find(b => b.dataset.correct === 'true');
+                        if (correctOne) correctOne.classList.add('correct');
+                        fb.innerHTML = '❌ Belum tepat. ' + wrongExplanation;
+                    }
+                    fb.style.display = 'block';
+                    if (nextBtn) nextBtn.style.display = 'block';
+                    if (isFinal && doneBox) doneBox.style.display = 'block';
+                };
+            });
+        }
+
+        setupQuizStep(1, 'btnNext1', 'fb1', 'Gunting besi memiliki bagian logam yang dapat menghantarkan listrik.', 'Jawaban yang benar adalah <strong>A. Gunting besi</strong>, karena bagian logamnya bersifat conductor.', false);
+        setupQuizStep(2, 'btnNext2', 'fb2', 'Saat ada material conductive yang menjembatani dua probe, gap tertutup dan buzzer dapat berbunyi.', 'Jawaban yang benar adalah <strong>B</strong>. Buzzer berbunyi ketika ada material conductive yang membantu menutup circuit.', false);
+        setupQuizStep(3, null, 'fb3', 'Tutup botol bisa menjadi test tray untuk cairan, sedangkan probe tetap dapat menyentuh material lain di luar tray.', 'Jawaban yang benar adalah <strong>C</strong>. Tutup botol dipakai sebagai area uji, bukan sebagai conductor atau power source.', true);
+
+        // Quiz navigation buttons
+        const badge = document.getElementById('quizBadge');
+        const dot1 = document.getElementById('dot1');
+        const dot2 = document.getElementById('dot2');
+        const dot3 = document.getElementById('dot3');
+
+        document.getElementById('btnNext1').onclick = () => {
+            document.getElementById('qStep1').style.display = 'none';
+            document.getElementById('qStep2').style.display = 'block';
+            badge.textContent = 'Pertanyaan 2 dari 3';
+            dot2.style.background = 'var(--orange)';
+        };
+
+        document.getElementById('btnNext2').onclick = () => {
+            document.getElementById('qStep2').style.display = 'none';
+            document.getElementById('qStep3').style.display = 'block';
+            badge.textContent = 'Pertanyaan 3 dari 3';
+            dot3.style.background = 'var(--orange)';
+        };
+
+        document.getElementById('btnResetQuiz').onclick = () => {
+            document.querySelectorAll('.q1, .q2, .q3').forEach(b => {
+                b.disabled = false;
+                b.classList.remove('correct', 'wrong');
+            });
+            ['fb1', 'fb2', 'fb3'].forEach(id => {
+                const el = document.getElementById(id);
+                el.innerHTML = '';
+                el.style.display = 'none';
+            });
+            document.getElementById('btnNext1').style.display = 'none';
+            document.getElementById('btnNext2').style.display = 'none';
+            document.getElementById('quizDoneBox').style.display = 'none';
+
+            document.getElementById('qStep3').style.display = 'none';
+            document.getElementById('qStep2').style.display = 'none';
+            document.getElementById('qStep1').style.display = 'block';
+
+            badge.textContent = 'Pertanyaan 1 dari 3';
+            dot1.style.background = 'var(--orange)';
+            dot2.style.background = '#dbe8f2';
+            dot3.style.background = '#dbe8f2';
+        };
+
+        // Feedback buttons
+        const feedbackChoices = [...document.querySelectorAll('.feedback-choice')];
+        feedbackChoices.forEach(btn => btn.onclick = () => { feedbackChoices.forEach(b => b.classList.remove('active')); btn.classList.add('active'); document.getElementById('feedbackNote').textContent = 'Terima kasih. Respons ini hanya untuk refleksi kelas, tidak menyimpan skor.' });
+    </script>
+</body>
+
+</html>
