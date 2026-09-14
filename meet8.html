@@ -1,0 +1,2772 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>RUANGGURU CODING — LED Robot Challenge</title>
+    <link rel="icon"
+        href="https://cdn-web-2.ruangguru.com/landing-pages/assets/e7d93748-818d-462d-be57-7db1e479cd62.png"
+        type="image/png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --navy: #073b70;
+            --navy2: #0d4f86;
+            --deep: #062b50;
+            --cyan: #43d5e6;
+            --orange: #ff8b2b;
+            --yellow: #ffc33d;
+            --ink: #153650;
+            --muted: #5e7487;
+            --green: #38b56f;
+            --red: #ef5350;
+            --white: #fff;
+            --cream: #fff9ef;
+            --shadow: 0 18px 46px rgba(2, 25, 50, .28)
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            overflow: hidden;
+            font-family: 'Fredoka', sans-serif;
+            color: var(--ink);
+            background: radial-gradient(circle at 80% 18%, rgba(67, 213, 230, .16) 0 12%, transparent 13%),
+                radial-gradient(circle at 10% 82%, rgba(255, 195, 61, .14) 0 15%, transparent 16%),
+                linear-gradient(135deg, var(--deep), var(--navy) 52%, var(--navy2));
+        }
+
+        body:before,
+        body:after {
+            content: "";
+            position: fixed;
+            width: 48vw;
+            height: 8px;
+            background: rgba(255, 255, 255, .035);
+            transform: rotate(-24deg);
+            border-radius: 20px;
+            box-shadow: 0 52px rgba(255, 255, 255, .03), 0 104px rgba(255, 255, 255, .025), 0 156px rgba(255, 255, 255, .02);
+        }
+
+        body:before {
+            left: 2vw;
+            top: 20vh;
+        }
+
+        body:after {
+            right: -10vw;
+            bottom: 20vh;
+        }
+
+        .brand {
+            position: fixed;
+            left: 22px;
+            top: 18px;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 9px 15px;
+            background: rgba(255, 255, 255, .97);
+            border-radius: 20px;
+            box-shadow: 0 10px 28px rgba(2, 24, 48, .3);
+        }
+
+        .brand img {
+            object-fit: contain;
+            width: auto;
+        }
+
+        .brand .k {
+            height: 45px;
+            max-width: 170px;
+        }
+
+        .brand .r {
+            height: 38px;
+            max-width: 145px;
+        }
+
+        .brand i {
+            width: 2px;
+            height: 34px;
+            background: #dce7f0;
+            border-radius: 10px;
+        }
+
+        .presentation {
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -48%);
+            width: min(88vw, 1440px);
+            aspect-ratio: 16/9;
+            max-height: 82vh;
+            border: 5px solid rgba(255, 255, 255, .9);
+            border-radius: 28px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            background: var(--cream);
+        }
+
+        .slide {
+            position: absolute;
+            inset: 0;
+            padding: 46px 56px 42px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateX(65px) scale(.985);
+            transition: .42s ease;
+            background: radial-gradient(circle at 88% 12%, rgba(67, 213, 230, .12), transparent 25%), linear-gradient(#fffefa, #fff8ed);
+            overflow: hidden;
+        }
+
+        .slide.active {
+            opacity: 1;
+            visibility: visible;
+            transform: none;
+            z-index: 5;
+        }
+
+        .slide.dark {
+            color: #fff;
+            background: radial-gradient(circle at 78% 44%, rgba(85, 170, 255, .24) 0 17%, rgba(85, 170, 255, .08) 18% 29%, transparent 30%), linear-gradient(135deg, #0b4a81, #083766 58%, #062b50);
+        }
+
+        .slide.orange {
+            color: #fff;
+            background: radial-gradient(circle at 82% 24%, rgba(255, 255, 255, .18), transparent 22%), linear-gradient(135deg, #ffa23d, #ff7e26);
+        }
+
+        .slide:after {
+            content: "";
+            position: absolute;
+            left: -8%;
+            right: -8%;
+            bottom: -38px;
+            height: 52px;
+            background: var(--orange);
+            transform: rotate(-1.5deg);
+            opacity: .94;
+            pointer-events: none;
+        }
+
+        .dark:after {
+            background: linear-gradient(90deg, var(--yellow), var(--orange));
+        }
+
+        .orange:after {
+            background: var(--navy);
+        }
+
+        .content {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+        }
+
+        .chip {
+            position: absolute;
+            left: 28px;
+            top: 16px;
+            z-index: 4;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            padding: 6px 13px;
+            border-radius: 999px;
+            background: var(--navy);
+            color: #fff;
+            font-weight: 700;
+            font-size: .86rem;
+            box-shadow: 0 5px 14px rgba(7, 59, 112, .2);
+        }
+
+        .dark .chip {
+            background: rgba(255, 255, 255, .14);
+            border: 1px solid rgba(255, 255, 255, .22);
+        }
+
+        .chip b {
+            width: 8px;
+            height: 8px;
+            background: var(--yellow);
+            border-radius: 50%;
+            box-shadow: 0 0 0 3px rgba(255, 195, 61, .16);
+        }
+
+        h1,
+        h2,
+        h3,
+        p {
+            margin: 0;
+        }
+
+        .display {
+            font-size: clamp(2.6rem, 4.2vw, 4.4rem);
+            line-height: 1.02;
+            font-weight: 700;
+            text-shadow: 0 4px rgba(12, 46, 86, .18);
+        }
+
+        .display .accent {
+            color: var(--yellow);
+        }
+
+        .slide-title {
+            font-size: clamp(1.65rem, 2.8vw, 2.45rem);
+            line-height: 1.1;
+            text-align: center;
+            color: var(--navy);
+            font-weight: 700;
+        }
+
+        .dark .slide-title,
+        .orange .slide-title {
+            color: #fff;
+        }
+
+        .kicker {
+            text-align: center;
+            color: var(--orange);
+            font-size: .84rem;
+            font-weight: 700;
+            letter-spacing: 1.8px;
+            text-transform: uppercase;
+            margin-bottom: 3px;
+        }
+
+        .dark .kicker {
+            color: var(--cyan);
+        }
+
+        .orange .kicker {
+            color: #fff7df;
+        }
+
+        .lead {
+            font-size: clamp(0.92rem, 1.2vw, 1.12rem);
+            line-height: 1.38;
+            color: var(--muted);
+            text-align: center;
+            max-width: 1050px;
+            font-weight: 500;
+            margin: 3px auto 0;
+        }
+
+        .dark .lead,
+        .orange .lead {
+            color: rgba(255, 255, 255, .9);
+        }
+
+        .highlight {
+            color: var(--orange);
+            font-weight: 700;
+        }
+
+        .cyan {
+            color: #00a6bf;
+            font-weight: 700;
+        }
+
+        .yellow {
+            color: var(--yellow);
+            font-weight: 700;
+        }
+
+        .center {
+            text-align: center;
+        }
+
+        .left {
+            text-align: left;
+        }
+
+        .stack {
+            display: grid;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .w {
+            width: 100%;
+        }
+
+        .max {
+            max-width: 1080px;
+            width: 100%;
+        }
+
+        .two {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            align-items: center;
+            width: 100%;
+        }
+
+        .three {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            width: 100%;
+        }
+
+        .four {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+            width: 100%;
+        }
+
+        .agenda {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+            width: 100%;
+        }
+
+        .card {
+            background: #fff;
+            border: 2px solid #e5eef5;
+            border-radius: 20px;
+            padding: 16px 14px;
+            box-shadow: 0 10px 24px rgba(5, 49, 87, .09);
+        }
+
+        .dark .card {
+            color: var(--ink);
+        }
+
+        .card h3,
+        .card-title {
+            font-size: 1.08rem;
+            font-weight: 700;
+            color: var(--navy);
+            margin-bottom: 5px;
+        }
+
+        .card p {
+            font-size: .88rem;
+            line-height: 1.35;
+            color: var(--muted);
+        }
+
+        .icon-card {
+            min-height: 130px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            gap: 6px;
+            transition: .2s;
+        }
+
+        .icon-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--cyan);
+        }
+
+        .big-icon {
+            font-size: 2.2rem;
+        }
+
+        .instruction {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 7px 16px;
+            border-radius: 999px;
+            background: #edf9fb;
+            border: 2px solid #bdebf1;
+            color: #116c79;
+            font-weight: 600;
+            font-size: .86rem;
+            justify-self: center;
+            margin-top: 2px;
+        }
+
+        .dark .instruction {
+            background: rgba(255, 255, 255, .13);
+            border-color: rgba(255, 255, 255, .27);
+            color: #fff;
+        }
+
+        .note {
+            font-size: .84rem;
+            color: var(--muted);
+            line-height: 1.35;
+        }
+
+        .dark .note {
+            color: rgba(255, 255, 255, .76);
+        }
+
+        .btn,
+        .btn2,
+        .option {
+            font-family: 'Fredoka', sans-serif;
+            font-weight: 700;
+            cursor: pointer;
+            transition: .2s;
+        }
+
+        .btn {
+            border: 0;
+            padding: 10px 20px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, var(--orange), var(--yellow));
+            color: #173a59;
+            box-shadow: 0 7px 16px rgba(255, 139, 43, .24);
+            font-size: .95rem;
+        }
+
+        .btn:hover:not(:disabled) {
+            transform: translateY(-2px) scale(1.02);
+        }
+
+        .btn:disabled {
+            opacity: .45;
+            cursor: not-allowed;
+        }
+
+        .btn2 {
+            border: 0;
+            padding: 9px 16px;
+            border-radius: 14px;
+            background: var(--navy);
+            color: #fff;
+            font-size: .95rem;
+        }
+
+        .option {
+            width: 100%;
+            padding: 10px 14px;
+            border-radius: 12px;
+            border: 2px solid #dbe8f2;
+            background: #f7fbff;
+            color: var(--ink);
+            text-align: left;
+            font-size: .92rem;
+        }
+
+        .option:hover:not(:disabled) {
+            border-color: var(--cyan);
+            transform: translateX(3px);
+        }
+
+        .option.selected {
+            outline: 3px solid rgba(67, 213, 230, .2);
+            border-color: var(--cyan);
+        }
+
+        .option.correct {
+            background: #e7f9ef;
+            border-color: var(--green);
+            color: #197247;
+        }
+
+        .option.wrong {
+            background: #fff0ef;
+            border-color: var(--red);
+            color: #a93232;
+        }
+
+        .option:disabled {
+            cursor: default;
+        }
+
+        .nav {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 3px solid rgba(255, 255, 255, .88);
+            background: var(--yellow);
+            color: var(--navy);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.35rem;
+            font-weight: 700;
+            cursor: pointer;
+            z-index: 1100;
+            box-shadow: 0 10px 24px rgba(2, 20, 40, .28);
+            transition: .2s;
+        }
+
+        .nav:hover:not(:disabled) {
+            transform: translateY(-50%) scale(1.08);
+            background: var(--orange);
+            color: #fff;
+        }
+
+        .nav:disabled {
+            opacity: .28;
+            cursor: not-allowed;
+        }
+
+        #prev {
+            left: 16px;
+        }
+
+        #next {
+            right: 16px;
+        }
+
+        .footer {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 8px;
+            z-index: 10;
+            display: flex;
+            justify-content: center;
+            pointer-events: none;
+        }
+
+        .counter {
+            font-size: .76rem;
+            font-weight: 700;
+            letter-spacing: .8px;
+            color: #6a8094;
+            background: rgba(255, 255, 255, .92);
+            border: 1px solid rgba(7, 59, 112, .12);
+            padding: 5px 12px;
+            border-radius: 999px;
+        }
+
+        .progress {
+            position: absolute;
+            left: 22%;
+            right: 22%;
+            bottom: 4px;
+            height: 4px;
+            background: rgba(7, 59, 112, .12);
+            border-radius: 999px;
+            overflow: hidden;
+        }
+
+        .bar {
+            height: 100%;
+            width: 0;
+            background: linear-gradient(90deg, var(--cyan), var(--orange));
+            transition: .3s;
+        }
+
+        /* Cover Slide */
+        .cover {
+            display: grid;
+            grid-template-columns: 1.15fr 0.85fr;
+            gap: 32px;
+            align-items: center;
+            width: 100%;
+        }
+
+        .cover-sub {
+            margin-top: 14px;
+            font-size: 1.08rem;
+            line-height: 1.45;
+            color: rgba(255, 255, 255, .88);
+            max-width: 620px;
+        }
+
+        .pill {
+            display: inline-flex;
+            margin-top: 18px;
+            padding: 8px 16px;
+            border-radius: 14px;
+            background: var(--yellow);
+            color: var(--navy);
+            font-weight: 700;
+            font-size: .88rem;
+        }
+
+        .robot {
+            max-width: 380px;
+            max-height: 380px;
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+            animation: float 3.2s ease-in-out infinite;
+            display: block;
+            margin: 0 auto;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        /* Review Slides Layout */
+        .session-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 5px 12px;
+            border-radius: 999px;
+            background: #eef9fb;
+            color: #116c79;
+            border: 2px solid #bdebf1;
+            font-weight: 700;
+            font-size: .8rem;
+            width: fit-content;
+        }
+
+        .review-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            align-items: center;
+            width: 100%;
+        }
+
+        .photo-card,
+        .review-photo {
+            background: #fff;
+            border: 3px solid #dcebf4;
+            border-radius: 26px;
+            padding: 15px;
+            box-shadow: 0 14px 28px rgba(5, 49, 87, .12);
+        }
+
+        .photo-card img,
+        .review-photo img {
+            display: block;
+            width: 100%;
+            height: 320px;
+            object-fit: contain;
+            border-radius: 18px;
+        }
+
+        .photo-card.covered img,
+        .review-photo.covered img {
+            object-fit: cover;
+        }
+
+        .review-points {
+            display: grid;
+            gap: 7px;
+            width: 100%;
+        }
+
+        .review-point {
+            background: #fff;
+            border-radius: 14px;
+            padding: 9px 13px;
+            border: 2px solid #e2edf4;
+            line-height: 1.34;
+            color: var(--muted);
+            font-size: .86rem;
+        }
+
+        .review-point strong {
+            display: block;
+            color: var(--navy);
+            font-size: .9rem;
+            margin-bottom: 2px;
+        }
+
+        /* Journey Strip */
+        .journey-strip {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 9px;
+            width: 100%;
+        }
+
+        .journey-step {
+            background: #fff;
+            border: 2px solid #e4edf4;
+            border-radius: 16px;
+            padding: 11px 7px;
+            text-align: center;
+            box-shadow: 0 6px 16px rgba(5, 49, 87, .07);
+            cursor: pointer;
+            transition: .2s;
+        }
+
+        .journey-step:hover,
+        .journey-step.active {
+            transform: translateY(-3px);
+            border-color: var(--cyan);
+            background: #effcff;
+        }
+
+        .journey-step b {
+            width: 30px;
+            height: 30px;
+            border-radius: 10px;
+            background: var(--yellow);
+            display: grid;
+            place-items: center;
+            margin: 0 auto 5px;
+            color: var(--navy);
+            font-size: .92rem;
+        }
+
+        .journey-step strong {
+            display: block;
+            font-size: .83rem;
+            color: var(--navy);
+            line-height: 1.15;
+        }
+
+        .journey-step span {
+            display: block;
+            font-size: .72rem;
+            color: var(--muted);
+            line-height: 1.15;
+            margin-top: 3px;
+        }
+
+        .status-result {
+            min-height: 46px;
+            padding: 10px 16px;
+            border-radius: 14px;
+            background: #fff;
+            border: 2px solid #dcebf4;
+            color: var(--muted);
+            text-align: center;
+            font-size: .9rem;
+            line-height: 1.35;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
+
+        /* Challenge Banner */
+        .challenge-banner {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 28px;
+            align-items: center;
+            width: 100%;
+        }
+
+        .gif-card {
+            background: #fff;
+            border: 4px solid #dcebf4;
+            border-radius: 22px;
+            padding: 10px;
+            box-shadow: 0 12px 28px rgba(5, 49, 87, .12);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .gif-card img {
+            width: 100%;
+            height: 270px;
+            max-height: 280px;
+            object-fit: contain;
+            border-radius: 14px;
+            display: block;
+        }
+
+        /* Requirements Grid */
+        .req-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+            width: 100%;
+        }
+
+        .req {
+            background: #fff;
+            border: 2px solid #e1edf4;
+            border-radius: 18px;
+            padding: 14px 12px;
+            text-align: center;
+            box-shadow: 0 8px 20px rgba(5, 49, 87, .08);
+        }
+
+        .req .ri {
+            font-size: 2.2rem;
+            margin-bottom: 4px;
+        }
+
+        .req h3 {
+            color: var(--navy);
+            font-size: 1.02rem;
+            margin-bottom: 4px;
+        }
+
+        .req p {
+            color: var(--muted);
+            font-size: .84rem;
+            line-height: 1.32;
+        }
+
+        /* Reference Cards */
+        .ref-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            width: 100%;
+        }
+
+        .ref-card {
+            background: #fff;
+            border: 3px solid #dcebf4;
+            border-radius: 20px;
+            padding: 10px;
+            box-shadow: 0 10px 22px rgba(5, 49, 87, .1);
+        }
+
+        .ref-card img {
+            width: 100%;
+            height: 210px;
+            max-height: 220px;
+            object-fit: contain;
+            border-radius: 14px;
+            background: #f9fbfc;
+            display: block;
+        }
+
+        .ref-card p {
+            text-align: center;
+            margin-top: 6px;
+            color: var(--muted);
+            font-weight: 600;
+            font-size: .86rem;
+            line-height: 1.25;
+        }
+
+        /* Materials Grid */
+        .material-grid.s8 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            width: 100%;
+        }
+
+        .material-grid.s8.structure-grid {
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+        }
+
+        .material.s8 {
+            background: #fff;
+            border: 2px solid #e4edf4;
+            border-radius: 15px;
+            padding: 8px 10px;
+            text-align: center;
+            box-shadow: 0 6px 16px rgba(5, 49, 87, .07);
+            transition: .2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .material.s8:hover {
+            transform: translateY(-3px);
+            border-color: var(--cyan);
+        }
+
+        .material.s8 img {
+            height: 65px;
+            width: 100%;
+            object-fit: contain;
+        }
+
+        .structure-grid .material.s8 img {
+            height: 58px;
+        }
+
+        .material.s8 strong {
+            display: block;
+            color: var(--navy);
+            margin-top: 4px;
+            font-size: .86rem;
+            line-height: 1.15;
+        }
+
+        .material.s8 span {
+            display: block;
+            color: var(--muted);
+            font-size: .74rem;
+            margin-top: 2px;
+        }
+
+        .material.s8 small {
+            display: block;
+            color: #8a9baa;
+            font-size: .68rem;
+            margin-top: 1px;
+        }
+
+        /* Rule Board & Power Resistor */
+        .rule-board {
+            display: grid;
+            grid-template-columns: 1.05fr 0.95fr;
+            gap: 24px;
+            align-items: center;
+            width: 100%;
+        }
+
+        .rule-circuit {
+            background: linear-gradient(135deg, #eef8ff, #fff9ef);
+            border: 3px solid #d7e9f3;
+            border-radius: 20px;
+            padding: 10px;
+        }
+
+        .rule-circuit svg {
+            width: 100%;
+            height: 250px;
+            max-height: 260px;
+            display: block;
+        }
+
+        .safety-box {
+            background: #fff7df;
+            border: 2px solid #ffd27d;
+            border-radius: 16px;
+            padding: 10px 14px;
+            color: #72520d;
+            font-size: .86rem;
+            line-height: 1.35;
+        }
+
+        .safety-box strong {
+            color: #5d4108;
+        }
+
+        .resistor-math {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr auto 1fr;
+            gap: 8px;
+            align-items: center;
+            background: #fff;
+            border: 2px solid #dcebf4;
+            border-radius: 16px;
+            padding: 8px 12px;
+        }
+
+        .math-chip {
+            padding: 8px 12px;
+            border-radius: 12px;
+            background: #f4f9fc;
+            border: 2px solid #dcebf4;
+            text-align: center;
+            color: var(--navy);
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        .math-op {
+            font-size: 1.3rem;
+            color: var(--orange);
+            font-weight: 700;
+            text-align: center;
+        }
+
+        /* Control Compare */
+        .control-compare {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            width: 100%;
+            max-width: 1100px;
+        }
+
+        .control-card {
+            background: #fff;
+            border: 3px solid #dcebf4;
+            border-radius: 20px;
+            padding: 16px 18px;
+            text-align: center;
+            box-shadow: 0 10px 22px rgba(5, 49, 87, .09);
+        }
+
+        .control-card .ci {
+            font-size: 2.6rem;
+        }
+
+        .control-card h3 {
+            color: var(--navy);
+            margin: 4px 0;
+            font-size: 1.15rem;
+        }
+
+        .control-card p {
+            color: var(--muted);
+            line-height: 1.35;
+            font-size: .88rem;
+        }
+
+        .control-demo {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .led-demo {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: #c9d2d8;
+            border: 5px solid #fff;
+            box-shadow: 0 0 0 3px #93a6b3;
+            transition: .2s;
+        }
+
+        .led-demo.on {
+            background: #fff47a;
+            box-shadow: 0 0 24px 10px rgba(255, 219, 73, .7), 0 0 0 3px #ffb54a;
+        }
+
+        /* Circuit Illustration */
+        .circuit-illustration {
+            background: linear-gradient(135deg, #eef8ff, #fff9ef);
+            border: 3px solid #d7e9f3;
+            border-radius: 20px;
+            padding: 10px;
+        }
+
+        .circuit-illustration svg {
+            width: 100%;
+            height: 250px;
+            max-height: 260px;
+            display: block;
+        }
+
+        /* Design Lab */
+        .design-lab {
+            display: grid;
+            grid-template-columns: 1.08fr 0.92fr;
+            gap: 20px;
+            width: 100%;
+            align-items: center;
+        }
+
+        .design-options {
+            background: #fff;
+            border: 3px solid #dcebf4;
+            border-radius: 20px;
+            padding: 14px 18px;
+            display: grid;
+            gap: 10px;
+        }
+
+        .option-row strong {
+            display: block;
+            color: var(--navy);
+            margin-bottom: 4px;
+            font-size: .92rem;
+        }
+
+        .choice-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 7px;
+        }
+
+        .choice-pill {
+            border: 2px solid #dbe8f2;
+            background: #fff;
+            border-radius: 999px;
+            padding: 6px 12px;
+            font-family: 'Fredoka', sans-serif;
+            font-weight: 700;
+            font-size: .86rem;
+            color: var(--ink);
+            cursor: pointer;
+            transition: .2s;
+        }
+
+        .choice-pill:hover,
+        .choice-pill.active {
+            border-color: var(--cyan);
+            background: #eefcff;
+            transform: translateY(-2px);
+        }
+
+        .plan-summary {
+            background: linear-gradient(135deg, #0b4a81, #073b70);
+            color: #fff;
+            border-radius: 20px;
+            padding: 16px 18px;
+            border: 3px solid rgba(255, 255, 255, .85);
+            box-shadow: 0 10px 24px rgba(4, 42, 76, .2);
+        }
+
+        .plan-summary h3 {
+            font-size: 1.18rem;
+            margin-bottom: 8px;
+        }
+
+        .plan-line {
+            padding: 8px 12px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, .1);
+            margin-top: 6px;
+            line-height: 1.35;
+            font-size: .88rem;
+        }
+
+        /* Flow Grid */
+        .flow-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            width: 100%;
+        }
+
+        .flow-step {
+            background: #fff;
+            border: 2px solid #e1edf4;
+            border-radius: 16px;
+            padding: 10px 8px;
+            text-align: center;
+        }
+
+        .flow-step b {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--navy);
+            color: #fff;
+            display: grid;
+            place-items: center;
+            margin: 0 auto 4px;
+            font-size: .95rem;
+        }
+
+        .flow-step h3 {
+            color: var(--navy);
+            font-size: .92rem;
+            margin-bottom: 2px;
+        }
+
+        .flow-step p {
+            color: var(--muted);
+            font-size: .78rem;
+            line-height: 1.25;
+        }
+
+        /* Power Simulation */
+        .power-sim {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 24px;
+            align-items: center;
+            width: 100%;
+        }
+
+        .sim-stage {
+            background: #fff;
+            border: 3px solid #dcebf4;
+            border-radius: 20px;
+            padding: 12px;
+            min-height: 240px;
+            display: grid;
+            place-items: center;
+        }
+
+        .sim-circuit {
+            width: 100%;
+            max-width: 580px;
+            max-height: 230px;
+        }
+
+        .sim-led {
+            transition: .2s;
+        }
+
+        .sim-led.on {
+            filter: drop-shadow(0 0 18px rgba(255, 205, 60, .95));
+        }
+
+        /* Checklist Grid */
+        .checklist-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            width: 100%;
+        }
+
+        .check-item {
+            border: 2px solid #dbe8f2;
+            background: #fff;
+            border-radius: 14px;
+            padding: 10px 14px;
+            text-align: left;
+            cursor: pointer;
+            transition: .2s;
+            font-family: 'Fredoka', sans-serif;
+            color: var(--muted);
+            font-weight: 500;
+            font-size: .85rem;
+            line-height: 1.32;
+        }
+
+        .check-item:hover {
+            border-color: var(--cyan);
+            transform: translateY(-2px);
+        }
+
+        .check-item.done {
+            background: #e9f9ef;
+            border-color: var(--green);
+            color: #197247;
+        }
+
+        .check-item strong {
+            display: block;
+            color: var(--navy);
+            font-size: .92rem;
+            margin-bottom: 2px;
+        }
+
+        .check-item.done strong {
+            color: #197247;
+        }
+
+        /* Troubleshooting Grid (3 columns x 2 rows for wider layout) */
+        .trouble-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            width: 100%;
+        }
+
+        .trouble {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 10px 12px;
+            background: #fff;
+            border: 2px solid #e1edf4;
+            border-radius: 14px;
+            cursor: pointer;
+            transition: .2s;
+        }
+
+        .trouble:hover {
+            transform: translateY(-2px);
+            border-color: var(--cyan);
+        }
+
+        .trouble.done {
+            background: #e7f9ef;
+            border-color: var(--green);
+        }
+
+        .trouble .check {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #eef5f9;
+            color: var(--navy);
+            font-weight: 700;
+            font-size: .88rem;
+            flex: none;
+        }
+
+        .trouble.done .check {
+            background: var(--green);
+            color: #fff;
+        }
+
+        .trouble strong {
+            display: block;
+            color: var(--navy);
+            font-size: .88rem;
+            margin-bottom: 2px;
+        }
+
+        .trouble span {
+            color: var(--muted);
+            font-size: .8rem;
+            line-height: 1.3;
+        }
+
+        /* Share Grid */
+        .share-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            width: 100%;
+        }
+
+        .share-card {
+            background: #fff;
+            border: 3px solid #dcebf4;
+            border-radius: 20px;
+            padding: 16px 14px;
+            text-align: center;
+        }
+
+        .share-card .si {
+            font-size: 2.2rem;
+        }
+
+        .share-card h3 {
+            color: var(--navy);
+            margin: 4px 0;
+            font-size: 1.05rem;
+        }
+
+        .share-card p {
+            color: var(--muted);
+            font-size: .86rem;
+            line-height: 1.35;
+        }
+
+        /* Quiz Container */
+        .quiz {
+            width: min(880px, 100%);
+            background: #fff;
+            border-radius: 22px;
+            padding: 20px 26px;
+            border: 3px solid #dcebf4;
+            color: var(--ink);
+            margin: 0 auto;
+        }
+
+        .quiz-prog {
+            font-size: .86rem;
+            font-weight: 700;
+            color: var(--orange);
+            margin-bottom: 6px;
+        }
+
+        .quiz-q {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--navy);
+            line-height: 1.3;
+            margin-bottom: 12px;
+        }
+
+        .quiz-options {
+            display: grid;
+            gap: 8px;
+        }
+
+        .quiz-fb {
+            min-height: 50px;
+            margin-top: 8px;
+            padding: 10px 14px;
+            border-radius: 12px;
+            background: #f4f9fc;
+            color: var(--muted);
+            font-size: .9rem;
+            line-height: 1.35;
+        }
+
+        /* Feedback Slide */
+        .feedback {
+            display: grid;
+            grid-template-columns: 0.85fr 1.15fr;
+            gap: 24px;
+            align-items: center;
+            width: 100%;
+        }
+
+        .feedback-choices {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .feedback-choice {
+            padding: 16px 10px;
+            border-radius: 18px;
+            background: #fff;
+            border: 3px solid #e0ebf2;
+            text-align: center;
+            cursor: pointer;
+            transition: .2s;
+            font-family: 'Fredoka', sans-serif;
+        }
+
+        .feedback-choice:hover,
+        .feedback-choice.selected {
+            transform: translateY(-4px);
+            border-color: var(--cyan);
+            background: #effcfd;
+        }
+
+        .face {
+            font-size: 2.4rem;
+        }
+
+        .feedback-choice strong {
+            display: block;
+            margin-top: 6px;
+            font-size: .9rem;
+            color: var(--navy);
+        }
+
+        @media (max-width: 1100px) {
+            .presentation {
+                width: 95vw;
+            }
+
+            .slide {
+                padding: 40px 36px 36px;
+            }
+        }
+
+        @media (max-width: 760px) {
+            body {
+                overflow: auto;
+            }
+
+            .brand {
+                left: 8px;
+                top: 8px;
+                padding: 6px 10px;
+                gap: 8px;
+            }
+
+            .brand .k {
+                height: 28px;
+            }
+
+            .brand .r {
+                height: 24px;
+            }
+
+            .presentation {
+                position: absolute;
+                top: 60px;
+                transform: translateX(-50%);
+                width: 100vw;
+                height: calc(100vh - 60px);
+                max-height: none;
+                aspect-ratio: auto;
+                border-radius: 0;
+                border: 0;
+            }
+
+            .slide {
+                padding: 56px 16px 48px;
+                overflow-y: auto;
+                justify-content: flex-start;
+            }
+
+            .slide:after {
+                display: none;
+            }
+
+            .two,
+            .review-grid,
+            .challenge-banner,
+            .rule-board,
+            .design-lab,
+            .power-sim,
+            .feedback,
+            .flow-grid,
+            .share-grid,
+            .ref-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .agenda,
+            .four,
+            .checklist-grid,
+            .trouble-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .material-grid.s8,
+            .material-grid.s8.structure-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .journey-strip {
+                grid-template-columns: repeat(4, 1fr);
+            }
+
+            .robot {
+                max-width: 260px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="brand">
+        <img class="k"
+            src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/5b36ddb1-5ff5-490e-af31-9a171820e051.png"
+            alt="Kalananti">
+        <i></i>
+        <img class="r"
+            src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/7e71d258-897f-42b7-9c8b-2ff76376ffc6.png"
+            alt="Ruangguru Coding">
+    </div>
+
+    <button class="nav" id="prev">◀</button>
+    <button class="nav" id="next">▶</button>
+
+    <main class="presentation" id="presentation">
+
+        <!-- Slide 1: Cover -->
+        <section class="slide dark active">
+            <div class="cover content">
+                <div>
+                    <div class="kicker left" style="color:var(--cyan)">WELCOME TO DIY ROBOTIC CLASS</div>
+                    <h1 class="display"><span class="accent">LED Robot</span><br>Challenge</h1>
+                    <p class="cover-sub">Setelah 7 session belajar basic electronics dan membuat berbagai project,
+                        sekarang saatnya kamu merancang robot versimu sendiri.</p>
+                    <div class="pill">SESSION 8 · PLAN & BUILD A BUTTON-CONTROLLED LED ROBOT</div>
+                </div>
+                <img class="robot"
+                    src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/eded3e71-16cf-401e-b1c1-3ff5f887dc38.png"
+                    alt="Robot">
+            </div>
+        </section>
+
+        <!-- Slide 2: Agenda -->
+        <section class="slide">
+            <span class="chip"><b></b> Today's Agenda</span>
+            <div class="content stack max">
+                <div>
+                    <div class="kicker">WHAT WE WILL DO TODAY</div>
+                    <h2 class="slide-title">Rencana Belajar Hari Ini</h2>
+                </div>
+                <div class="agenda">
+                    <div class="card icon-card">
+                        <div class="big-icon">🔁</div>
+                        <h3>Review Session 1–7</h3>
+                        <p>Mengingat kembali circuit, LED, resistor, breadboard, switch, motor, dan conductivity.</p>
+                    </div>
+                    <div class="card icon-card">
+                        <div class="big-icon">🧠</div>
+                        <h3>Plan Your Robot</h3>
+                        <p>Tentukan bentuk robot, jumlah LED, posisi lampu, dan control yang akan dipakai.</p>
+                    </div>
+                    <div class="card icon-card">
+                        <div class="big-icon">🤖</div>
+                        <h3>Build the Challenge</h3>
+                        <p>Rancang circuit dan body robot dengan bahan yang tersedia.</p>
+                    </div>
+                    <div class="card icon-card">
+                        <div class="big-icon">🛠️</div>
+                        <h3>Test & Improve</h3>
+                        <p>Uji, troubleshoot, lalu presentasikan ide robotmu.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 3: Quick Review -->
+        <section class="slide">
+            <span class="chip"><b></b> Quick Review</span>
+            <div class="content review-grid max">
+                <div class="review-photo">
+                    <img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/74462b9b-7214-49b8-9ed1-c10f4a512356.png"
+                        alt="Conductivity Tester Robot">
+                </div>
+                <div class="stack">
+                    <div class="kicker left">LAST SESSION</div>
+                    <h2 class="slide-title left">Session 7 · Conductivity Tester Robot</h2>
+                    <p class="lead left">Kemarin kita menggunakan <span class="highlight">buzzer</span> untuk mengetahui
+                        apakah suatu material dapat membantu menutup circuit.</p>
+                    <div class="review-points">
+                        <div class="review-point"><strong>Conductor vs Insulator</strong>Material memiliki kemampuan
+                            berbeda dalam menghantarkan electric current.</div>
+                        <div class="review-point"><strong>Buzzer as Output</strong>Saat jalur circuit berhasil tertutup,
+                            buzzer menghasilkan suara.</div>
+                        <div class="review-point"><strong>What we built</strong>Conductivity tester dengan battery 2×AA,
+                            active buzzer, dan dua probe.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 4: Learning Journey -->
+        <section class="slide">
+            <span class="chip"><b></b> Learning Journey</span>
+            <div class="content stack max">
+                <div>
+                    <div class="kicker">YOUR LEARNING JOURNEY</div>
+                    <h2 class="slide-title">7 Sessions, 7 Building Blocks</h2>
+                    <p class="lead">Klik setiap session untuk mengingat fokus utamanya. Setelah ini kita review satu per
+                        satu.</p>
+                </div>
+                <div class="journey-strip" id="journeyStrip">
+                    <div class="journey-step active"
+                        data-msg="Session 1: basic circuit, LED polarity, voltage, switch, open/closed path.">
+                        <b>1</b><strong>Basic Circuit</strong><span>LED · Switch</span></div>
+                    <div class="journey-step" data-msg="Session 2: resistor, series, parallel, dan circuit diagram.">
+                        <b>2</b><strong>Resistor</strong><span>Series · Parallel</span></div>
+                    <div class="journey-step" data-msg="Session 3: menerapkan polarity pada LED Light Saber.">
+                        <b>3</b><strong>Light Saber</strong><span>Polarity</span></div>
+                    <div class="journey-step"
+                        data-msg="Session 4: open/closed loop dengan copper tape pada paper circuit.">
+                        <b>4</b><strong>Paper Circuit</strong><span>Open · Closed</span></div>
+                    <div class="journey-step" data-msg="Session 5: connection di breadboard dan beberapa circuit.">
+                        <b>5</b><strong>Breadboard</strong><span>Connections</span></div>
+                    <div class="journey-step" data-msg="Session 6: switch mengontrol DC motor pada Mini Sweeper Robot.">
+                        <b>6</b><strong>DC Motor</strong><span>Movement</span></div>
+                    <div class="journey-step"
+                        data-msg="Session 7: material conductive dapat menutup jalur dan mengaktifkan buzzer.">
+                        <b>7</b><strong>Conductivity</strong><span>Buzzer</span></div>
+                </div>
+                <div class="status-result" id="journeyMsg">Session 1: basic circuit, LED polarity, voltage, switch,
+                    open/closed path.</div>
+            </div>
+        </section>
+
+        <!-- Slide 5: Session 1 -->
+        <section class="slide">
+            <span class="chip"><b></b> Session 1</span>
+            <div class="content review-grid max">
+                <div class="review-photo">
+                    <img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/5e4b66d8-1f83-4878-bf53-734111d4ebbf.png"
+                        alt="LED">
+                </div>
+                <div class="stack">
+                    <span class="session-tag">SESSION 1 · ELECTRONICS FOUNDATION</span>
+                    <h2 class="slide-title left">Introduction to Basic Electronics</h2>
+                    <p class="lead left">Kita mulai dari pertanyaan paling dasar: <strong>bagaimana listrik membuat
+                            sebuah output bekerja?</strong></p>
+                    <div class="review-points">
+                        <div class="review-point"><strong>We learned</strong>LED anode (+) & cathode (−), battery
+                            polarity, voltage, switch, open circuit, dan closed circuit.</div>
+                        <div class="review-point"><strong>We practiced</strong>Menghubungkan battery → switch → LED →
+                            kembali ke battery dan mencari broken path.</div>
+                        <div class="review-point"><strong>Key skill</strong>Kalau LED tidak menyala, cek power,
+                            connection, switch, dan polarity satu per satu.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 6: Session 2 -->
+        <section class="slide">
+            <span class="chip"><b></b> Session 2</span>
+            <div class="content review-grid max">
+                <div class="review-photo">
+                    <img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/d3974113-e993-4eb6-9c05-c3d311367033.png"
+                        alt="Resistor and LED circuit">
+                </div>
+                <div class="stack">
+                    <span class="session-tag">SESSION 2 · RESISTORS & MULTI-LED CIRCUITS</span>
+                    <h2 class="slide-title left">Resistor, Series & Parallel</h2>
+                    <p class="lead left">Kita mulai memakai battery 9V dan belajar bahwa LED perlu dilindungi dari
+                        current yang terlalu besar.</p>
+                    <div class="review-points">
+                        <div class="review-point"><strong>We learned</strong>Fungsi resistor 220Ω, perbedaan circuit
+                            series dan parallel, serta simbol circuit.</div>
+                        <div class="review-point"><strong>We practiced</strong>Menyusun beberapa LED pada satu jalur
+                            maupun beberapa branch.</div>
+                        <div class="review-point"><strong>What we made</strong>Multi-LED circuit dan circuit diagram
+                            menggunakan simbol battery, resistor, dan LED.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 7: Session 3 -->
+        <section class="slide">
+            <span class="chip"><b></b> Session 3</span>
+            <div class="content review-grid max">
+                <div class="review-photo">
+                    <img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/ca9fb0bf-550f-45a9-9fda-27e14d84f1f3.png"
+                        alt="LED Light Saber">
+                </div>
+                <div class="stack">
+                    <span class="session-tag">SESSION 3 · POLARITY & SIMPLE LED CIRCUIT</span>
+                    <h2 class="slide-title left">LED Light Saber</h2>
+                    <p class="lead left">Untuk pertama kalinya circuit sederhana kita ubah menjadi sebuah benda yang
+                        bisa digunakan dan dihias.</p>
+                    <div class="review-points">
+                        <div class="review-point"><strong>We learned</strong>Polarity harus tetap benar walaupun circuit
+                            dipasang ke dalam sebuah craft project.</div>
+                        <div class="review-point"><strong>We practiced</strong>Test LED + coin battery terlebih dahulu
+                            sebelum masuk ke tahap crafting.</div>
+                        <div class="review-point"><strong>What we made</strong>Mini LED Light Saber menggunakan LED,
+                            CR2032, sedotan, dan selotip.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 8: Session 4 -->
+        <section class="slide">
+            <span class="chip"><b></b> Session 4</span>
+            <div class="content review-grid max">
+                <div class="review-photo covered">
+                    <img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/f656ef42-fefb-4844-9286-e62aceb8e36e.jpg"
+                        alt="LED Paper Circuit Robot">
+                </div>
+                <div class="stack">
+                    <span class="session-tag">SESSION 4 · OPEN & CLOSED LOOP</span>
+                    <h2 class="slide-title left">LED Paper Circuit</h2>
+                    <p class="lead left">Kita belajar bahwa connector tidak harus berupa wire. Copper tape juga bisa
+                        menjadi jalur circuit.</p>
+                    <div class="review-points">
+                        <div class="review-point"><strong>We learned</strong>Open loop membuat LED OFF; closed loop
+                            membuat jalur lengkap sehingga LED ON.</div>
+                        <div class="review-point"><strong>We practiced</strong>Membuat contact yang bisa dibuka dan
+                            ditutup pada lipatan kertas.</div>
+                        <div class="review-point"><strong>What we made</strong>Paper robot dengan dua LED sebagai mata
+                            dan circuit di balik kertas.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 9: Session 5 -->
+        <section class="slide">
+            <span class="chip"><b></b> Session 5</span>
+            <div class="content review-grid max">
+                <div class="review-photo">
+                    <img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/598b8458-f9ba-40a3-b43f-9793d6b2f379.png"
+                        alt="Breadboard">
+                </div>
+                <div class="stack">
+                    <span class="session-tag">SESSION 5 · BUILDING BASIC CIRCUITS ON A BREADBOARD</span>
+                    <h2 class="slide-title left">Introduction to Breadboard</h2>
+                    <p class="lead left">Circuit-nya tetap sama. Yang berubah hanya <strong>cara connection
+                            dibuat</strong>.</p>
+                    <div class="review-points">
+                        <div class="review-point"><strong>We learned</strong>Connected pins, center gap, power rails,
+                            dan cara berpikir berdasarkan connection—bukan hafalan posisi pin.</div>
+                        <div class="review-point"><strong>We practiced</strong>One LED circuit, three LED circuit, dan
+                            button + LED + buzzer.</div>
+                        <div class="review-point"><strong>Key skill</strong>Build one branch at a time, test, lalu
+                            tambah bagian berikutnya.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 10: Session 6 -->
+        <section class="slide">
+            <span class="chip"><b></b> Session 6</span>
+            <div class="content review-grid max">
+                <div class="review-photo covered">
+                    <img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/b525632e-009f-4a07-bcd2-019996face74.png"
+                        alt="Mini Sweeper Robot">
+                </div>
+                <div class="stack">
+                    <span class="session-tag">SESSION 6 · SWITCH-CONTROLLED DC MOTOR</span>
+                    <h2 class="slide-title left">Mini Sweeper Robot</h2>
+                    <p class="lead left">Kita mulai menggunakan output yang menghasilkan <strong>movement</strong>,
+                        bukan hanya cahaya.</p>
+                    <div class="review-points">
+                        <div class="review-point"><strong>We learned</strong>Switch 0 / OFF membuka circuit; switch 1 /
+                            ON menutup circuit dan menyalakan DC motor.</div>
+                        <div class="review-point"><strong>We practiced</strong>Test electronics first sebelum memasang
+                            motor dan circuit pada body robot.</div>
+                        <div class="review-point"><strong>What we made</strong>Mini Sweeper Robot dengan 9V battery,
+                            switch, DC motor, dan craft structure.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 11: Session 7 -->
+        <section class="slide">
+            <span class="chip"><b></b> Session 7</span>
+            <div class="content review-grid max">
+                <div class="review-photo">
+                    <img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/0f658809-bffa-461f-81eb-825aa2f91244.png"
+                        alt="Conductivity tester circuit">
+                </div>
+                <div class="stack">
+                    <span class="session-tag">SESSION 7 · TESTING CONDUCTIVE PATHS</span>
+                    <h2 class="slide-title left">Conductivity Tester Robot</h2>
+                    <p class="lead left">Kita menggunakan buzzer sebagai output untuk menguji apakah sebuah material
+                        dapat membantu melengkapi jalur circuit.</p>
+                    <div class="review-points">
+                        <div class="review-point"><strong>We learned</strong>Conductor, insulator, active buzzer, dan
+                            water as a temporary conductive path.</div>
+                        <div class="review-point"><strong>We practiced</strong>Direct contact test, water test, lalu
+                            material test menggunakan dua probe.</div>
+                        <div class="review-point"><strong>What we made</strong>Conductivity Tester Robot yang memberi
+                            feedback suara.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 12: Challenge Time -->
+        <section class="slide orange">
+            <span class="chip"><b></b> Challenge Time</span>
+            <div class="content challenge-banner max">
+                <div class="stack">
+                    <div class="kicker left" style="color:#fff7df">CHALLENGE TIME</div>
+                    <h2 class="slide-title left">Sekarang Kamu yang Design</h2>
+                    <p class="lead left">Selama 7 session, kita banyak mengikuti langkah dan mencoba konsep satu per
+                        satu. Hari ini kamu harus <strong>menggabungkan skill itu sendiri</strong>.</p>
+                    <div class="instruction">🧠 Plan → Build → Test → Troubleshoot → Improve</div>
+                </div>
+                <div class="gif-card">
+                    <img src="https://cdn-web.ruangguru.com/file-uploader/52a961fd-6cf7-4087-b39a-f2d43a3e22eb.gif"
+                        alt="Robot challenge example">
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 13: Challenge Brief -->
+        <section class="slide">
+            <span class="chip"><b></b> Challenge Brief</span>
+            <div class="content stack max">
+                <div>
+                    <div class="kicker">TODAY'S MISSION</div>
+                    <h2 class="slide-title">Build an LED Robot</h2>
+                    <p class="lead">Bentuk robot dan rangkaiannya boleh berbeda. Yang penting semua challenge
+                        requirement terpenuhi.</p>
+                </div>
+                <div class="req-grid">
+                    <div class="req">
+                        <div class="ri">🤖</div>
+                        <h3>Robot Body</h3>
+                        <p>Design body menggunakan cardboard, cardstock, stik es krim, tutup botol, dan material craft.
+                        </p>
+                    </div>
+                    <div class="req">
+                        <div class="ri">💡</div>
+                        <h3>LED Output</h3>
+                        <p>Gunakan minimal 1 LED dan maksimal 5 LED. Posisi LED bebas.</p>
+                    </div>
+                    <div class="req">
+                        <div class="ri">🔋</div>
+                        <h3>9V Power</h3>
+                        <p>Robot mendapat power dari battery 9V melalui battery socket.</p>
+                    </div>
+                    <div class="req">
+                        <div class="ri">🎚️</div>
+                        <h3>User Control</h3>
+                        <p>LED harus bisa dikontrol menggunakan push button atau sakelar ON/OFF.</p>
+                    </div>
+                </div>
+                <div class="instruction">✅ Tidak harus sama dengan contoh. Challenge-nya justru membuat desain versimu
+                    sendiri.</div>
+            </div>
+        </section>
+
+        <!-- Slide 14: Reference Ideas -->
+        <section class="slide">
+            <span class="chip"><b></b> Reference Ideas</span>
+            <div class="content stack max">
+                <div>
+                    <div class="kicker">INSPIRATION</div>
+                    <h2 class="slide-title">Robot Shape References</h2>
+                    <p class="lead">Gunakan contoh ini untuk melihat bahwa robot bisa dibuat dengan banyak bentuk.
+                        Jangan copy persis—ambil idenya.</p>
+                </div>
+                <div class="ref-grid">
+                    <div class="ref-card">
+                        <img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/aa5a99eb-b855-45a3-b6b9-80e988ff6bd0.png"
+                            alt="Robot reference 1">
+                        <p>Simple body + craft structure</p>
+                    </div>
+                    <div class="ref-card">
+                        <img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/eccf2d73-6303-48fa-ae1f-896004aec2e4.png"
+                            alt="Robot reference 2">
+                        <p>Different proportion + decorative parts</p>
+                    </div>
+                    <div class="ref-card">
+                        <img src="https://www.make.do/cdn/shop/articles/playful.childhood_robot_10_8245f4e2-c96d-4e23-b97f-a4a8206ff112.jpg?v=1770244408"
+                            alt="Robot reference 3">
+                        <p>Cardboard robot with creative details</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 15: Example Result -->
+        <section class="slide">
+            <span class="chip"><b></b> Example Result</span>
+            <div class="content two max">
+                <div class="photo-card">
+                    <img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/5d4f9e77-55b6-4ed4-bcb3-47a93b8639b6.png"
+                        alt="Example Result LED Robot">
+                </div>
+                <div class="stack">
+                    <div class="kicker left">ONE POSSIBLE RESULT</div>
+                    <h2 class="slide-title left">What Makes This a Good Challenge Example?</h2>
+                    <div class="review-points">
+                        <div class="review-point"><strong>Visible output</strong>LED is part of the robot design, not
+                            just a loose circuit.</div>
+                        <div class="review-point"><strong>User control</strong>A button / switch is accessible from the
+                            outside.</div>
+                        <div class="review-point"><strong>Electronics + structure</strong>The circuit works and the
+                            robot can still stand as a physical craft.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 16: Electronics Kit -->
+        <section class="slide">
+            <span class="chip"><b></b> Let's Prepare · Electronics</span>
+            <div class="content stack max">
+                <div>
+                    <div class="kicker">TOOLS & MATERIALS</div>
+                    <h2 class="slide-title">Electronics Kit</h2>
+                    <p class="lead">Kamu tidak harus memakai semua komponen sekaligus. Pilih sesuai design circuit-mu.
+                    </p>
+                </div>
+                <div class="material-grid s8">
+                    <div class="material s8">
+                        <img src="https://down-id.img.susercontent.com/file/07059cfb90417f8b0f5cd35bb046d6a8"
+                            alt="Battery 9V">
+                        <strong>Battery 9V</strong><span>1 buah · individu</span><small>power</small>
+                    </div>
+                    <div class="material s8">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQm-ez1PwhX9H_FKXWVlRIkePTNcPDHCAGtJ8gGufshvtiYSRzEWVDUFa4&s=10"
+                            alt="Battery Socket 9V">
+                        <strong>Battery Socket 9V</strong><span>1 buah · individu</span><small>power</small>
+                    </div>
+                    <div class="material s8">
+                        <img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/598b8458-f9ba-40a3-b43f-9793d6b2f379.png"
+                            alt="Breadboard">
+                        <strong>Breadboard</strong><span>1 buah · individu</span><small>main part</small>
+                    </div>
+                    <div class="material s8">
+                        <img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/5e4b66d8-1f83-4878-bf53-734111d4ebbf.png"
+                            alt="LED Berbagai Warna">
+                        <strong>LED Berbagai Warna</strong><span>maks. 5 buah · individu</span><small>output</small>
+                    </div>
+                    <div class="material s8">
+                        <img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/598244f2-faf8-43a2-b01f-c73f64515e06.jpg"
+                            alt="Resistor 220Ω">
+                        <strong>Resistor 220Ω</strong><span>5 buah · individu</span><small>protection</small>
+                    </div>
+                    <div class="material s8">
+                        <img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/48134bf0-2bc3-4ff2-970f-0c9b1f73847a.png"
+                            alt="Push Button">
+                        <strong>Push Button</strong><span>1 buah · individu</span><small>input</small>
+                    </div>
+                    <div class="material s8">
+                        <img src="https://id-live-01.slatic.net/p/6b767fc51ce13d35a5d6d000320f6f49.jpg"
+                            alt="Sakelar ON/OFF">
+                        <strong>Sakelar ON/OFF</strong><span>1 buah · individu</span><small>control</small>
+                    </div>
+                    <div class="material s8">
+                        <img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/636543ec-9f5b-4cd7-a985-c6b43087dd1c.png"
+                            alt="Jumper Male-Male">
+                        <strong>Jumper Male-Male</strong><span>20 buah · individu</span><small>connection</small>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 17: Structure Kit -->
+        <section class="slide">
+            <span class="chip"><b></b> Let's Prepare · Structure</span>
+            <div class="content stack max">
+                <div>
+                    <div class="kicker">TOOLS & MATERIALS</div>
+                    <h2 class="slide-title">Structure & Crafting Kit</h2>
+                    <p class="lead">Bentuk robot bebas. Material ini bisa dipotong, dilipat, ditempel, atau dijadikan
+                        detail visual.</p>
+                </div>
+                <div class="material-grid s8 structure-grid">
+                    <div class="material s8">
+                        <img src="https://i5.walmartimages.com/seo/Hamilco-White-Cardstock-Thick-11x17-Paper-Heavy-Weight-80-lb-Cover-Card-Stock-25-Pack_499398ce-e708-496f-9f85-3393c0544e6a.5874e7f7c808c0d57dc7ae07779d3292.jpeg"
+                            alt="Cardboard">
+                        <strong>Cardboard</strong><span>2 lembar · individu</span><small>structure</small>
+                    </div>
+                    <div class="material s8">
+                        <img src="https://i5.walmartimages.com/seo/Hamilco-White-Cardstock-Thick-11x17-Paper-Heavy-Weight-80-lb-Cover-Card-Stock-25-Pack_499398ce-e708-496f-9f85-3393c0544e6a.5874e7f7c808c0d57dc7ae07779d3292.jpeg"
+                            alt="Cardstock">
+                        <strong>Cardstock</strong><span>5 lembar · individu</span><small>structure</small>
+                    </div>
+                    <div class="material s8">
+                        <img src="https://id-test-11.slatic.net/p/87bed99a607df1f2aee762edd79be637.jpg"
+                            alt="Stik Es Krim">
+                        <strong>Stik Es Krim</strong><span>10 buah · individu</span><small>structure</small>
+                    </div>
+                    <div class="material s8">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnu1blReuvekXJkXapRdHZ_WGrvJJZHLNt8ibNsFMLp7dCoC2Mt6w2MOk&s=10"
+                            alt="Tutup Botol">
+                        <strong>Tutup Botol</strong><span>4 buah · individu</span><small>structure</small>
+                    </div>
+                    <div class="material s8">
+                        <img src="https://i0.wp.com/maxwel.com/wp-content/uploads/2022/03/electrical_tape.jpg?fit=640%2C640&ssl=1"
+                            alt="Electrical Tape">
+                        <strong>Electrical Tape</strong><span>1 roll · sharing</span><small>support</small>
+                    </div>
+                    <div class="material s8">
+                        <img src="https://stationary.co.id/cdn/shop/products/joyko-lem-cair-putih-60ml-gl-w02-office-stationery-toko-atk_583_1024x1024.jpg?v=1543434171"
+                            alt="Lem Putih">
+                        <strong>Lem Putih</strong><span>1 botol kecil · sharing</span><small>support</small>
+                    </div>
+                    <div class="material s8">
+                        <img src="https://abro.com/wp-content/uploads/2020/07/2123Y-Masking-Tape-Automotive-White-1in.jpg"
+                            alt="Masking Tape">
+                        <strong>Masking Tape</strong><span>1 roll · sharing</span><small>support</small>
+                    </div>
+                    <div class="material s8">
+                        <img src="https://down-id.img.susercontent.com/file/d3790a6c680bd1e4030343859524286d"
+                            alt="Gunting">
+                        <strong>Gunting</strong><span>1 buah · sharing</span><small>tool</small>
+                    </div>
+                    <div class="material s8">
+                        <img src="https://image.made-in-china.com/2f0j00MkHcuDvUCpqy/High-Quality-Multi-Colored-Wholesale-Round-Tip-Dry-Erase-Whiteboard-Markers.webp"
+                            alt="Spidol">
+                        <strong>Spidol</strong><span>1 buah · sharing</span><small>decoration</small>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 18: 4 Rules -->
+        <section class="slide">
+            <span class="chip"><b></b> Engineering Recall</span>
+            <div class="content stack max">
+                <div>
+                    <div class="kicker">BEFORE YOU DESIGN</div>
+                    <h2 class="slide-title">Remember the 4 Rules</h2>
+                    <p class="lead">Challenge ini bukan mulai dari nol. Empat konsep ini sudah pernah kamu gunakan.</p>
+                </div>
+                <div class="four">
+                    <div class="card icon-card">
+                        <div class="big-icon">🔋</div>
+                        <h3>Power</h3>
+                        <p>Battery 9V menjadi sumber energi circuit.</p>
+                    </div>
+                    <div class="card icon-card">
+                        <div class="big-icon">🛡️</div>
+                        <h3>Protection</h3>
+                        <p>Resistor membantu membatasi current yang melewati LED.</p>
+                    </div>
+                    <div class="card icon-card">
+                        <div class="big-icon">💡</div>
+                        <h3>Polarity</h3>
+                        <p>LED tetap punya anode (+) dan cathode (−).</p>
+                    </div>
+                    <div class="card icon-card">
+                        <div class="big-icon">🎚️</div>
+                        <h3>Control</h3>
+                        <p>Button atau switch membuka dan menutup jalur circuit.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 19: Power & Resistor -->
+        <section class="slide">
+            <span class="chip"><b></b> Power & Resistor</span>
+            <div class="content rule-board max">
+                <div class="rule-circuit">
+                    <svg viewBox="0 0 680 340">
+                        <rect x="45" y="95" width="140" height="115" rx="16" fill="#fff" stroke="#073b70"
+                            stroke-width="5" />
+                        <text x="115" y="148" text-anchor="middle" font-size="26" font-weight="700"
+                            fill="#073b70">9V</text>
+                        <text x="115" y="178" text-anchor="middle" font-size="16" fill="#5e7487">Battery</text>
+                        <path d="M185 130 H275" stroke="#ef5350" stroke-width="7" />
+                        <rect x="275" y="108" width="90" height="44" rx="10" fill="#fff4da" stroke="#073b70"
+                            stroke-width="4" />
+                        <text x="320" y="136" text-anchor="middle" font-size="15" font-weight="700"
+                            fill="#073b70">220Ω</text>
+                        <path d="M365 130 H410" stroke="#ef5350" stroke-width="7" />
+                        <rect x="410" y="108" width="90" height="44" rx="10" fill="#fff4da" stroke="#073b70"
+                            stroke-width="4" />
+                        <text x="455" y="136" text-anchor="middle" font-size="15" font-weight="700"
+                            fill="#073b70">220Ω</text>
+                        <path d="M500 130 H545" stroke="#ef5350" stroke-width="7" />
+                        <circle cx="575" cy="130" r="26" fill="#fff47a" stroke="#073b70" stroke-width="4" />
+                        <path d="M575 156 V250 H115 V210" stroke="#073b70" stroke-width="7" fill="none" />
+                        <text x="340" y="295" text-anchor="middle" font-size="20" font-weight="700" fill="#073b70">For
+                            one LED branch: 220Ω + 220Ω = 440Ω</text>
+                    </svg>
+                </div>
+                <div class="stack">
+                    <div class="kicker left">ENGINEERING SAFETY</div>
+                    <h2 class="slide-title left">9V Is Stronger Than Coin Battery</h2>
+                    <p class="lead left">Jangan hubungkan standard LED langsung ke battery 9V. LED membutuhkan
+                        resistance untuk membatasi current.</p>
+                    <div class="resistor-math">
+                        <div class="math-chip">220Ω</div>
+                        <div class="math-op">+</div>
+                        <div class="math-chip">220Ω</div>
+                        <div class="math-op">=</div>
+                        <div class="math-chip">440Ω</div>
+                    </div>
+                    <div class="safety-box"><strong>Untuk satu LED branch:</strong> gunakan dua resistor 220Ω secara
+                        series jika memungkinkan. Kamu tidak wajib memakai semua 5 LED.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 20: Multiple LEDs -->
+        <section class="slide">
+            <span class="chip"><b></b> Multiple LEDs</span>
+            <div class="content two max">
+                <div class="stack">
+                    <div class="kicker left">IF YOU WANT MORE LEDS</div>
+                    <h2 class="slide-title left">Plan the Branches First</h2>
+                    <p class="lead left">Kamu punya <strong>5 resistor 220Ω</strong>. Kalau ingin memakai 3–5 LED, ingat
+                        kembali konsep <strong>series dan parallel</strong> dari Session 2.</p>
+                    <div class="review-points">
+                        <div class="review-point"><strong>1–2 LEDs</strong>Lebih mudah dibuat dan diuji. Cocok jika kamu
+                            ingin fokus pada bentuk robot.</div>
+                        <div class="review-point"><strong>3–5 LEDs</strong>Boleh, tetapi tunjukkan circuit plan ke MT
+                            sebelum battery 9V dipasang.</div>
+                        <div class="review-point"><strong>Important</strong>Jumlah LED bukan penentu robot terbaik. Yang
+                            penting circuit aman, bekerja, dan sesuai design.</div>
+                    </div>
+                </div>
+                <div class="card icon-card" style="min-height:230px">
+                    <div style="font-size:3.5rem;margin-bottom:6px">💡💡💡</div>
+                    <h3>More LEDs = More Planning</h3>
+                    <p>Semakin banyak output, semakin penting connection, resistor, dan jalur return-nya.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 21: Button or Switch -->
+        <section class="slide">
+            <span class="chip"><b></b> Button or Switch?</span>
+            <div class="content stack max">
+                <div>
+                    <div class="kicker">CONTROL MECHANISM</div>
+                    <h2 class="slide-title">Choose Your Control</h2>
+                    <p class="lead">Robot harus punya cara untuk membuka dan menutup circuit dari luar.</p>
+                </div>
+                <div class="control-compare" style="margin: 0 auto;">
+                    <div class="control-card">
+                        <div class="ci">🔘</div>
+                        <h3>Push Button</h3>
+                        <p>LED menyala saat button ditekan. Saat dilepas, circuit kembali terbuka.</p>
+                        <div class="control-demo">
+                            <div class="led-demo" id="buttonLed"></div>
+                            <button class="btn" id="holdButton">Press & Hold</button>
+                        </div>
+                    </div>
+                    <div class="control-card">
+                        <div class="ci">🎚️</div>
+                        <h3>ON/OFF Switch</h3>
+                        <p>LED tetap ON sampai switch dipindahkan kembali ke posisi OFF.</p>
+                        <div class="control-demo">
+                            <div class="led-demo" id="switchLed"></div>
+                            <button class="btn2" id="toggleSwitch">Switch: OFF</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="instruction">💡 Pilih salah satu. Kalau design-mu membutuhkan keduanya, boleh juga.</div>
+            </div>
+        </section>
+
+        <!-- Slide 22: Circuit Design Challenge -->
+        <section class="slide">
+            <span class="chip"><b></b> Circuit Design Challenge</span>
+            <div class="content two max">
+                <div class="circuit-illustration">
+                    <svg viewBox="0 0 760 360">
+                        <defs>
+                            <marker id="arr8" markerWidth="9" markerHeight="9" refX="8" refY="4" orient="auto">
+                                <path d="M0,0 L0,8 L9,4 z" fill="#ff8b2b" />
+                            </marker>
+                        </defs>
+                        <rect x="35" y="115" width="130" height="105" rx="16" fill="#fff" stroke="#073b70"
+                            stroke-width="5" />
+                        <text x="100" y="160" text-anchor="middle" font-size="24" font-weight="700"
+                            fill="#073b70">9V</text>
+                        <text x="100" y="190" text-anchor="middle" font-size="16" fill="#5e7487">POWER</text>
+                        <rect x="220" y="115" width="130" height="105" rx="16" fill="#fff" stroke="#073b70"
+                            stroke-width="5" />
+                        <text x="285" y="160" text-anchor="middle" font-size="22" font-weight="700"
+                            fill="#073b70">?</text>
+                        <text x="285" y="190" text-anchor="middle" font-size="16" fill="#5e7487">CONTROL</text>
+                        <rect x="405" y="115" width="130" height="105" rx="16" fill="#fff" stroke="#073b70"
+                            stroke-width="5" />
+                        <text x="470" y="160" text-anchor="middle" font-size="22" font-weight="700"
+                            fill="#073b70">?</text>
+                        <text x="470" y="190" text-anchor="middle" font-size="16" fill="#5e7487">PROTECTION</text>
+                        <rect x="590" y="115" width="130" height="105" rx="16" fill="#fff" stroke="#073b70"
+                            stroke-width="5" />
+                        <text x="655" y="160" text-anchor="middle" font-size="28" font-weight="700"
+                            fill="#073b70">💡</text>
+                        <text x="655" y="190" text-anchor="middle" font-size="16" fill="#5e7487">OUTPUT</text>
+                        <path d="M165 168 H210" stroke="#ff8b2b" stroke-width="6" marker-end="url(#arr8)" />
+                        <path d="M350 168 H395" stroke="#ff8b2b" stroke-width="6" marker-end="url(#arr8)" />
+                        <path d="M535 168 H580" stroke="#ff8b2b" stroke-width="6" marker-end="url(#arr8)" />
+                        <path d="M655 220 V295 H100 V220" stroke="#073b70" stroke-width="6" fill="none" />
+                        <text x="380" y="325" text-anchor="middle" font-size="18" font-weight="700"
+                            fill="#073b70">RETURN PATH</text>
+                    </svg>
+                </div>
+                <div class="stack">
+                    <div class="kicker left">NO ANSWER KEY TODAY</div>
+                    <h2 class="slide-title left">You Design the Circuit</h2>
+                    <p class="lead left">Kita tidak akan memberikan final wiring untuk dicopy. Kamu sudah punya semua
+                        konsep yang dibutuhkan.</p>
+                    <div class="review-points">
+                        <div class="review-point"><strong>Must have</strong>Power source, user control, resistor
+                            protection, LED output, dan return path.</div>
+                        <div class="review-point"><strong>Your decision</strong>Button atau switch? 1–5 LED? Series atau
+                            parallel? LED ditempatkan di mana?</div>
+                        <div class="review-point"><strong>Before powering</strong>Tunjukkan circuit plan ke MT, terutama
+                            jika memakai 3–5 LED.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 23: Plan Your Robot -->
+        <section class="slide">
+            <span class="chip"><b></b> Plan Your Robot</span>
+            <div class="content design-lab max" id="designLab">
+                <div class="design-options">
+                    <div>
+                        <div class="kicker left">PLAN BEFORE BUILD</div>
+                        <h2 class="slide-title left" style="font-size:1.8rem">Design Choices</h2>
+                    </div>
+                    <div class="option-row">
+                        <strong>How many LEDs?</strong>
+                        <div class="choice-row" data-group="leds">
+                            <button class="choice-pill active" data-value="1">1</button>
+                            <button class="choice-pill" data-value="2">2</button>
+                            <button class="choice-pill" data-value="3">3</button>
+                            <button class="choice-pill" data-value="4">4</button>
+                            <button class="choice-pill" data-value="5">5</button>
+                        </div>
+                    </div>
+                    <div class="option-row">
+                        <strong>Control</strong>
+                        <div class="choice-row" data-group="control">
+                            <button class="choice-pill active" data-value="Push Button">Push Button</button>
+                            <button class="choice-pill" data-value="ON/OFF Switch">ON/OFF Switch</button>
+                            <button class="choice-pill" data-value="Both">Both</button>
+                        </div>
+                    </div>
+                    <div class="option-row">
+                        <strong>Main LED location</strong>
+                        <div class="choice-row" data-group="location">
+                            <button class="choice-pill active" data-value="Eyes">Eyes</button>
+                            <button class="choice-pill" data-value="Chest">Chest</button>
+                            <button class="choice-pill" data-value="Head">Head</button>
+                            <button class="choice-pill" data-value="Arms">Arms</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="plan-summary">
+                    <h3>🤖 My LED Robot Plan</h3>
+                    <div class="plan-line">LED: <strong id="planLed">1 LED</strong></div>
+                    <div class="plan-line">Control: <strong id="planControl">Push Button</strong></div>
+                    <div class="plan-line">Main light location: <strong id="planLocation">Eyes</strong></div>
+                    <div class="plan-line">Next: sketch body + circuit before cutting or connecting.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 24: Share to Class -->
+        <section class="slide">
+            <span class="chip"><b></b> Share to Class</span>
+            <div class="content stack max">
+                <div>
+                    <div class="kicker">SHARE BEFORE BUILD</div>
+                    <h2 class="slide-title">Tell the Class Your Robot Idea</h2>
+                    <p class="lead">Jelaskan rencanamu dengan singkat. Tidak perlu presentasi panjang.</p>
+                </div>
+                <div class="share-grid">
+                    <div class="share-card">
+                        <div class="si">🤖</div>
+                        <h3>What Robot?</h3>
+                        <p>Robot apa yang akan kamu buat? Bentuk atau karakternya seperti apa?</p>
+                    </div>
+                    <div class="share-card">
+                        <div class="si">💡</div>
+                        <h3>Where Are the LEDs?</h3>
+                        <p>Berapa LED yang dipakai dan ditempatkan di bagian mana?</p>
+                    </div>
+                    <div class="share-card">
+                        <div class="si">🎚️</div>
+                        <h3>How Will It Turn On?</h3>
+                        <p>Apakah menggunakan push button, ON/OFF switch, atau keduanya?</p>
+                    </div>
+                </div>
+                <div class="instruction">🗣️ “Robotku akan menjadi..., LED-nya ada di..., dan akan dinyalakan
+                    menggunakan...”</div>
+            </div>
+        </section>
+
+        <!-- Slide 25: Build Flow -->
+        <section class="slide">
+            <span class="chip"><b></b> Build Flow</span>
+            <div class="content stack max">
+                <div>
+                    <div class="kicker">STEP BY STEP</div>
+                    <h2 class="slide-title">A Good Build Order</h2>
+                    <p class="lead">Desain boleh bebas, tapi engineering process tetap perlu urutan yang rapi.</p>
+                </div>
+                <div class="flow-grid">
+                    <div class="flow-step"><b>1</b>
+                        <h3>Sketch</h3>
+                        <p>Gambar body & komponen.</p>
+                    </div>
+                    <div class="flow-step"><b>2</b>
+                        <h3>Build Circuit</h3>
+                        <p>Rangkai di luar body.</p>
+                    </div>
+                    <div class="flow-step"><b>3</b>
+                        <h3>Build Body</h3>
+                        <p>Susun cardboard craft.</p>
+                    </div>
+                    <div class="flow-step"><b>4</b>
+                        <h3>Mount Parts</h3>
+                        <p>Pasang LED, switch, socket.</p>
+                    </div>
+                    <div class="flow-step"><b>5</b>
+                        <h3>Reconnect</h3>
+                        <p>Pastikan wire tersambung.</p>
+                    </div>
+                    <div class="flow-step"><b>6</b>
+                        <h3>Power Check</h3>
+                        <p>Cek polarity & resistor.</p>
+                    </div>
+                    <div class="flow-step"><b>7</b>
+                        <h3>Test</h3>
+                        <p>Nyalakan button / switch.</p>
+                    </div>
+                    <div class="flow-step"><b>8</b>
+                        <h3>Improve</h3>
+                        <p>Rapikan & hias robot.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 26: Before Crafting -->
+        <section class="slide">
+            <span class="chip"><b></b> Before Crafting</span>
+            <div class="content power-sim max">
+                <div class="sim-stage">
+                    <svg class="sim-circuit" viewBox="0 0 680 310">
+                        <rect x="45" y="85" width="130" height="105" rx="16" fill="#fff" stroke="#073b70"
+                            stroke-width="5" />
+                        <text x="110" y="132" text-anchor="middle" font-size="24" font-weight="700"
+                            fill="#073b70">9V</text>
+                        <text x="110" y="162" text-anchor="middle" font-size="15" fill="#5e7487">Battery</text>
+                        <rect x="235" y="90" width="105" height="65" rx="12" fill="#fff" stroke="#073b70"
+                            stroke-width="5" />
+                        <text x="287" y="128" text-anchor="middle" font-size="15" font-weight="700"
+                            fill="#073b70">CONTROL</text>
+                        <rect x="395" y="90" width="105" height="65" rx="12" fill="#fff4da" stroke="#073b70"
+                            stroke-width="5" />
+                        <text x="447" y="128" text-anchor="middle" font-size="15" font-weight="700"
+                            fill="#073b70">RESISTOR</text>
+                        <circle class="sim-led" id="simLed" cx="575" cy="122" r="30" fill="#d8e1e6" stroke="#073b70"
+                            stroke-width="5" />
+                        <path d="M175 120 H235 M340 120 H395 M500 120 H545" stroke="#ef5350" stroke-width="7" />
+                        <path d="M575 152 V230 H110 V190" stroke="#073b70" stroke-width="7" fill="none" />
+                    </svg>
+                </div>
+                <div class="stack">
+                    <div class="kicker left">FUNCTION BEFORE CRAFTING</div>
+                    <h2 class="slide-title left">Test the Circuit First</h2>
+                    <p class="lead left">Sebelum circuit ditempel ke body, pastikan design elektronikmu sudah bekerja.
+                    </p>
+                    <button class="btn" id="simPower" style="width:fit-content">Test Control</button>
+                    <div class="status-result" id="simPowerText">Circuit simulation: output masih OFF.</div>
+                    <div class="instruction">✅ Setelah berhasil, foto / ingat posisi connection sebelum dipasang ke
+                        robot.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 27: Build the Body -->
+        <section class="slide">
+            <span class="chip"><b></b> Build the Body</span>
+            <div class="content two max">
+                <div class="card icon-card" style="min-height:240px">
+                    <div style="font-size:3.5rem;margin-bottom:4px">✂️📦🤖</div>
+                    <h3>Build the Structure</h3>
+                    <p>Cardboard menjadi body utama. Cardstock, bottle cap, dan sticks menjadi detail sesuai design.</p>
+                </div>
+                <div class="stack">
+                    <div class="kicker left">NOW BUILD THE BODY</div>
+                    <h2 class="slide-title left">Make Space for the Electronics</h2>
+                    <div class="review-points">
+                        <div class="review-point"><strong>LED holes</strong>Tentukan lubang / posisi LED sebelum body
+                            ditutup permanen.</div>
+                        <div class="review-point"><strong>Accessible control</strong>Button atau switch harus mudah
+                            ditekan dari luar.</div>
+                        <div class="review-point"><strong>Battery access</strong>Jangan lem battery 9V secara permanen.
+                            Battery perlu bisa dilepas.</div>
+                        <div class="review-point"><strong>Wire route</strong>Sisakan jalur supaya jumper tidak terjepit
+                            atau tertarik.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 28: Final Assembly -->
+        <section class="slide">
+            <span class="chip"><b></b> Final Assembly</span>
+            <div class="content two max">
+                <div class="photo-card">
+                    <img src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/5d4f9e77-55b6-4ed4-bcb3-47a93b8639b6.png"
+                        alt="Final Assembly Robot">
+                </div>
+                <div class="stack">
+                    <div class="kicker left">ELECTRONICS + STRUCTURE</div>
+                    <h2 class="slide-title left">Mount Without Breaking Circuit</h2>
+                    <div class="review-points">
+                        <div class="review-point"><strong>1. LED</strong>Masukkan LED ke posisi yang sudah direncanakan.
+                            Jangan paksa kaki LED tertekuk tajam.</div>
+                        <div class="review-point"><strong>2. Breadboard</strong>Pasang di area datar yang masih bisa
+                            dijangkau jika troubleshooting.</div>
+                        <div class="review-point"><strong>3. Button / Switch</strong>Pastikan control tidak tertutup
+                            dekorasi.</div>
+                        <div class="review-point"><strong>4. Battery</strong>Pasang terakhir setelah semua connection
+                            diperiksa.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 29: Safety Check -->
+        <section class="slide">
+            <span class="chip"><b></b> Safety Check</span>
+            <div class="content stack max">
+                <div>
+                    <div class="kicker">SAFETY CHECK</div>
+                    <h2 class="slide-title">Before Connecting the 9V Battery</h2>
+                    <p class="lead">Klik setiap item setelah benar-benar kamu periksa.</p>
+                </div>
+                <div class="checklist-grid" id="safetyChecklist">
+                    <button class="check-item"><strong>🔋 Battery is still disconnected</strong>Selesaikan pemeriksaan
+                        sebelum socket dipasang ke 9V.</button>
+                    <button class="check-item"><strong>💡 LED polarity checked</strong>Anode (+) dan cathode (−) sudah
+                        sesuai design.</button>
+                    <button class="check-item"><strong>🛡️ Resistor installed</strong>Tidak ada LED yang tersambung
+                        langsung ke 9V tanpa resistance.</button>
+                    <button class="check-item"><strong>🎚️ Control is in OFF state</strong>Switch OFF atau button tidak
+                        ditekan saat battery pertama kali dipasang.</button>
+                    <button class="check-item"><strong>〰️ No direct + to − shortcut</strong>Positive dan negative
+                        battery tidak terhubung langsung tanpa load.</button>
+                    <button class="check-item"><strong>✋ Ask MT if unsure</strong>Kalau ragu dengan circuit 3–5 LED,
+                        tunjukkan ke MT sebelum power ON.</button>
+                </div>
+                <div class="status-result" id="safetyStatus">0 / 6 checks completed.</div>
+            </div>
+        </section>
+
+        <!-- Slide 30: Troubleshoot -->
+        <section class="slide">
+            <span class="chip"><b></b> Troubleshoot</span>
+            <div class="content stack max">
+                <div>
+                    <div class="kicker">PROBLEM SOLVING</div>
+                    <h2 class="slide-title">LED Robot Belum Menyala?</h2>
+                    <p class="lead">Jangan bongkar semuanya. Check one by one.</p>
+                </div>
+                <div class="trouble-grid" id="troubleGrid8">
+                    <div class="trouble">
+                        <div class="check">1</div>
+                        <div><strong>Battery & Socket</strong><span>Pastikan 9V battery terpasang kuat pada
+                                socket.</span></div>
+                    </div>
+                    <div class="trouble">
+                        <div class="check">2</div>
+                        <div><strong>Control</strong><span>Apakah switch sudah ON atau button menutup circuit?</span>
+                        </div>
+                    </div>
+                    <div class="trouble">
+                        <div class="check">3</div>
+                        <div><strong>LED Polarity</strong><span>Periksa anode (+) dan cathode (−) tidak terbalik.</span>
+                        </div>
+                    </div>
+                    <div class="trouble">
+                        <div class="check">4</div>
+                        <div><strong>Resistor & Jumper</strong><span>Cek apakah komponen berada pada pin yang
+                                benar.</span></div>
+                    </div>
+                    <div class="trouble">
+                        <div class="check">5</div>
+                        <div><strong>One Branch at a Time</strong><span>Jika banyak LED, test satu branch terlebih
+                                dahulu.</span></div>
+                    </div>
+                    <div class="trouble">
+                        <div class="check">✓</div>
+                        <div><strong>Retest</strong><span>Setelah satu perubahan, test lagi sebelum mengubah
+                                lain.</span></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 31: Show & Tell -->
+        <section class="slide dark">
+            <span class="chip"><b></b> Share to Class</span>
+            <div class="content two max">
+                <div class="stack">
+                    <div class="kicker left">SHOW & TELL</div>
+                    <h2 class="slide-title left" style="font-size:2.2rem">Share Your LED Robot</h2>
+                    <p class="lead left">Tunjukkan hasilmu dan jelaskan tiga hal berikut.</p>
+                    <div class="review-points" style="margin-top:6px">
+                        <div class="review-point"><strong>🤖 Design</strong>Robot apa yang kamu buat dan kenapa memilih
+                            bentuk itu?</div>
+                        <div class="review-point"><strong>⚡ Circuit</strong>Berapa LED yang dipakai dan bagaimana kamu
+                            mengontrolnya?</div>
+                        <div class="review-point"><strong>🛠️ Improvement</strong>Apa yang sempat tidak bekerja dan
+                            bagaimana kamu memperbaikinya?</div>
+                    </div>
+                </div>
+                <img class="robot"
+                    src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/eded3e71-16cf-401e-b1c1-3ff5f887dc38.png"
+                    alt="Robot">
+            </div>
+        </section>
+
+        <!-- Slide 32: Quick Quiz -->
+        <section class="slide dark">
+            <span class="chip"><b></b> Quick Quiz</span>
+            <div class="content stack max">
+                <div>
+                    <div class="kicker">CHECK YOUR UNDERSTANDING</div>
+                    <h2 class="slide-title">Quick Quiz</h2>
+                </div>
+                <div class="quiz">
+                    <div class="quiz-prog" id="quizProg8"></div>
+                    <div class="quiz-q" id="quizQ8"></div>
+                    <div class="quiz-options" id="quizOptions8"></div>
+                    <div class="quiz-fb" id="quizFb8">Pilih satu jawaban.</div>
+                    <button class="btn" id="quizNext8" style="display:none;margin-top:10px">Next Question</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 33: Review -->
+        <section class="slide">
+            <span class="chip"><b></b> Review</span>
+            <div class="content stack max">
+                <div>
+                    <div class="kicker">TODAY'S REVIEW</div>
+                    <h2 class="slide-title">What Did We Practice Today?</h2>
+                </div>
+                <div class="agenda">
+                    <div class="card icon-card">
+                        <div class="big-icon">🧠</div>
+                        <h3>Plan</h3>
+                        <p>Merancang body dan circuit sebelum mulai build.</p>
+                    </div>
+                    <div class="card icon-card">
+                        <div class="big-icon">💡</div>
+                        <h3>Apply Electronics</h3>
+                        <p>Menggabungkan power, resistor, LED, polarity, dan control.</p>
+                    </div>
+                    <div class="card icon-card">
+                        <div class="big-icon">🤖</div>
+                        <h3>Build Independently</h3>
+                        <p>Membuat robot berbeda dengan material yang sama.</p>
+                    </div>
+                    <div class="card icon-card">
+                        <div class="big-icon">🛠️</div>
+                        <h3>Troubleshoot</h3>
+                        <p>Memeriksa masalah secara bertahap sampai project bekerja.</p>
+                    </div>
+                </div>
+                <div class="instruction">✨ Hari ini bukan tentang robot yang paling cantik. Yang penting: design-mu
+                    punya alasan dan circuit-mu bekerja.</div>
+            </div>
+        </section>
+
+        <!-- Slide 34: Feedback -->
+        <section class="slide dark">
+            <span class="chip"><b></b> Feedback</span>
+            <div class="content feedback max">
+                <img class="robot"
+                    src="https://uob-1328237036.cos.ap-singapore.myqcloud.com//file-uploader/images/eded3e71-16cf-401e-b1c1-3ff5f887dc38.png"
+                    alt="Robot">
+                <div class="stack">
+                    <h2 class="slide-title left">How Was Today’s Challenge?</h2>
+                    <p class="lead left">Pilih satu respons yang paling sesuai.</p>
+                    <div class="feedback-choices">
+                        <button class="feedback-choice">
+                            <div class="face">🙂</div><strong>I Built It!</strong>
+                        </button>
+                        <button class="feedback-choice">
+                            <div class="face">🤔</div><strong>Need Testing</strong>
+                        </button>
+                        <button class="feedback-choice">
+                            <div class="face">⚡</div><strong>Ready More</strong>
+                        </button>
+                    </div>
+                    <p class="note" id="feedbackNote8">Respons ini tidak menyimpan skor atau data pribadi.</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="footer">
+            <span class="counter" id="counter">01 / 34</span>
+            <span class="progress"><span class="bar" id="bar"></span></span>
+        </div>
+
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const $ = id => document.getElementById(id);
+            const slides = [...document.querySelectorAll('.slide')];
+            let current = 0;
+
+            function nav() {
+                $('prev').disabled = current === 0;
+                $('next').disabled = current === slides.length - 1;
+                $('counter').textContent = String(current + 1).padStart(2, '0') + ' / ' + String(slides.length).padStart(2, '0');
+                $('bar').style.width = ((current + 1) / slides.length * 100) + '%';
+            }
+
+            function go(i) {
+                if (i < 0 || i >= slides.length || i === current) return;
+                slides[current].classList.remove('active');
+                current = i;
+                slides[current].classList.add('active');
+                nav();
+            }
+
+            $('prev').onclick = () => go(current - 1);
+            $('next').onclick = () => go(current + 1);
+
+            document.addEventListener('keydown', e => {
+                if (e.key === 'ArrowRight' || e.key === 'PageDown') go(current + 1);
+                if (e.key === 'ArrowLeft' || e.key === 'PageUp') go(current - 1);
+            });
+            nav();
+
+            // learning journey
+            const journey = [...document.querySelectorAll('.journey-step')];
+            journey.forEach(s => s.onclick = () => {
+                journey.forEach(x => x.classList.remove('active'));
+                s.classList.add('active');
+                $('journeyMsg').textContent = s.dataset.msg;
+            });
+
+            // push button demo
+            const hold = $('holdButton'), buttonLed = $('buttonLed');
+            function buttonOn() { buttonLed.classList.add('on'); }
+            function buttonOff() { buttonLed.classList.remove('on'); }
+            ['mousedown', 'touchstart'].forEach(ev => hold.addEventListener(ev, e => { e.preventDefault(); buttonOn(); }));
+            ['mouseup', 'mouseleave', 'touchend', 'touchcancel'].forEach(ev => hold.addEventListener(ev, buttonOff));
+
+            // switch demo
+            let sw = false;
+            $('toggleSwitch').onclick = () => {
+                sw = !sw;
+                $('switchLed').classList.toggle('on', sw);
+                $('toggleSwitch').textContent = 'Switch: ' + (sw ? 'ON' : 'OFF');
+            };
+
+            // plan selector
+            const plan = { leds: '1', control: 'Push Button', location: 'Eyes' };
+            document.querySelectorAll('.choice-row').forEach(row => {
+                row.querySelectorAll('.choice-pill').forEach(btn => btn.onclick = () => {
+                    row.querySelectorAll('.choice-pill').forEach(x => x.classList.remove('active'));
+                    btn.classList.add('active');
+                    plan[row.dataset.group] = btn.dataset.value;
+                    $('planLed').textContent = plan.leds + ' LED' + (plan.leds === '1' ? '' : 's');
+                    $('planControl').textContent = plan.control;
+                    $('planLocation').textContent = plan.location;
+                });
+            });
+
+            // simple circuit simulation
+            let sim = false;
+            $('simPower').onclick = () => {
+                sim = !sim;
+                $('simLed').setAttribute('fill', sim ? '#fff47a' : '#d8e1e6');
+                $('simLed').classList.toggle('on', sim);
+                $('simPowerText').innerHTML = sim ? '<strong>CONTROL CLOSED:</strong> circuit complete → LED ON.' : '<strong>CONTROL OPEN:</strong> path broken → LED OFF.';
+            };
+
+            // safety checklist
+            const checks = [...document.querySelectorAll('#safetyChecklist .check-item')];
+            function updateSafety() {
+                const done = checks.filter(c => c.classList.contains('done')).length;
+                $('safetyStatus').textContent = done + ' / ' + checks.length + ' checks completed.' + (done === checks.length ? ' Ready to ask MT for final power check.' : '');
+            }
+            checks.forEach(c => c.onclick = () => { c.classList.toggle('done'); updateSafety(); });
+            updateSafety();
+
+            // troubleshooting
+            const trouble = [...document.querySelectorAll('#troubleGrid8 .trouble')];
+            trouble.forEach((c, i) => c.onclick = () => {
+                c.classList.toggle('done');
+                c.querySelector('.check').textContent = c.classList.contains('done') ? '✓' : (i === trouble.length - 1 ? '✓' : String(i + 1));
+            });
+
+            // quiz
+            const quizData = [
+                { q: 'Apa yang harus ada di antara battery 9V dan LED agar current tidak terlalu besar?', o: ['A. Resistor', 'B. Lem putih', 'C. Cardboard'], a: 0, e: 'Resistor membantu membatasi current yang melewati LED.' },
+                { q: 'Kalau menggunakan push button, kapan LED seharusnya menyala?', o: ['A. Saat button ditekan dan circuit tertutup', 'B. Hanya saat battery dilepas', 'C. Saat jumper tidak tersambung'], a: 0, e: 'Push button digunakan untuk menutup jalur circuit saat ditekan.' },
+                { q: 'Apa langkah terbaik sebelum circuit ditempel ke body robot?', o: ['A. Test circuit terlebih dahulu', 'B. Lem semua wire permanen', 'C. Langsung pasang battery tanpa cek'], a: 0, e: 'Test electronics first membuat troubleshooting jauh lebih mudah.' }
+            ];
+            let qi = 0;
+            function renderQuiz() {
+                const q = quizData[qi];
+                $('quizProg8').textContent = 'Question ' + (qi + 1) + ' of ' + quizData.length;
+                $('quizQ8').textContent = q.q;
+                $('quizOptions8').innerHTML = '';
+                $('quizFb8').textContent = 'Pilih satu jawaban.';
+                $('quizFb8').style.background = '#f4f9fc';
+                $('quizFb8').style.color = 'var(--muted)';
+                $('quizNext8').style.display = 'none';
+                q.o.forEach((txt, i) => {
+                    const b = document.createElement('button');
+                    b.type = 'button'; b.className = 'option'; b.textContent = txt;
+                    b.onclick = () => {
+                        const all = [...$('quizOptions8').children];
+                        all.forEach(x => x.disabled = true);
+                        const ok = i === q.a;
+                        b.classList.add(ok ? 'correct' : 'wrong');
+                        all[q.a].classList.add('correct');
+                        $('quizFb8').textContent = (ok ? 'Benar. ' : 'Belum tepat. ') + q.e;
+                        $('quizFb8').style.background = ok ? '#eaf9f0' : '#fff1f0';
+                        $('quizFb8').style.color = ok ? '#20734a' : '#a33636';
+                        if (qi < quizData.length - 1) $('quizNext8').style.display = 'inline-block';
+                    };
+                    $('quizOptions8').appendChild(b);
+                });
+            }
+            $('quizNext8').onclick = () => { qi++; renderQuiz(); };
+            renderQuiz();
+
+            // feedback
+            const fbs = [...document.querySelectorAll('.feedback-choice')];
+            fbs.forEach(b => b.onclick = () => {
+                fbs.forEach(x => x.classList.remove('selected'));
+                b.classList.add('selected');
+                $('feedbackNote8').textContent = 'Terima kasih. Sampaikan ke MT bagian challenge yang paling seru atau paling sulit.';
+            });
+        });
+    </script>
+</body>
+
+</html>
